@@ -1,0 +1,324 @@
+---
+/**
+ * Blog Article Detail Page (/blog/[slug])
+ */
+import PageLayout from "../../layouts/PageLayout.astro";
+import { categoryMeta, kindMeta, type Block } from "../../data/insights";
+import { Badge, toneBg } from "../../components/react/decor";
+import { profile } from "../../data/site";
+import { cn } from "../../lib/utils";
+import { ShareRow, BlockView } from "../../components/react/ArticleDetail";
+import { getArticles, getArticleBySlug } from "../../lib/cms/queries";
+
+export const prerender = true;
+
+export async function getStaticPaths() {
+  const all = await getArticles();
+  return all.map((i) => ({
+    params: { slug: i.slug },
+  }));
+}
+
+const { slug } = Astro.params;
+const i = await getArticleBySlug(slug as string);
+
+if (!i) {
+  return Astro.redirect("/blog");
+}
+
+const allArticles = await getArticles();
+const BASE = "https://rohitgautam.site";
+const url = `${BASE}/blog/${i.slug}`;
+const meta = categoryMeta(i.category);
+const index = allArticles.findIndex((x) => x.slug === i.slug);
+const prev = allArticles[index - 1];
+const next = allArticles[index + 1];
+const headings = (i.body as Block[]).filter((b: Block): b is Extract<Block, { type: "h2" }> => b.type === "h2");
+
+function slugify(s: string) {
+  return s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+}
+
+function fmt(d: string) {
+  return new Date(d).toLocaleDateString("en-GB", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  });
+}
+
+const jsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "TechArticle",
+    headline: i.title,
+    description: i.description,
+    abstract: i.quickAnswer,
+    datePublished: i.published,
+    dateModified: i.updated,
+    keywords: i.tags.join(", "),
+    articleSection: i.category,
+    wordCount: i.readingTime * 220,
+    mainEntityOfPage: { "@type": "WebPage", "@id": url },
+    author: {
+      "@type": "Person",
+      name: "Rohit Gautam",
+      jobTitle: "Software Engineer",
+      url: BASE,
+    },
+    publisher: { "@type": "Person", name: "Rohit Gautam", url: BASE },
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: BASE },
+      { "@type": "ListItem", position: 2, name: "Blog", item: `${BASE}/blog` },
+      { "@type": "ListItem", position: 3, name: i.title, item: url },
+    ],
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: i.faq.map((f) => ({
+      "@type": "Question",
+      name: f.q,
+      acceptedAnswer: { "@type": "Answer", text: f.a },
+    })),
+  },
+];
+---
+
+<PageLayout
+  title={`${i.title} — Rohit Gautam`}
+  description={i.description}
+  type="article"
+>
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
+  <article class="container-page pt-12 pb-24">
+    <nav aria-label="Breadcrumb" class="font-mono text-xs text-muted-foreground">
+      <a href="/" class="hover:underline">
+        Home
+      </a>
+      {" / "}
+      <a href="/blog" class="hover:underline">
+        Blog
+      </a>
+      {" / "}
+      <span class="text-foreground">{i.category}</span>
+    </nav>
+
+    <header class="mt-6 max-w-3xl">
+      <div class="flex flex-wrap items-center gap-2">
+        <Badge tone={meta.tone} client:load>{i.category}</Badge>
+        <Badge tone={kindMeta[i.kind].tone} client:load>{kindMeta[i.kind].label}</Badge>
+        <Badge tone="paper" client:load>{i.difficulty}</Badge>
+      </div>
+      <h1 class="mt-4 font-display text-[2.3rem] leading-[1.02] font-extrabold md:text-6xl">
+        {i.title}
+      </h1>
+      <p class="mt-5 text-base leading-relaxed text-foreground/75 md:text-lg">
+        {i.description}
+      </p>
+      <div class="mt-5 flex flex-wrap items-center gap-x-4 gap-y-1 font-mono text-xs text-muted-foreground">
+        <span>By {profile.name}, Software Engineer</span>
+        <span>{i.readingTime} min read</span>
+        <time datetime={i.published}>Published {fmt(i.published)}</time>
+        <time datetime={i.updated}>Last updated {fmt(i.updated)}</time>
+      </div>
+      <ShareRow slug={i.slug} title={i.title} client:idle />
+    </header>
+
+    <div class="mt-10 grid gap-10 lg:grid-cols-[minmax(0,1fr)_260px] lg:items-start">
+      <div class="min-w-0">
+        <section
+          class={cn(
+            "rounded-3xl border-[3px] border-hairline p-6 shadow-hard",
+            toneBg["mint"],
+          )}
+        >
+          <h2 class="font-display text-lg font-extrabold uppercase tracking-wide">
+            Quick answer
+          </h2>
+          <p class="mt-2 text-base leading-relaxed">{i.quickAnswer}</p>
+        </section>
+
+        <div class="prose-insight mt-10 space-y-6">
+          {i.body.map((block: Block) => (
+            <BlockView block={block} client:visible />
+          ))}
+        </div>
+
+        <section class="mt-12">
+          <h2 id="checklist" class="font-display text-2xl font-extrabold md:text-3xl">
+            Checklist
+          </h2>
+          <ul class="mt-4 space-y-2.5">
+            {i.checklist.map((c: string) => (
+              <li class="flex gap-3 text-base leading-relaxed">
+                <span aria-hidden="true" class="mt-0.5 inline-flex size-5 shrink-0 items-center justify-center rounded-md border-[3px] border-hairline bg-yellow text-[10px] font-bold">
+                  ✓
+                </span>
+                {c}
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        <section class="mt-12">
+          <h2 id="common-mistakes" class="font-display text-2xl font-extrabold md:text-3xl">
+            Common mistakes
+          </h2>
+          <ul class="mt-4 space-y-2.5">
+            {i.mistakes.map((m: string) => (
+              <li class="flex gap-3 text-base leading-relaxed">
+                <span aria-hidden="true" class="mt-0.5 inline-flex size-5 shrink-0 items-center justify-center rounded-md border-[3px] border-hairline bg-peach text-[10px] font-bold">
+                  ✕
+                </span>
+                {m}
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        <section class="mt-12">
+          <h2 id="faq" class="font-display text-2xl font-extrabold md:text-3xl">
+            Frequently asked questions
+          </h2>
+          <div class="mt-4 space-y-4">
+            {i.faq.map((f: { q: string; a: string }) => (
+              <details
+                class="rounded-2xl border-[3px] border-hairline bg-card p-5 shadow-hard-sm"
+              >
+                <summary class="cursor-pointer font-display text-base font-extrabold">
+                  {f.q}
+                </summary>
+                <p class="mt-2.5 text-base leading-relaxed text-foreground/80">{f.a}</p>
+              </details>
+            ))}
+          </div>
+        </section>
+
+        <section class="mt-12 rounded-3xl border-[3px] border-hairline bg-surface p-6 shadow-hard">
+          <h2 id="summary" class="font-display text-2xl font-extrabold">
+            Summary
+          </h2>
+          <p class="mt-2 text-base leading-relaxed">{i.summary}</p>
+        </section>
+
+        <section class="mt-10 rounded-3xl border-[3px] border-hairline bg-lavender p-7 shadow-hard">
+          <p class="hand text-2xl">working on something like this?</p>
+          <h2 class="mt-1 font-display text-2xl font-extrabold md:text-3xl">
+            Let's talk about your build
+          </h2>
+          <a
+            href="/contact"
+            class="mt-5 inline-flex rounded-full border-[3px] border-hairline bg-card px-5 py-2.5 font-display text-sm font-extrabold shadow-hard-sm transition-transform hover:-translate-y-0.5"
+          >
+            Start a conversation
+          </a>
+        </section>
+
+        {i.related.length ? (
+          <section class="mt-14">
+            <h2 class="font-display text-2xl font-extrabold">Related reading</h2>
+            <ul class="mt-4 grid gap-3 sm:grid-cols-2">
+              {i.related.map((relSlug: string) => {
+                const r = allArticles.find((x) => x.slug === relSlug);
+                if (!r) return null;
+                return (
+                  <li>
+                    <a
+                      href={`/blog/${relSlug}`}
+                      class="block h-full rounded-2xl border-[3px] border-hairline bg-card p-4 shadow-hard-sm transition-transform hover:-translate-y-1"
+                    >
+                      <span class="font-mono text-[11px] text-muted-foreground">
+                        {r.category}
+                      </span>
+                      <span class="mt-1 block font-display font-extrabold">{r.title}</span>
+                    </a>
+                  </li>
+                );
+              })}
+            </ul>
+          </section>
+        ) : null}
+
+        {i.projects?.length ? (
+          <section class="mt-10">
+            <h2 class="font-display text-2xl font-extrabold">Related work</h2>
+            <ul class="mt-4 flex flex-wrap gap-3">
+              {i.projects.map((projSlug: string) => (
+                <li>
+                  <a
+                    href={`/projects/${projSlug}`}
+                    class="inline-flex rounded-full border-[3px] border-hairline bg-mint px-4 py-2 font-display text-sm font-extrabold shadow-hard-sm transition-transform hover:-translate-y-0.5"
+                  >
+                    {projSlug.replace(/-/g, " ")}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </section>
+        ) : null}
+
+        <nav class="mt-14 grid gap-4 sm:grid-cols-2" aria-label="Article navigation">
+          {prev ? (
+            <a
+              href={`/blog/${prev.slug}`}
+              class="rounded-2xl border-[3px] border-hairline bg-card p-4 shadow-hard-sm transition-transform hover:-translate-y-1"
+            >
+              <span class="font-mono text-[11px] text-muted-foreground">← Previous</span>
+              <span class="mt-1 block font-display font-extrabold">{prev.title}</span>
+            </a>
+          ) : (
+            <span />
+          )}
+          {next ? (
+            <a
+              href={`/blog/${next.slug}`}
+              class="rounded-2xl border-[3px] border-hairline bg-card p-4 text-right shadow-hard-sm transition-transform hover:-translate-y-1"
+            >
+              <span class="font-mono text-[11px] text-muted-foreground">Next →</span>
+              <span class="mt-1 block font-display font-extrabold">{next.title}</span>
+            </a>
+          ) : null}
+        </nav>
+      </div>
+
+      <aside class="hidden lg:block">
+        <div class="sticky top-28 rounded-3xl border-[3px] border-hairline bg-surface p-5 shadow-hard">
+          <p class="hand text-xl">on this page</p>
+          <ul class="mt-3 space-y-2 text-sm">
+            {headings.map((h: { text: string }) => (
+              <li>
+                <a
+                  href={`#${slugify(h.text)}`}
+                  class="text-foreground/75 hover:text-foreground hover:underline"
+                >
+                  {h.text}
+                </a>
+              </li>
+            ))}
+            <li>
+              <a href="#checklist" class="text-foreground/75 hover:underline">
+                Checklist
+              </a>
+            </li>
+            <li>
+              <a href="#faq" class="text-foreground/75 hover:underline">
+                FAQ
+              </a>
+            </li>
+            <li>
+              <a href="#summary" class="text-foreground/75 hover:underline">
+                Summary
+              </a>
+            </li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </article>
+</PageLayout>

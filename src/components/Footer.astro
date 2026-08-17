@@ -1,0 +1,94 @@
+---
+/**
+ * Footer.astro — Static footer.
+ * No client JS needed — all content is static HTML + CSS.
+ */
+import { profile, availability } from "@/data/site";
+import { navLinks } from "@/components/nav-links";
+---
+
+<footer class="relative mt-10">
+  <div class="container-page">
+    <!-- Scribble divider -->
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 600 16"
+      preserveAspectRatio="none"
+      class="h-4 w-full text-foreground/50 mb-10"
+    >
+      <path
+        d="M2 10c40-8 80 8 120 0s80-10 120-2 80 10 120 2 80-10 120-2 76 8 116 2"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2.5"
+        stroke-linecap="round"
+      />
+    </svg>
+  </div>
+
+  <div class="container-page flex flex-col gap-8 pb-4 md:flex-row md:items-start md:justify-between">
+    <!-- Info card -->
+    <div class="relative max-w-lg rounded-2xl border-[3px] border-hairline bg-mint p-6 shadow-hard -rotate-1">
+      <span aria-hidden class="tape-strip absolute -top-3 left-6 h-5 w-20 -rotate-6 rounded-[2px]"></span>
+      <p class="font-display text-base font-extrabold">{profile.name}</p>
+      <p class="mt-2 text-sm text-foreground/80">{profile.tagline}</p>
+      <p class="mt-5 flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.22em]">
+        <span class="relative flex size-2.5">
+          <span class="absolute inline-flex size-full animate-ping rounded-full bg-foreground/50"></span>
+          <span class="relative inline-flex size-2.5 rounded-full bg-foreground"></span>
+        </span>
+        availability
+      </p>
+      <ul class="mt-3 grid grid-cols-1 gap-y-1.5 text-sm text-foreground/85 sm:grid-cols-2 sm:gap-x-6">
+        {availability.map((item: string) => (
+          <li class="flex items-start gap-2">
+            <span aria-hidden class="mt-2 size-1.5 shrink-0 rounded-full bg-foreground"></span>
+            {item}
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    <!-- Nav pill links -->
+    <div class="flex flex-wrap gap-2 md:max-w-md md:justify-end">
+      {navLinks.map((link: { to: string; label: string }, i: number) => (
+        <a
+          href={link.to}
+          data-magnetic="0.3"
+          style={`transform: rotate(${i % 3 === 0 ? -2 : i % 3 === 1 ? 1.5 : 0}deg)`}
+          class="inline-block rounded-full border-[3px] border-hairline bg-card px-3.5 py-1.5 text-sm font-semibold shadow-hard-sm transition-colors duration-200 hover:bg-yellow"
+        >
+          {link.label}
+        </a>
+      ))}
+    </div>
+  </div>
+
+  <!-- Bottom row -->
+  <div class="container-page flex flex-col gap-3 py-8 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
+    <p class="flex items-center gap-2">
+      <!-- Heart doodle -->
+      <svg aria-hidden viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="size-4 text-peach">
+        <path d="M12 20s-8-4.6-8-10a4.5 4.5 0 018-2.8A4.5 4.5 0 0120 10c0 5.4-8 10-8 10z" />
+      </svg>
+      &copy; {new Date().getFullYear()} {profile.name}. Handmade with React and TypeScript.
+    </p>
+    <div class="flex flex-wrap gap-2">
+      <a href={profile.github} target="_blank" rel="noreferrer" data-magnetic="0.35" class="inline-block">
+        <span style="transform: rotate(-3deg)" class="hover-wiggle inline-flex items-center gap-1.5 rounded-full border-[3px] border-hairline px-3 py-1 font-display text-xs font-extrabold tracking-wide uppercase shadow-hard-sm bg-sky text-foreground">
+          GitHub
+        </span>
+      </a>
+      <a href={profile.linkedin} target="_blank" rel="noreferrer" data-magnetic="0.35" class="inline-block">
+        <span style="transform: rotate(2deg)" class="hover-wiggle inline-flex items-center gap-1.5 rounded-full border-[3px] border-hairline px-3 py-1 font-display text-xs font-extrabold tracking-wide uppercase shadow-hard-sm bg-lavender text-foreground">
+          LinkedIn
+        </span>
+      </a>
+      <a href={`mailto:${profile.email}`} data-magnetic="0.35" class="inline-block">
+        <span style="transform: rotate(-2deg)" class="hover-wiggle inline-flex items-center gap-1.5 rounded-full border-[3px] border-hairline px-3 py-1 font-display text-xs font-extrabold tracking-wide uppercase shadow-hard-sm bg-yellow text-foreground">
+          Email
+        </span>
+      </a>
+    </div>
+  </div>
+</footer>

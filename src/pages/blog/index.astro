@@ -1,0 +1,76 @@
+---
+/**
+ * Blog Index Page (/blog) — Technical articles, case studies, and engineering notes.
+ */
+import PageLayout from "../../layouts/PageLayout.astro";
+import { kindMeta } from "../../data/insights";
+import { flags } from "../../data/site";
+import { Sticker } from "../../components/react/decor";
+import { StaggerText } from "../../components/react/motion";
+import { BlogList } from "../../components/react/BlogList";
+import { BlogComingSoon } from "../../components/react/sections/BlogComingSoon";
+import { Newsletter } from "../../components/react/Newsletter";
+import { getArticles } from "../../lib/cms/queries";
+
+export const prerender = true;
+
+const articles = await getArticles();
+
+const title = "Blog & Insights — Practical engineering writing by Rohit Gautam";
+const description =
+  "Evergreen technical articles, engineering case studies and notes on React, Node.js, Shopify, Cloudflare, AI and performance.";
+const url = "https://rohitgautam.site/blog";
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Blog",
+  name: "Blog by Rohit Gautam",
+  description,
+  url,
+  author: { "@type": "Person", name: "Rohit Gautam" },
+  blogPost: articles.map((i) => ({
+    "@type": "BlogPosting",
+    headline: i.title,
+    url: `${url}/${i.slug}`,
+    datePublished: i.published,
+    dateModified: i.updated,
+  })),
+};
+---
+
+<PageLayout title={title} description={description}>
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
+  <section class="container-page pt-14 pb-8 md:pt-20">
+    <p class="hand text-2xl">insights</p>
+    <h1 class="mt-3 max-w-4xl font-display text-[2.6rem] leading-[0.94] font-extrabold md:text-7xl">
+      <StaggerText text="Engineering notes" client:load />
+      <br />
+      <StaggerText text="worth keeping" delay={0.15} client:load />
+    </h1>
+    <p class="mt-6 max-w-2xl text-base leading-relaxed text-foreground/75 md:text-lg">
+      Long-lived writing about how things are actually built — React and Node.js architecture,
+      Shopify and Cloudflare products, performance work and AI features that survive users.
+    </p>
+    {!flags.blogComingSoon && (
+      <div class="mt-6 flex flex-wrap gap-2">
+        {(Object.keys(kindMeta) as (keyof typeof kindMeta)[]).map((k) => (
+          <Sticker tone={kindMeta[k].tone} rotate={0} client:load>
+            {kindMeta[k].share} {kindMeta[k].label}
+          </Sticker>
+        ))}
+      </div>
+    )}
+  </section>
+
+  {flags.blogComingSoon ? (
+    <BlogComingSoon client:load />
+  ) : (
+    <>
+      <BlogList initialItems={articles} client:load />
+      <section class="container-page pb-28 max-w-4xl">
+        <Newsletter client:visible />
+      </section>
+    </>
+  )}
+</PageLayout>

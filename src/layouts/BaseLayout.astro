@@ -1,0 +1,94 @@
+---
+/**
+ * BaseLayout.astro — HTML shell for every page.
+ * Includes SEO metadata, OpenGraph, fonts, theme script, <ClientRouter />, and pixel transition.
+ */
+import { ClientRouter } from "astro:transitions";
+import "../styles/global.css";
+
+interface Props {
+  title: string;
+  description?: string;
+  image?: string;
+  type?: "website" | "article";
+}
+
+const {
+  title,
+  description = "Rohit Gautam builds scalable full stack applications and AI-powered software with React.js, Node.js and Cloudflare.",
+  image = "/images/portrait.jpg",
+  type = "website",
+} = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site || "https://rohitgautam.site");
+const ogImageURL = new URL(image, Astro.site || "https://rohitgautam.site");
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="canonical" href={canonicalURL} />
+
+    <!-- Primary Meta Tags -->
+    <title>{title}</title>
+    <meta name="title" content={title} />
+    <meta name="description" content={description} />
+    <meta name="author" content="Rohit Gautam" />
+    <meta name="theme-color" content="#FAF7EE" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content={type} />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImageURL} />
+    <meta property="og:site_name" content="Rohit Gautam" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content={canonicalURL} />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageURL} />
+
+    <!-- RSS Syndication -->
+    <link rel="alternate" type="application/rss+xml" title="Rohit Gautam Insights RSS Feed" href="/rss.xml" />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=JetBrains+Mono:wght@400;500;600;700&family=Caveat:wght@400..700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Theme: apply saved preference before paint to avoid flash and persist on transitions -->
+    <script is:inline>
+      function applyTheme() {
+        const stored = localStorage.getItem("theme");
+        if (stored === "dark") {
+          document.documentElement.classList.add("dark");
+        } else {
+          document.documentElement.classList.remove("dark");
+        }
+      }
+      applyTheme();
+      document.addEventListener("astro:after-swap", applyTheme);
+    </script>
+
+    <!-- Astro ClientRouter for soft navigation + View Transitions -->
+    <ClientRouter />
+  </head>
+  <body>
+    <slot />
+
+    <!-- Pixel dissolve page transition (vanilla JS, persists across navigations) -->
+    <script src="../scripts/pixel-transition.ts"></script>
+    <!-- Magnetic hover animation for data-magnetic elements -->
+    <script src="../scripts/magnetic-elements.ts"></script>
+  </body>
+</html>

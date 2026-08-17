@@ -1,0 +1,114 @@
+---
+/**
+ * Contact Page — Inquiry form, cal.com scheduler, email links, and social connections.
+ */
+import PageLayout from "../layouts/PageLayout.astro";
+import { Download, Mail, MapPin } from "lucide-react";
+import { profile } from "../data/site";
+import { Doodle, FloatingShape } from "../components/react/decor";
+import { Magnetic, Reveal, StaggerText } from "../components/react/motion";
+import { ContactForm } from "../components/react/ContactForm";
+import { Mascot } from "../components/react/Mascot";
+import { TechGlyph } from "../components/react/tech-icons";
+
+const links = [
+  { label: "Email", value: profile.email, href: `mailto:${profile.email}`, glyph: null, tone: "bg-yellow" },
+  { label: "GitHub", value: "Code and experiments", href: profile.github, glyph: "GitHub", tone: "bg-mint" },
+  { label: "LinkedIn", value: "Professional updates", href: profile.linkedin, glyph: "LinkedIn", tone: "bg-sky" },
+];
+---
+
+<PageLayout
+  title="Contact Rohit Gautam — Software Engineer"
+  description="Get in touch with Rohit Gautam about full stack applications, Cloudflare edge products and AI automation work."
+>
+  <section class="relative overflow-hidden py-16 md:py-24">
+    <FloatingShape name="heart" tone="peach" className="left-[8%] top-24 size-12" client:load />
+    <FloatingShape name="sparkle" tone="lavender" className="right-[10%] bottom-24 size-14" delay={400} client:load />
+    <div class="container-page grid gap-14 lg:grid-cols-[0.85fr_1.15fr] lg:items-start lg:gap-16">
+      <div class="lg:sticky lg:top-28">
+        <p class="hand text-2xl">contact</p>
+        <h1 class="mt-3 font-display text-[2.7rem] leading-[0.92] font-extrabold md:text-7xl">
+          <StaggerText text="Let's build" client:load />
+          <br />
+          <StaggerText text="something real" delay={0.15} client:load />
+        </h1>
+        <p class="mt-7 max-w-lg text-base leading-relaxed text-foreground/75 md:text-lg">
+          Tell me what you're building, what's stuck, and when it needs to be live. If it's a fit
+          I'll come back with a plan; if it isn't, I'll say so and point you somewhere better.
+        </p>
+        <div class="mt-10 flex flex-wrap gap-3">
+          <Magnetic client:idle>
+            <a
+              href={`mailto:${profile.email}`}
+              class="inline-flex items-center gap-2 rounded-full border-[3px] border-hairline bg-lavender px-6 py-3 font-display text-sm font-extrabold shadow-hard transition-transform hover:-translate-y-0.5"
+            >
+              <Mail className="size-4" /> {profile.email}
+            </a>
+          </Magnetic>
+        </div>
+        <p class="mt-8 flex items-center gap-2 text-sm text-muted-foreground">
+          <MapPin className="size-4" /> Based in {profile.location}
+        </p>
+
+        <div class="mt-10 flex items-end gap-3">
+          <Mascot className="size-24 shrink-0 text-hairline" wave client:visible />
+          <p class="hand text-xl">usually replies within a day ✦</p>
+        </div>
+      </div>
+
+      <Reveal delay={0.1} client:load>
+        <ContactForm client:load />
+      </Reveal>
+    </div>
+
+    <div class="container-page mt-16 md:mt-24">
+      <p class="font-mono text-[11px] uppercase tracking-[0.24em] text-muted-foreground">
+        elsewhere
+      </p>
+      <div class="mt-5 grid gap-4 sm:grid-cols-2">
+        {links.map(({ label, value, href, glyph, tone }, i) => (
+          <Reveal delay={i * 0.06} client:visible>
+            <a
+              href={href}
+              target={href.startsWith("http") ? "_blank" : undefined}
+              rel="noreferrer"
+              class="poke flex h-full items-center gap-4 rounded-2xl border-[3px] border-hairline bg-card p-5 shadow-hard-sm transition-transform hover:-translate-y-0.5"
+            >
+              <span class={`grid size-11 shrink-0 place-items-center rounded-xl border-[3px] border-hairline ${tone}`}>
+                {glyph === "GitHub" ? (
+                  <TechGlyph name="GitHub" className="size-5" client:load />
+                ) : glyph === "LinkedIn" ? (
+                  <svg aria-hidden="true" viewBox="0 0 24 24" fill="currentColor" class="size-5">
+                    <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.2V10.9H6.46M7.83 6.45a1.66 1.66 0 0 0-1.66 1.66 1.66 1.66 0 0 0 1.66-1.66 1.66 1.66 0 0 0 1.66-1.66 1.66 1.66 0 0 0-1.66-1.66Z" />
+                  </svg>
+                ) : (
+                  <Mail className="size-5" />
+                )}
+              </span>
+              <span class="min-w-0">
+                <span class="block font-display text-sm font-extrabold">{label}</span>
+                <span class="block truncate text-xs text-muted-foreground">{value}</span>
+              </span>
+            </a>
+          </Reveal>
+        ))}
+        <Reveal delay={0.18} client:visible>
+          <a
+            href={profile.resumeUrl}
+            download
+            class="poke flex h-full items-center gap-4 rounded-2xl border-[3px] border-hairline bg-card p-5 shadow-hard-sm transition-transform hover:-translate-y-0.5"
+          >
+            <span class="grid size-11 shrink-0 place-items-center rounded-xl border-[3px] border-hairline bg-lavender">
+              <Download className="size-5" />
+            </span>
+            <span>
+              <span class="block font-display text-sm font-extrabold">Resume</span>
+              <span class="block text-xs text-muted-foreground">Download the PDF</span>
+            </span>
+          </a>
+        </Reveal>
+      </div>
+    </div>
+  </section>
+</PageLayout>

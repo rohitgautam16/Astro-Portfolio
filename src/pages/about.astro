@@ -1,0 +1,168 @@
+---
+/**
+ * About Page — Full stack engineer biography, quick facts, philosophy, toolkit, and certifications.
+ */
+import PageLayout from "../layouts/PageLayout.astro";
+import { ArrowRight } from "lucide-react";
+import { certifications, philosophy, profile, skillGroups } from "../data/site";
+import { Doodle, FloatingShape, Sticker } from "../components/react/decor";
+import { Magnetic, Reveal, StaggerText } from "../components/react/motion";
+import { ToolkitCard } from "../components/react/ToolCard";
+---
+
+<PageLayout
+  title="About Rohit Gautam — Full stack engineer"
+  description="How Rohit Gautam works: product-first full stack engineering with React.js, Node.js and Cloudflare, plus the principles behind the code."
+>
+  <section class="relative overflow-hidden pt-14 pb-20 md:pt-20">
+    <FloatingShape name="flower" tone="peach" className="right-[10%] top-16 size-12" client:load />
+    <div class="container-page">
+      <p class="hand text-2xl">about me</p>
+      <h1 class="mt-3 max-w-4xl font-display text-[2.7rem] leading-[0.92] font-extrabold md:text-7xl">
+        <StaggerText text="Engineer first," client:load />
+        <br />
+        <span class="relative inline-block">
+          <StaggerText text="product-obsessed" delay={0.15} client:load />
+          <span aria-hidden="true" class="absolute inset-x-0 -bottom-1 -z-10 h-4 bg-yellow"></span>
+        </span>
+      </h1>
+      <div class="mt-10 grid gap-10 lg:grid-cols-[1.3fr_0.7fr]">
+        <div class="flex flex-col gap-6">
+          {profile.summary.map((paragraph: string, i: number) => (
+            <Reveal delay={i * 0.07} client:visible>
+              <p
+                class={
+                  i === 0
+                    ? "text-xl leading-relaxed font-medium md:text-2xl"
+                    : "text-base leading-relaxed text-foreground/75 md:text-lg"
+                }
+              >
+                {paragraph}
+              </p>
+            </Reveal>
+          ))}
+        </div>
+        <Reveal delay={0.1} className="relative" client:visible>
+          <div class="rotate-[1.5deg] rounded-[26px] border-[3px] border-hairline bg-surface p-7 shadow-hard">
+            <span aria-hidden="true" class="tape-strip absolute -top-3 left-8 h-5 w-24 -rotate-6 rounded-[2px]"></span>
+            <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-muted-foreground">
+              quick facts
+            </p>
+            <dl class="mt-5 space-y-4 text-sm">
+              {[
+                ["Based in", profile.location],
+                ["Role", profile.role],
+                ["Focus", "Full stack · AI"],
+                ["Cloud", "Cloudflare · Oracle Cloud"],
+                ["Open to", "Product roles & contracts"],
+              ].map(([k, v]) => (
+                <div class="flex items-baseline justify-between gap-4 border-b border-dashed border-hairline/50 pb-3">
+                  <dt class="font-mono text-[11px] uppercase tracking-widest text-muted-foreground">
+                    {k}
+                  </dt>
+                  <dd class="text-right font-semibold">{v}</dd>
+                </div>
+              ))}
+            </dl>
+            <div class="mt-6 flex flex-wrap gap-2">
+              {profile.focus.map((item: string, i: number) => (
+                <Sticker tone={(["mint", "sky", "lavender", "peach", "yellow"] as const)[i % 5]!} rotate={i % 2 ? 2 : -2} client:load>
+                  {item}
+                </Sticker>
+              ))}
+            </div>
+          </div>
+        </Reveal>
+      </div>
+    </div>
+  </section>
+
+  <section class="border-y-[3px] border-hairline bg-surface py-20 md:py-28">
+    <div class="container-page">
+      <Reveal client:visible>
+        <h2 class="font-display text-3xl leading-[0.95] font-extrabold md:text-5xl">
+          How I make decisions
+        </h2>
+      </Reveal>
+      <div class="mt-12 grid gap-6 md:grid-cols-2">
+        {philosophy.map((item, i) => (
+          <Reveal delay={i * 0.06} className="h-full" client:visible>
+            <div
+              style={`transform: rotate(${i % 2 ? 0.8 : -0.8}deg)`}
+              class="poke h-full rounded-2xl border-[3px] border-hairline bg-card p-7 shadow-hard"
+            >
+              <div class="flex items-center gap-3">
+                <span class="grid size-9 place-items-center rounded-full border-[3px] border-hairline bg-mint font-mono text-xs font-bold">
+                  {item.no}
+                </span>
+                <h3 class="font-display text-xl font-extrabold">{item.title}</h3>
+              </div>
+              <p class="mt-4 text-sm leading-relaxed text-foreground/75">{item.body}</p>
+            </div>
+          </Reveal>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="container-page py-20 md:py-28">
+    <Reveal className="max-w-2xl" client:visible>
+      <p class="flex items-center gap-2 hand text-2xl">
+        <Doodle name="dots" className="size-4" client:load /> the toolkit
+      </p>
+      <h2 class="mt-2 font-display text-3xl leading-[0.95] font-extrabold md:text-5xl">
+        What I work with
+      </h2>
+      <p class="mt-5 text-base leading-relaxed text-foreground/75">
+        These are the technologies I reach for when something has to run in production — not a
+        wishlist. Grouped by the part of the product they hold up.
+      </p>
+    </Reveal>
+    <div class="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      {skillGroups.map((group, i) => (
+        <ToolkitCard
+          client:visible
+          category={group.category}
+          note={group.note}
+          tone={group.tone}
+          items={group.items}
+          index={i}
+        />
+      ))}
+    </div>
+  </section>
+
+  <section class="container-page pb-24">
+    <div class="grid gap-6 md:grid-cols-2">
+      {certifications.map((cert, i) => (
+        <Reveal delay={i * 0.07} className="h-full" client:visible>
+          <div class="h-full rounded-2xl border-[3px] border-hairline bg-sky p-7 shadow-hard">
+            <p class="font-mono text-[11px] uppercase tracking-widest">{cert.org}</p>
+            <h3 class="mt-3 font-display text-xl font-extrabold">{cert.title}</h3>
+            <p class="mt-3 text-sm text-foreground/75">{cert.detail}</p>
+          </div>
+        </Reveal>
+      ))}
+    </div>
+    <Reveal delay={0.1} client:visible>
+      <div class="mt-14 flex flex-wrap gap-3">
+        <Magnetic client:idle>
+          <a
+            href="/projects"
+            class="inline-flex items-center gap-2 rounded-full border-[3px] border-hairline bg-lavender px-6 py-3 font-display text-sm font-extrabold shadow-hard transition-transform hover:-translate-y-0.5"
+          >
+            See the products <ArrowRight className="size-4" />
+          </a>
+        </Magnetic>
+        <Magnetic client:idle>
+          <a
+            href="/contact"
+            class="inline-flex items-center gap-2 rounded-full border-[3px] border-hairline bg-card px-6 py-3 font-display text-sm font-extrabold shadow-hard-sm transition-transform hover:-translate-y-0.5"
+          >
+            Get in touch
+          </a>
+        </Magnetic>
+      </div>
+    </Reveal>
+  </section>
+</PageLayout>

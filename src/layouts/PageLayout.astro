@@ -1,0 +1,42 @@
+---
+/**
+ * PageLayout.astro — Standard page wrapper.
+ * BaseLayout (head, fonts, theme, ClientRouter, pixel transition)
+ * + Header (React island, sticky nav)
+ * + ScrollProgress (React island)
+ * + main content (slot)
+ * + Footer (static Astro)
+ */
+import BaseLayout from "./BaseLayout.astro";
+import Footer from "../components/Footer.astro";
+import { Header } from "../components/react/Header";
+import { ScrollProgress } from "../components/react/motion";
+import { SmoothScroll } from "../components/react/motion";
+import { flags } from "../data/site";
+
+interface Props {
+  title: string;
+  description?: string;
+  image?: string;
+  type?: "website" | "article";
+}
+
+const { title, description, image, type } = Astro.props;
+const pathname = Astro.url.pathname;
+---
+
+<BaseLayout title={title} description={description} image={image} type={type}>
+  <a
+    href="#main"
+    class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:rounded-xl focus:border-[3px] focus:border-hairline focus:bg-yellow focus:px-4 focus:py-2 focus:font-display focus:text-sm focus:font-extrabold focus:text-foreground focus:shadow-hard focus:outline-none"
+  >
+    Skip to main content
+  </a>
+  {!flags.siteComingSoon && <ScrollProgress client:idle />}
+  {!flags.siteComingSoon && <SmoothScroll client:idle />}
+  {!flags.siteComingSoon && <Header client:load pathname={pathname} />}
+  <main id="main" class={flags.siteComingSoon ? "h-[100dvh] w-full overflow-hidden" : ""}>
+    <slot />
+  </main>
+  {!flags.siteComingSoon && <Footer />}
+</BaseLayout>

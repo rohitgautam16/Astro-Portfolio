@@ -1,0 +1,53 @@
+---
+/**
+ * Homepage — Full Astro page with PageLayout and all 9 interactive sections.
+ */
+import PageLayout from "../layouts/PageLayout.astro";
+import { HeroSection } from "../components/react/sections/HeroSection";
+import { FocusMarquee } from "../components/react/sections/FocusMarquee";
+import { IntroSection } from "../components/react/sections/IntroSection";
+import { FeaturedProducts } from "../components/react/sections/FeaturedProducts";
+import { PhilosophySection } from "../components/react/sections/PhilosophySection";
+import { TechStackSection } from "../components/react/sections/TechStackSection";
+import { CareerTimeline } from "../components/react/sections/CareerTimeline";
+import { BuildingSection } from "../components/react/sections/BuildingSection";
+import { CertificationsSection } from "../components/react/sections/CertificationsSection";
+import { ContactCta } from "../components/react/sections/ContactCta";
+import { SiteComingSoon } from "../components/react/sections/SiteComingSoon";
+import { profile, flags } from "../data/site";
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: profile.name,
+  jobTitle: profile.role,
+  description: profile.tagline,
+  address: { "@type": "PostalAddress", addressCountry: "IN" },
+  knowsAbout: profile.focus,
+  sameAs: [profile.github, profile.linkedin],
+};
+---
+
+<PageLayout
+  title="Rohit Gautam — Software Engineer building full stack products"
+  description="Rohit Gautam is a software engineer in India building scalable full stack applications and AI-powered software with React.js, Node.js and Cloudflare."
+>
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
+  {flags.siteComingSoon ? (
+    <SiteComingSoon client:load />
+  ) : (
+    <>
+      <HeroSection client:load />
+      <FocusMarquee client:visible />
+      <IntroSection client:visible />
+      <FeaturedProducts client:load />
+      <PhilosophySection client:visible />
+      <TechStackSection client:visible />
+      <CareerTimeline client:visible />
+      <BuildingSection client:visible />
+      <CertificationsSection client:visible />
+      <ContactCta client:visible />
+    </>
+  )}
+</PageLayout>
