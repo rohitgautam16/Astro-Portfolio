@@ -33,6 +33,7 @@ const ogImageURL = new URL(image, Astro.site || "https://rohitgautam.site");
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="icon" href="/favicon.ico" sizes="32x32" />
     <link rel="canonical" href={canonicalURL} />
@@ -40,7 +41,6 @@ const ogImageURL = new URL(image, Astro.site || "https://rohitgautam.site");
     <!-- Primary Meta Tags -->
     <title>{title}</title>
     <meta name="title" content={title} />
-    <meta name="description" content={description} />
     <meta name="author" content="Rohit Gautam" />
     <meta name="theme-color" content="#FAF7EE" />
 
