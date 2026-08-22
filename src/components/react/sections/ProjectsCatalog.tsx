@@ -156,9 +156,6 @@ export function ProjectsCatalog() {
 
   return (
     <>
-      {/* ------------------------------------------------------------- */}
-      {/* DESKTOP: Horizontally pinned scroll catalog                     */}
-      {/* ------------------------------------------------------------- */}
       <section
         ref={containerRef}
         className="relative hidden lg:block bg-surface -mt-20 pt-20 md:-mt-24 md:pt-24"

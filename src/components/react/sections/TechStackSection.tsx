@@ -36,7 +36,7 @@ export function TechStackSection() {
                   {group.category}
                   <span aria-hidden className="h-[3px] flex-1 rounded-full bg-hairline/25" />
                 </h4>
-                <div className="mt-4 grid grid-cols-1 gap-3 min-[380px]:grid-cols-2">
+                <div className="mt-4 grid grid-cols-2 gap-3">
                   {group.items.map((item, i) => (
                     <ToolCard
                       key={item}

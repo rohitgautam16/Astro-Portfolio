@@ -157,13 +157,10 @@ export function FeaturedProducts() {
 
   return (
     <>
-      {/* ------------------------------------------------------------- */}
-      {/* DESKTOP: Horizontally pinned scroll section                     */}
-      {/* ------------------------------------------------------------- */}
       <section
         id="work"
         ref={containerRef}
-        className="relative hidden lg:block bg-surface"
+        className="relative hidden lg:block"
         style={{ height: "340vh" }}
       >
         <div className="sticky top-0 flex h-screen w-full flex-col justify-center pt-[88px] pb-4 xl:pt-[96px] xl:pb-6">
@@ -208,10 +205,8 @@ export function FeaturedProducts() {
         </div>
       </section>
 
-      {/* ------------------------------------------------------------- */}
-      {/* MOBILE / TABLET: Clean vertical list with standard scroll     */}
-      {/* ------------------------------------------------------------- */}
-      <section className="relative block lg:hidden bg-surface py-20">
+
+      <section className="relative block lg:hidden py-20 mt-10">
         <div className="container-page">
           <Reveal className="flex flex-wrap items-end justify-between gap-6">
             <div>
