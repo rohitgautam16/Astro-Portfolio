@@ -4,7 +4,7 @@ import { Doodle } from "./decor";
 import { TechGlyph } from "./tech-icons";
 
 const WORDS = ["Hello", "नमस्ते", "Bonjour", "Hola", "Welcome"];
-const MIN_MS = 4000; // 4.0 seconds for complete intro greeting sequence
+const MIN_MS = 14000; // 4.0 seconds for complete intro greeting sequence
 
 /** Tech & doodle items floating around the preloader */
 const FLOATING_ITEMS = [
@@ -30,6 +30,7 @@ export function Preloader() {
     const alreadyBooted = sessionStorage.getItem("rg-booted") === "1";
 
     if (isReduced || alreadyBooted) {
+      document.documentElement.classList.remove("rg-preloading");
       setDone(true);
       return;
     }
@@ -53,6 +54,7 @@ export function Preloader() {
       sessionStorage.setItem("rg-booted", "1");
       setExiting(true);
       document.body.style.overflow = "";
+      document.documentElement.classList.remove("rg-preloading");
 
       // Allow 1.35 seconds for full dramatic exit reveal sequence
       destroyTimeout = window.setTimeout(() => {
@@ -198,7 +200,7 @@ export function Preloader() {
             initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.45, duration: 0.5 }}
-            className="mt-8 font-mono text-[11px] uppercase tracking-[0.32em] text-muted-foreground"
+            className="mt-8 font-mono text-center text-[11px] uppercase tracking-[0.32em] text-muted-foreground"
           >
             Rohit Gautam · Full Stack Software Engineer
           </motion.p>

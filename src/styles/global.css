@@ -487,3 +487,12 @@ body {
 .marquee-pause:hover .marquee-track-reverse {
   animation-play-state: paused;
 }
+
+/* Preloader anti-flash rule: hide headers/nav on initial frame 0 before preloader exits */
+html.rg-preloading header,
+html.rg-preloading nav,
+html.rg-preloading [data-site-header] {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
