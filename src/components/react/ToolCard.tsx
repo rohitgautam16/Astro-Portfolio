@@ -53,7 +53,7 @@ export function ToolCard({
   );
 }
 
-/** Compact bordered chip with a logo — used inside skill category cards. */
+/** Compact bordered chip with a logo - used inside skill category cards. */
 export function ToolChip({ name, level }: { name: string; level?: string }) {
   return (
     <span className="group inline-flex max-w-full items-center gap-2 rounded-xl border-2 border-hairline bg-card px-2.5 py-1.5 shadow-hard-sm transition-transform duration-200 hover:-translate-y-0.5 hover:-rotate-1">

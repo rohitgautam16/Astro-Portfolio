@@ -1,5 +1,5 @@
 /**
- * ThemeToggle — Standalone React island.
+ * ThemeToggle - Standalone React island.
  * Reads/writes theme from localStorage + classList directly (no Context needed).
  */
 import { useCallback, useEffect, useState } from "react";

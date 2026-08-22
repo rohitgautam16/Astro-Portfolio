@@ -2,7 +2,7 @@ import { useEffect, useState, useMemo, useRef } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Search, ArrowRight, Sun, Moon, Mail, Calendar, FileText } from "lucide-react";
 import { navLinks } from "@/components/nav-links";
-import { profile, projects } from "@/data/site";
+import { profile, projects, flags } from "@/data/site";
 import { insights } from "@/data/insights";
 import { useTheme } from "@/components/react/ThemeToggle";
 import { TechGlyph } from "@/components/react/tech-icons";
@@ -62,8 +62,9 @@ export function CommandPalette({
   const items: CommandItem[] = useMemo(() => {
     const list: CommandItem[] = [];
 
-    // Pages
+    // Pages (Filter out blog if blog is coming soon)
     navLinks.forEach((link) => {
+      if (flags.blogComingSoon && link.to === "/blog") return;
       list.push({
         id: `page-${link.to}`,
         category: "Pages",
@@ -91,19 +92,21 @@ export function CommandPalette({
       });
     });
 
-    // Articles
-    insights.forEach((art) => {
-      list.push({
-        id: `article-${art.slug}`,
-        category: "Articles",
-        title: art.title,
-        subtitle: `${art.category} · ${art.readingTime} min read`,
-        action: () => {
-          onClose();
-          window.location.href = `/blog/${art.slug}`;
-        },
+    // Articles (Only include if blog is live)
+    if (!flags.blogComingSoon) {
+      insights.forEach((art) => {
+        list.push({
+          id: `article-${art.slug}`,
+          category: "Articles",
+          title: art.title,
+          subtitle: `${art.category} · ${art.readingTime} min read`,
+          action: () => {
+            onClose();
+            window.location.href = `/blog/${art.slug}`;
+          },
+        });
       });
-    });
+    }
 
     // Actions
     list.push({

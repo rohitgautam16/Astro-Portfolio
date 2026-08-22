@@ -1,5 +1,5 @@
 /**
- * Header — React island.
+ * Header - React island.
  * Sticky navigation with scroll-aware styling, desktop nav links,
  * search trigger, theme toggle, and hamburger for mobile.
  */

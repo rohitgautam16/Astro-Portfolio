@@ -101,7 +101,7 @@ function HorizontalCard({
         <div className="flex h-full flex-col justify-between p-6 xl:p-8">
           <div>
             <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-muted-foreground">
-              {String(index + 1).padStart(2, "0")} — {project.kind} · {project.year}
+              {String(index + 1).padStart(2, "0")} - {project.kind} · {project.year}
             </p>
 
             <h3 className="mt-3 font-display text-2xl xl:text-3xl font-extrabold leading-tight text-balance">

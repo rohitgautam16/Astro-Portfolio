@@ -111,20 +111,20 @@ export const insights: Insight[] = [
         type: "p",
         text: "The order below matters more than any single technique. Render cost, byte cost and waterfall cost are three different problems with three different tools, and applying the wrong tool is what makes optimisation feel unproductive.",
       },
-      { type: "h2", text: "Step 1 — Measure before you touch anything" },
+      { type: "h2", text: "Step 1 - Measure before you touch anything" },
       {
         type: "list",
         items: [
           "Record a React Profiler session for the interaction that feels slow, not for the page in general.",
-          "Throttle CPU 4× in Chrome DevTools — desktop numbers hide almost every real problem.",
+          "Throttle CPU 4× in Chrome DevTools - desktop numbers hide almost every real problem.",
           "Capture Core Web Vitals from real users (INP and LCP) rather than a single Lighthouse run.",
           "Write the baseline number down. If you cannot state the before value, you cannot claim an after.",
         ],
       },
-      { type: "h2", text: "Step 2 — Cut render work" },
+      { type: "h2", text: "Step 2 - Cut render work" },
       {
         type: "p",
-        text: "The cheapest render is the one that never happens. Before reaching for memo, move state down to the component that actually uses it — most 'the whole page re-renders' problems are a single piece of state living too high in the tree.",
+        text: "The cheapest render is the one that never happens. Before reaching for memo, move state down to the component that actually uses it - most 'the whole page re-renders' problems are a single piece of state living too high in the tree.",
       },
       {
         type: "code",
@@ -156,14 +156,14 @@ function Dashboard({ rows }) {
         type: "callout",
         tone: "yellow",
         title: "memo is a contract, not a decoration",
-        text: "React.memo only helps when every prop is referentially stable. One inline object or arrow function in the parent silently disables it — and you pay the comparison cost for nothing.",
+        text: "React.memo only helps when every prop is referentially stable. One inline object or arrow function in the parent silently disables it - and you pay the comparison cost for nothing.",
       },
       { type: "h3", text: "Lists are where render cost actually lives" },
       {
         type: "p",
         text: "A table of 2,000 rows re-rendering on every keystroke is the single most common React performance bug in commerce and dashboard apps. Virtualise anything above roughly 100 rows, debounce the input that drives filtering, and keep the row component memoised with primitive props.",
       },
-      { type: "h2", text: "Step 3 — Cut bytes" },
+      { type: "h2", text: "Step 3 - Cut bytes" },
       {
         type: "table",
         head: ["Problem", "Symptom", "Fix"],
@@ -178,7 +178,7 @@ function Dashboard({ rows }) {
         type: "p",
         text: "Set a budget and enforce it in CI. A bundle analyser that nobody looks at after the first week does not prevent regressions; a build that fails at 200 KB gzipped does.",
       },
-      { type: "h2", text: "Step 4 — Cut waterfalls" },
+      { type: "h2", text: "Step 4 - Cut waterfalls" },
       {
         type: "p",
         text: "Once the app renders quickly, the remaining latency is usually sequential data fetching: the layout fetches the user, then the page fetches the list, then a card fetches its detail. Hoist requests to the route loader so they run in parallel, and put Suspense boundaries around genuinely optional content rather than around the whole page.",
@@ -197,7 +197,7 @@ function Dashboard({ rows }) {
   },
 });`,
       },
-      { type: "h2", text: "Step 5 — Protect the win" },
+      { type: "h2", text: "Step 5 - Protect the win" },
       {
         type: "p",
         text: "Performance regresses by default, one innocent import at a time. Add a bundle-size check and a Lighthouse CI run to the pipeline, and record the interaction latency of your two most-used flows in a dashboard someone actually reads.",
@@ -305,7 +305,7 @@ function Dashboard({ rows }) {
       { type: "h2", text: "Validate at the edge, trust inside" },
       {
         type: "p",
-        text: "Parse every request body, query string and webhook payload with a schema at the boundary. Inside the service layer you should never write a defensive typeof check again — the type is the guarantee.",
+        text: "Parse every request body, query string and webhook payload with a schema at the boundary. Inside the service layer you should never write a defensive typeof check again - the type is the guarantee.",
       },
       { type: "h2", text: "Make writes idempotent" },
       {
@@ -325,7 +325,7 @@ return result;`,
       { type: "h2", text: "Get slow work off the request" },
       {
         type: "p",
-        text: "Thumbnails, exports, emails, third-party syncs and AI calls do not belong in a request cycle. Push a job, return an id, and let the client poll or receive a socket update. A queue also gives you retries and a dead-letter list — two things a setTimeout never will.",
+        text: "Thumbnails, exports, emails, third-party syncs and AI calls do not belong in a request cycle. Push a job, return an id, and let the client poll or receive a socket update. A queue also gives you retries and a dead-letter list - two things a setTimeout never will.",
       },
       {
         type: "table",
@@ -342,7 +342,7 @@ return result;`,
         type: "list",
         items: [
           "Structured JSON logs with a request id propagated through every layer.",
-          "p95 and p99 latency per route — averages hide the failure.",
+          "p95 and p99 latency per route - averages hide the failure.",
           "Error rate per route with the payload shape, never the payload itself.",
           "A health endpoint that checks dependencies, not one that returns 200 unconditionally.",
         ],
@@ -417,7 +417,7 @@ return result;`,
         type: "list",
         ordered: true,
         items: [
-          "Merchant hits /auth?shop=store.myshopify.com — the Worker validates the shop domain against a strict pattern.",
+          "Merchant hits /auth?shop=store.myshopify.com - the Worker validates the shop domain against a strict pattern.",
           "Redirect to Shopify with a signed state stored in KV with a short TTL.",
           "Shopify calls back; the Worker verifies HMAC and state, then exchanges the code for an offline token.",
           "Persist the token per shop, keyed by shop domain, and redirect into the embedded admin.",
@@ -467,16 +467,16 @@ const payload = JSON.parse(raw);`,
       {
         type: "list",
         items: [
-          "No native Node binaries — sharp, canvas and child_process are unavailable; use WASM or a queue consumer.",
+          "No native Node binaries - sharp, canvas and child_process are unavailable; use WASM or a queue consumer.",
           "CPU time per request is limited; long loops belong in Queues, not handlers.",
           "Read environment inside the handler, never at module scope.",
-          "Everything must be bundled at build time — no runtime module resolution.",
+          "Everything must be bundled at build time - no runtime module resolution.",
         ],
       },
       { type: "h2", text: "Billing and mandatory webhooks" },
       {
         type: "p",
-        text: "Implement the GDPR webhooks on day one — customers/redact, shop/redact and customers/data_request — because app review will reject you without them. Reconcile subscription state from Shopify's billing API on every admin load rather than trusting a locally cached flag.",
+        text: "Implement the GDPR webhooks on day one - customers/redact, shop/redact and customers/data_request - because app review will reject you without them. Reconcile subscription state from Shopify's billing API on every admin load rather than trusting a locally cached flag.",
       },
     ],
     checklist: [
@@ -523,7 +523,7 @@ const payload = JSON.parse(raw);`,
     description:
       "Discriminated unions, branded types, schema-derived types and the small set of TypeScript patterns that keep a growing React codebase honest without turning it into type golf.",
     quickAnswer:
-      "The TypeScript patterns worth adopting in a large frontend are: discriminated unions for UI state, types derived from runtime schemas so validation and types cannot drift, branded types for identifiers, and strict compiler flags including noUncheckedIndexedAccess. Avoid clever conditional types in application code — they cost more in comprehension than they save in bugs.",
+      "The TypeScript patterns worth adopting in a large frontend are: discriminated unions for UI state, types derived from runtime schemas so validation and types cannot drift, branded types for identifiers, and strict compiler flags including noUncheckedIndexedAccess. Avoid clever conditional types in application code - they cost more in comprehension than they save in bugs.",
     kind: "article",
     category: "TypeScript",
     tags: ["TypeScript", "React", "Zod", "Types", "DX"],
@@ -552,7 +552,7 @@ const payload = JSON.parse(raw);`,
       { type: "h2", text: "Derive types from schemas" },
       {
         type: "p",
-        text: "Hand-written interfaces next to hand-written validators drift within a sprint. Declare the schema once and infer the type — one source of truth for the runtime shape and the compile-time shape.",
+        text: "Hand-written interfaces next to hand-written validators drift within a sprint. Declare the schema once and infer the type - one source of truth for the runtime shape and the compile-time shape.",
       },
       {
         type: "code",
@@ -647,7 +647,7 @@ declare function cancelOrder(id: OrderId): Promise<void>;
     slug: "image-optimization-at-the-edge",
     title: "Image Optimization at the Edge: A Practical Guide",
     description:
-      "How to cut page weight with modern formats, correct sizing, edge caching and lazy loading — measured against LCP rather than a compression ratio.",
+      "How to cut page weight with modern formats, correct sizing, edge caching and lazy loading - measured against LCP rather than a compression ratio.",
     quickAnswer:
       "Serve AVIF with a WebP fallback, generate responsive widths and let the browser pick with srcset and sizes, cache transformed variants at the edge keyed by format and width, mark the LCP image as eager with fetchpriority high, and lazy-load everything below the fold. Most sites lose more to oversized dimensions than to a suboptimal codec.",
     kind: "article",
@@ -701,7 +701,7 @@ declare function cancelOrder(id: OrderId): Promise<void>;
         type: "table",
         head: ["Format", "Use for", "Notes"],
         rows: [
-          ["AVIF", "Photography", "Best ratio, slower to encode — cache it"],
+          ["AVIF", "Photography", "Best ratio, slower to encode - cache it"],
           ["WebP", "Fallback everywhere", "Universally supported today"],
           ["SVG", "Logos, icons, diagrams", "Sanitise any user-uploaded SVG"],
           ["JPEG", "Last-resort fallback", "Keep quality around 78"],
@@ -718,7 +718,7 @@ declare function cancelOrder(id: OrderId): Promise<void>;
         items: [
           "LCP element and its load time, from field data not a lab run.",
           "Total image bytes on the landing and product templates.",
-          "Cache hit ratio on the transform endpoint — under 90% means your cache key is wrong.",
+          "Cache hit ratio on the transform endpoint - under 90% means your cache key is wrong.",
           "CLS after the fix, to confirm you did not trade one metric for another.",
         ],
       },
@@ -766,7 +766,7 @@ declare function cancelOrder(id: OrderId): Promise<void>;
     slug: "designing-ai-features-that-dont-break",
     title: "Designing AI Features That Don't Break in Production",
     description:
-      "Prompt versioning, structured outputs, cost control, graceful degradation and evaluation — the engineering around a model call that decides whether the feature survives.",
+      "Prompt versioning, structured outputs, cost control, graceful degradation and evaluation - the engineering around a model call that decides whether the feature survives.",
     quickAnswer:
       "Treat a model call like any unreliable third-party dependency: force structured output with a schema and validate it, version prompts as code, set timeouts with a deterministic fallback, cap spend per user and per day, cache aggressively, and run an evaluation set in CI. The model is the easy part; the surrounding engineering decides whether the feature survives contact with users.",
     kind: "article",
@@ -781,7 +781,7 @@ declare function cancelOrder(id: OrderId): Promise<void>;
       { type: "h2", text: "A model call is a network call with opinions" },
       {
         type: "p",
-        text: "It can be slow, it can fail, it can return something structurally different from yesterday, and it costs money per invocation. Every reliability pattern you already apply to third-party APIs applies here — plus a few new ones.",
+        text: "It can be slow, it can fail, it can return something structurally different from yesterday, and it costs money per invocation. Every reliability pattern you already apply to third-party APIs applies here - plus a few new ones.",
       },
       { type: "h2", text: "Force structure, then validate it" },
       {
@@ -799,7 +799,7 @@ if (!parsed.success) return fallbackFromHeuristics(input);`,
       },
       {
         type: "p",
-        text: "Never render model output straight into the UI. Parse it, and always have a deterministic fallback path — a heuristic, a cached previous result, or an honest empty state.",
+        text: "Never render model output straight into the UI. Parse it, and always have a deterministic fallback path - a heuristic, a cached previous result, or an honest empty state.",
       },
       {
         type: "callout",
@@ -812,7 +812,7 @@ if (!parsed.success) return fallbackFromHeuristics(input);`,
         type: "list",
         items: [
           "Per-user and per-day spend caps enforced server-side.",
-          "Cache by a hash of the normalised input — repeat questions are free.",
+          "Cache by a hash of the normalised input - repeat questions are free.",
           "Route simple tasks to a small model, escalate only on low confidence.",
           "Cap input length; a pasted PDF should be truncated, not billed.",
           "Log tokens per feature so you know which screen is expensive.",
@@ -832,7 +832,7 @@ if (!parsed.success) return fallbackFromHeuristics(input);`,
       { type: "h2", text: "Evaluate like you test" },
       {
         type: "p",
-        text: "Keep 30–50 real inputs with expected properties — not exact strings — and assert them in CI on every prompt or model change. Without an eval set, 'the new model is better' is a vibe, and regressions ship silently.",
+        text: "Keep 30–50 real inputs with expected properties - not exact strings - and assert them in CI on every prompt or model change. Without an eval set, 'the new model is better' is a vibe, and regressions ship silently.",
       },
       { type: "h2", text: "Safety basics" },
       {
@@ -869,7 +869,7 @@ if (!parsed.success) return fallbackFromHeuristics(input);`,
       },
       {
         q: "How do I test AI features?",
-        a: "Build a fixed evaluation set of real inputs and assert structural properties — valid schema, required fields present, no forbidden content — rather than exact text matches.",
+        a: "Build a fixed evaluation set of real inputs and assert structural properties - valid schema, required fields present, no forbidden content - rather than exact text matches.",
       },
       {
         q: "Should users know content is AI-generated?",
@@ -910,7 +910,7 @@ if (!parsed.success) return fallbackFromHeuristics(input);`,
         ordered: true,
         items: [
           "Open Memory in DevTools, take snapshot 1 on a settled page.",
-          "Perform the suspect interaction ten times — usually navigating in and out of a route.",
+          "Perform the suspect interaction ten times - usually navigating in and out of a route.",
           "Force garbage collection, take snapshot 2, repeat the interaction, take snapshot 3.",
           "Compare 3 against 1 filtered to 'Objects allocated between snapshots'. Anything growing linearly with the repetition count is your leak.",
         ],
@@ -1003,7 +1003,7 @@ if (!parsed.success) return fallbackFromHeuristics(input);`,
     description:
       "Engineering notes from a multi-vendor marketplace: modelling vendor-scoped inventory, keeping search fast as the catalog grows, and settling payouts without double-counting.",
     quickAnswer:
-      "A multi-vendor catalog scales when vendor scoping lives in the data model rather than in query filters, search runs against a denormalised read model updated by events, and money is handled with an append-only ledger. The hardest part is not the product grid — it is inventory correctness and payout reconciliation across independent sellers.",
+      "A multi-vendor catalog scales when vendor scoping lives in the data model rather than in query filters, search runs against a denormalised read model updated by events, and money is handled with an append-only ledger. The hardest part is not the product grid - it is inventory correctness and payout reconciliation across independent sellers.",
     kind: "case-note",
     category: "System Design",
     tags: ["System Design", "MongoDB", "Marketplace", "Search", "Payments"],
@@ -1052,7 +1052,7 @@ await repo.list({ status: "active" }); // vendorId cannot be omitted`,
         type: "callout",
         tone: "mint",
         title: "Money is append-only",
-        text: "Never mutate a balance. Write ledger entries — sale, commission, refund, payout — and derive the balance. Reconciliation stops being archaeology.",
+        text: "Never mutate a balance. Write ledger entries - sale, commission, refund, payout - and derive the balance. Reconciliation stops being archaeology.",
       },
       { type: "h2", text: "What I would change next time" },
       {
@@ -1060,7 +1060,7 @@ await repo.list({ status: "active" }); // vendorId cannot be omitted`,
         items: [
           "Introduce the event-driven read model on day one rather than after the catalog got slow.",
           "Make the ledger the first payments artefact, before any payout logic.",
-          "Give vendors an activity log early — most support tickets were 'what happened to my listing'.",
+          "Give vendors an activity log early - most support tickets were 'what happened to my listing'.",
         ],
       },
     ],
@@ -1089,7 +1089,7 @@ await repo.list({ status: "active" }); // vendorId cannot be omitted`,
       },
     ],
     summary:
-      "Structural vendor scoping, an event-driven read model for search, TTL reservations for inventory and an append-only ledger for money — those four decisions carried the marketplace further than any query tuning.",
+      "Structural vendor scoping, an event-driven read model for search, TTL reservations for inventory and an append-only ledger for money - those four decisions carried the marketplace further than any query tuning.",
     related: ["node-api-architecture-that-scales", "react-performance-checklist"],
     caseStudies: ["multi-vendor-ecommerce"],
     projects: ["multi-vendor-ecommerce"],
@@ -1101,7 +1101,7 @@ await repo.list({ status: "active" }); // vendorId cannot be omitted`,
     description:
       "A measured teardown of a slow Shopify storefront: which apps cost the most, how the hero image was fixed, and what actually moved Largest Contentful Paint.",
     quickAnswer:
-      "On the Shopify storefronts I have audited, LCP improvements come mostly from three changes: removing or deferring third-party app scripts that block the main thread, right-sizing and preloading the hero image, and cutting render-blocking CSS from the theme. Liquid rendering is almost never the bottleneck — the merchant's app stack usually is.",
+      "On the Shopify storefronts I have audited, LCP improvements come mostly from three changes: removing or deferring third-party app scripts that block the main thread, right-sizing and preloading the hero image, and cutting render-blocking CSS from the theme. Liquid rendering is almost never the bottleneck - the merchant's app stack usually is.",
     kind: "case-note",
     category: "Shopify",
     tags: ["Shopify", "Performance", "LCP", "Liquid", "Third-party scripts"],
@@ -1149,7 +1149,7 @@ await repo.list({ status: "active" }); // vendorId cannot be omitted`,
         type: "callout",
         tone: "peach",
         title: "The uncomfortable conversation",
-        text: "Most of the win required removing apps the merchant was paying for. Bring the numbers per app — 'this popup costs 0.6 seconds on every visit' is a much easier conversation than 'the site is slow'.",
+        text: "Most of the win required removing apps the merchant was paying for. Bring the numbers per app - 'this popup costs 0.6 seconds on every visit' is a much easier conversation than 'the site is slow'.",
       },
       { type: "h2", text: "Result" },
       {
@@ -1169,7 +1169,7 @@ await repo.list({ status: "active" }); // vendorId cannot be omitted`,
           "Audit apps before touching Liquid.",
           "Measure in the field; lab scores hide the real app stack.",
           "Every third-party script needs an owner and a justification.",
-          "Re-measure a month later — apps get reinstalled.",
+          "Re-measure a month later - apps get reinstalled.",
         ],
       },
     ],
@@ -1191,7 +1191,7 @@ await repo.list({ status: "active" }); // vendorId cannot be omitted`,
     faq: [
       {
         q: "Do Shopify apps really slow down a store?",
-        a: "Yes — most inject render-blocking JavaScript on every page regardless of whether the feature is used there. In audits, apps typically account for the majority of total blocking time.",
+        a: "Yes - most inject render-blocking JavaScript on every page regardless of whether the feature is used there. In audits, apps typically account for the majority of total blocking time.",
       },
       {
         q: "What is a good LCP for a Shopify store?",
@@ -1247,7 +1247,7 @@ await repo.list({ status: "active" }); // vendorId cannot be omitted`,
         items: [
           "Working software weekly, not a reveal at the end.",
           "Decisions written down, including the ones we rejected and why.",
-          "Boring, typed, observable systems — the interesting part should be the product.",
+          "Boring, typed, observable systems - the interesting part should be the product.",
           "Honest estimates, including when the honest answer is 'do not build this'.",
         ],
       },
@@ -1273,7 +1273,7 @@ await repo.list({ status: "active" }); // vendorId cannot be omitted`,
     faq: [
       {
         q: "What kind of projects do you take?",
-        a: "Product engineering work across React and Node.js applications, Shopify apps and storefronts, and AI-assisted tooling — usually where performance, commerce and architecture overlap.",
+        a: "Product engineering work across React and Node.js applications, Shopify apps and storefronts, and AI-assisted tooling - usually where performance, commerce and architecture overlap.",
       },
       {
         q: "Do you work with agencies?",

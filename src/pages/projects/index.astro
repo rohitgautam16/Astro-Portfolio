@@ -1,6 +1,6 @@
 ---
 /**
- * Projects Index Page — Interactive horizontal pinned case studies catalog.
+ * Projects Index Page - Interactive horizontal pinned case studies catalog.
  */
 import PageLayout from "../../layouts/PageLayout.astro";
 import { ProjectsCatalog } from "../../components/react/sections/ProjectsCatalog";
@@ -8,11 +8,16 @@ import { FloatingShape } from "../../components/react/decor";
 ---
 
 <PageLayout
-  title="Featured products by Rohit Gautam — Full stack builds"
+  title="Featured products by Rohit Gautam - Full stack builds"
   description="Case studies: Align music subscription platform, a multi vendor marketplace and an AI astrology platform."
 >
   <div class="relative">
-    <FloatingShape name="planet" tone="lavender" className="right-[8%] top-24 size-14 z-20 hidden lg:block" client:load />
+    <FloatingShape
+      name="planet"
+      tone="lavender"
+      className="right-[8%] top-24 size-14 z-20 hidden lg:block"
+      client:load
+    />
     <ProjectsCatalog client:load />
   </div>
 </PageLayout>

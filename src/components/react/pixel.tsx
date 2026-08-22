@@ -3,7 +3,7 @@ import { useEffect, useRef, useState, type ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
 /**
- * Pixel motion system — the signature animation language of the site.
+ * Pixel motion system - the signature animation language of the site.
  * A grid of square blocks assembles, covers and dissolves instead of fading.
  *
  * NOTE: PixelTransition (full-screen route-change wipe) is now handled by
@@ -11,7 +11,7 @@ import { cn } from "@/lib/utils";
  * This file only contains PixelGrid and PixelReveal (in-page animations).
  */
 
-/** Single subtle tone family — quiet lavender wash instead of a rainbow grid. */
+/** Single subtle tone family - quiet lavender wash instead of a rainbow grid. */
 const TONES = ["bg-lavender", "bg-lavender/85", "bg-lavender/70"] as const;
 
 /** Deterministic pseudo-random so SSR and client agree. */

@@ -60,7 +60,7 @@ export function ProjectCard({
         <div className={cn("flex flex-col justify-between p-7 md:p-10", flip && "md:order-1")}>
           <div>
             <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-muted-foreground">
-              {String(index + 1).padStart(2, "0")} — {project.kind} · {project.year}
+              {String(index + 1).padStart(2, "0")} - {project.kind} · {project.year}
             </p>
             <h3 className="mt-4 font-display text-2xl leading-[1.05] font-extrabold text-balance md:text-4xl">
               {project.title}

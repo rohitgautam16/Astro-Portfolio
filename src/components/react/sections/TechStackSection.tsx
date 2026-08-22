@@ -17,7 +17,7 @@ export function TechStackSection() {
                 Tools I reach for
               </h2>
               <p className="mt-5 max-w-sm text-sm leading-relaxed text-foreground/75">
-                Chosen because they are boring in production and pleasant in development — in that order. Grouped by how I actually use them across the stack.
+                Chosen because they are boring in production and pleasant in development - in that order. Grouped by how I actually use them across the stack.
               </p>
               <div className="mt-8 inline-flex -rotate-1 items-center gap-3 rounded-2xl border-[3px] border-hairline bg-surface px-4 py-3 shadow-hard-sm">
                 <Doodle name="dots" className="size-5" />

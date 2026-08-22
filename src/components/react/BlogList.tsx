@@ -92,7 +92,7 @@ export function BlogList({ initialItems }: { initialItems?: Article[] }) {
           </Reveal>
         ))}
         {list.length === 0 ? (
-          <p className="hand text-2xl col-span-2 text-center py-12">Nothing matches that — try a broader search.</p>
+          <p className="hand text-2xl col-span-2 text-center py-12">Nothing matches that - try a broader search.</p>
         ) : null}
       </section>
     </>

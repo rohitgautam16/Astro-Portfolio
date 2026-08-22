@@ -101,7 +101,7 @@ function HorizontalCatalogCard({
         <div className="flex h-full flex-col justify-between p-6 xl:p-8">
           <div>
             <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-muted-foreground">
-              {String(index + 1).padStart(2, "0")} — {project.kind} · {project.year}
+              {String(index + 1).padStart(2, "0")} - {project.kind} · {project.year}
             </p>
 
             <h3 className="mt-3 font-display text-2xl xl:text-3xl font-extrabold leading-tight text-balance">
@@ -152,7 +152,7 @@ export function ProjectsCatalog() {
   });
 
   // Calculate translation across all project cards
-  const x = useTransform(smoothProgress, [0, 1], ["0%", "-66%"]);
+  const x = useTransform(smoothProgress, [0, 1], ["0%", "-76%"]);
 
   return (
     <>
@@ -161,8 +161,8 @@ export function ProjectsCatalog() {
       {/* ------------------------------------------------------------- */}
       <section
         ref={containerRef}
-        className="relative hidden lg:block bg-surface"
-        style={{ height: "340vh" }}
+        className="relative hidden lg:block bg-surface -mt-20 pt-20 md:-mt-24 md:pt-24"
+        style={{ height: "500vh" }}
       >
         <div className="sticky top-0 flex h-screen w-full flex-col justify-center pt-[88px] pb-4 xl:pt-[96px] xl:pb-6">
           <div className="container-page pb-4 xl:pb-6">
@@ -178,7 +178,7 @@ export function ProjectsCatalog() {
                 </h1>
               </div>
               <p className="max-w-md text-xs xl:text-sm leading-relaxed text-foreground/80">
-                Each of these went to real users — with billing, edge cases, support tickets and the architecture decisions those force.
+                Each of these went to real users - with billing, edge cases, support tickets and the architecture decisions those force.
               </p>
             </div>
           </div>
@@ -206,7 +206,7 @@ export function ProjectsCatalog() {
       {/* ------------------------------------------------------------- */}
       {/* MOBILE / TABLET: Vertical layout with standard scrolling      */}
       {/* ------------------------------------------------------------- */}
-      <section className="relative block lg:hidden bg-surface pt-10 pb-20">
+      <section className="relative block lg:hidden bg-surface -mt-20 pt-28 pb-20 md:-mt-24 md:pt-36">
         <div className="container-page">
           <div className="pb-12">
             <p className="hand text-2xl">featured products</p>
@@ -216,7 +216,7 @@ export function ProjectsCatalog() {
               <StaggerText text="portfolio filler" delay={0.15} client:load />
             </h1>
             <p className="mt-5 text-sm leading-relaxed text-foreground/75 md:text-base">
-              Each of these went to real users — with billing, edge cases, support tickets and the
+              Each of these went to real users - with billing, edge cases, support tickets and the
               architecture decisions those force.
             </p>
           </div>

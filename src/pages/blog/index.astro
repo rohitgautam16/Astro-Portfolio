@@ -1,6 +1,6 @@
 ---
 /**
- * Blog Index Page (/blog) — Technical articles, case studies, and engineering notes.
+ * Blog Index Page (/blog) - Technical articles, case studies, and engineering notes.
  */
 import PageLayout from "../../layouts/PageLayout.astro";
 import { kindMeta } from "../../data/insights";
@@ -16,7 +16,7 @@ export const prerender = true;
 
 const articles = await getArticles();
 
-const title = "Blog & Insights — Practical engineering writing by Rohit Gautam";
+const title = "Blog & Insights - Practical engineering writing by Rohit Gautam";
 const description =
   "Evergreen technical articles, engineering case studies and notes on React, Node.js, Shopify, Cloudflare, AI and performance.";
 const url = "https://rohitgautam.site/blog";
@@ -49,7 +49,7 @@ const jsonLd = {
       <StaggerText text="worth keeping" delay={0.15} client:load />
     </h1>
     <p class="mt-6 max-w-2xl text-base leading-relaxed text-foreground/75 md:text-lg">
-      Long-lived writing about how things are actually built — React and Node.js architecture,
+      Long-lived writing about how things are actually built - React and Node.js architecture,
       Shopify and Cloudflare products, performance work and AI features that survive users.
     </p>
     {!flags.blogComingSoon && (

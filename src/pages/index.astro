@@ -1,11 +1,12 @@
 ---
 /**
- * Homepage — Full Astro page with PageLayout and all 9 interactive sections.
+ * Homepage - Full Astro page with PageLayout and all 9 interactive sections.
  */
 import PageLayout from "../layouts/PageLayout.astro";
 import { HeroSection } from "../components/react/sections/HeroSection";
 import { FocusMarquee } from "../components/react/sections/FocusMarquee";
 import { IntroSection } from "../components/react/sections/IntroSection";
+import { ZoomMarqueeSection } from "../components/react/sections/ZoomMarqueeSection";
 import { FeaturedProducts } from "../components/react/sections/FeaturedProducts";
 import { PhilosophySection } from "../components/react/sections/PhilosophySection";
 import { TechStackSection } from "../components/react/sections/TechStackSection";
@@ -29,8 +30,8 @@ const jsonLd = {
 ---
 
 <PageLayout
-  title="Rohit Gautam — Software Engineer building full stack products"
-  description="Rohit Gautam is a software engineer in India building scalable full stack applications and AI-powered software with React.js, Node.js and Cloudflare."
+  title="Rohit Gautam - Full Stack Software Engineer building scalable products"
+  description="Rohit Gautam is a full stack software engineer building scalable web applications and AI-powered products with React.js, Node.js and Cloudflare."
 >
   <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
 
@@ -41,6 +42,7 @@ const jsonLd = {
       <HeroSection client:load />
       <FocusMarquee client:visible />
       <IntroSection client:visible />
+      <ZoomMarqueeSection client:load />
       <FeaturedProducts client:load />
       <PhilosophySection client:visible />
       <TechStackSection client:visible />

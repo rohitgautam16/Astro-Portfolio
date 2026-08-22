@@ -39,6 +39,20 @@ export function CareerTimeline() {
               <p className="mt-2 max-w-lg text-sm leading-relaxed text-foreground/75 md:text-base">
                 {item.detail}
               </p>
+              {item.projects && item.projects.length > 0 && (
+                <div className="mt-6 space-y-4">
+                  {item.projects.map((proj) => (
+                    <div key={proj.title} className="relative pl-4 border-l-2 border-primary/40">
+                      <h4 className="font-display text-base font-bold text-foreground">
+                        {proj.title}
+                      </h4>
+                      <p className="mt-1 text-sm leading-relaxed text-foreground/75">
+                        {proj.detail}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              )}
             </Reveal>
           ))}
         </ol>

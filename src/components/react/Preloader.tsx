@@ -1,31 +1,48 @@
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { Doodle } from "./decor";
+import { TechGlyph } from "./tech-icons";
 
 const WORDS = ["Hello", "नमस्ते", "Bonjour", "Hola", "Welcome"];
-/** Minimum time the preloader stays up, even if the page is already ready. */
-const MIN_MS = 3200;
+const MIN_MS = 4000; // 4.0 seconds for complete intro greeting sequence
 
-/**
- * Playful portfolio preloader: an oversized RG monogram assembles, greeting
- * words flip through, and stickers pop in before the curtain lifts.
- */
+/** Tech & doodle items floating around the preloader */
+const FLOATING_ITEMS = [
+  { type: "tech" as const, name: "React", cls: "left-[7%] top-[15%] -rotate-6", delay: 0.2 },
+  { type: "doodle" as const, doodle: "star" as const, color: "text-yellow", cls: "left-[12%] top-[46%] rotate-12", delay: 0.35 },
+  { type: "tech" as const, name: "TypeScript", cls: "left-[10%] bottom-[18%] rotate-6", delay: 0.5 },
+
+  { type: "tech" as const, name: "Node.js", cls: "right-[8%] top-[16%] rotate-6", delay: 0.25 },
+  { type: "doodle" as const, doodle: "sparkle" as const, color: "text-lavender", cls: "right-[12%] top-[48%] -rotate-12", delay: 0.4 },
+  { type: "tech" as const, name: "Shopify", cls: "right-[9%] bottom-[16%] -rotate-6", delay: 0.55 },
+];
+
 export function Preloader() {
-  const reduced = useReducedMotion();
-  const [done, setDone] = useState(false);
+  // Default to done=true so SSR static HTML pages never contain fixed overlay divs
+  const [done, setDone] = useState(true);
+  const [exiting, setExiting] = useState(false);
   const [word, setWord] = useState(0);
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
-    if (reduced || sessionStorage.getItem("rg-booted") === "1") {
+    const isReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const alreadyBooted = sessionStorage.getItem("rg-booted") === "1";
+
+    if (isReduced || alreadyBooted) {
       setDone(true);
       return;
     }
+
+    // Fresh session boot: unhide preloader and lock scroll
+    setDone(false);
+
     document.body.style.overflow = "hidden";
     const start = performance.now();
     let frame = 0;
-    let finish = 0;
+    let finishTimeout = 0;
+    let destroyTimeout = 0;
+
     let loaded = document.readyState === "complete";
     const onLoad = () => {
       loaded = true;
@@ -34,150 +51,193 @@ export function Preloader() {
 
     const complete = () => {
       sessionStorage.setItem("rg-booted", "1");
+      setExiting(true);
       document.body.style.overflow = "";
-      setDone(true);
+
+      // Allow 1.35 seconds for full dramatic exit reveal sequence
+      destroyTimeout = window.setTimeout(() => {
+        setDone(true);
+      }, 1350);
     };
 
     const tick = () => {
       const elapsed = performance.now() - start;
       const p = Math.min(1, elapsed / MIN_MS);
-      // hold just shy of 100% until the document is actually ready
       setProgress(Math.round((loaded ? p : Math.min(p, 0.96)) * 100));
       if (p < 1 || !loaded) {
         frame = requestAnimationFrame(tick);
       } else {
-        finish = window.setTimeout(complete, 260);
+        finishTimeout = window.setTimeout(complete, 250);
       }
     };
     frame = requestAnimationFrame(tick);
 
-    const words = window.setInterval(() => setWord((w) => (w + 1) % WORDS.length), 700);
+    const wordsInterval = window.setInterval(() => setWord((w) => (w + 1) % WORDS.length), 750);
 
     return () => {
       cancelAnimationFrame(frame);
-      window.clearInterval(words);
-      window.clearTimeout(finish);
+      window.clearInterval(wordsInterval);
+      window.clearTimeout(finishTimeout);
+      window.clearTimeout(destroyTimeout);
       window.removeEventListener("load", onLoad);
       document.body.style.overflow = "";
     };
-  }, [reduced]);
+  }, [done]);
+
+  if (done) return null;
 
   return (
-    <AnimatePresence>
-      {!done ? (
+    <div
+      role="status"
+      aria-live="polite"
+      aria-label="Loading portfolio"
+      className={`fixed inset-0 z-[99990] grid w-screen place-items-center overflow-hidden px-6 transition-all duration-1000 ease-[cubic-bezier(0.76,0,0.24,1)] ${exiting ? "pointer-events-none opacity-0 scale-[1.04]" : "opacity-100 scale-100"
+        }`}
+      style={{ backgroundColor: "var(--color-background)" }}
+    >
+      {/* Background grain texture & grid lines */}
+      <div
+        aria-hidden
+        className={`pointer-events-none absolute inset-0 bg-background transition-opacity duration-1000 ${exiting ? "opacity-0" : "opacity-100"
+          }`}
+        style={{ backgroundColor: "var(--color-background)" }}
+      />
+      <div
+        aria-hidden
+        className={`grid-lines pointer-events-none absolute inset-0 transition-opacity duration-800 ${exiting ? "opacity-0" : "opacity-30"
+          }`}
+      />
+
+      {/* Floating tech badges & doodles around the screen */}
+      {FLOATING_ITEMS.map((item, idx) => (
         <motion.div
-          key="preloader"
-          className="fixed inset-0 z-[100] grid w-screen place-items-center overflow-hidden bg-background px-6"
-          style={{ backgroundColor: "var(--color-background)" }}
-          initial={{ clipPath: "inset(0% 0% 0% 0%)" }}
-          exit={{ clipPath: "inset(0% 0% 100% 0%)" }}
-          transition={{ duration: 0.95, ease: [0.76, 0, 0.24, 1] }}
-          role="status"
-          aria-live="polite"
-          aria-label="Loading portfolio"
+          key={idx}
+          aria-hidden
+          className={`absolute hidden md:flex items-center gap-2 ${item.cls}`}
+          initial={{ scale: 0, opacity: 0, y: 20 }}
+          animate={
+            exiting
+              ? { scale: 0.2, opacity: 0, y: -180 }
+              : { scale: 1, opacity: 1, y: 0 }
+          }
+          transition={{
+            delay: item.delay,
+            duration: exiting ? 0.9 : 0.6,
+            type: exiting ? "tween" : "spring",
+            stiffness: 220,
+            damping: 15,
+          }}
         >
-          <div
-            aria-hidden
-            className="pointer-events-none absolute inset-0 bg-background"
-            style={{ backgroundColor: "var(--color-background)" }}
-          />
-          <div aria-hidden className="grid-lines pointer-events-none absolute inset-0 opacity-30" />
+          {item.type === "tech" ? (
+            <div className="flex items-center gap-2 rounded-2xl border-[3px] border-hairline bg-surface px-3.5 py-2 shadow-hard-sm">
+              <TechGlyph name={item.name} className="size-5" />
+              <span className="font-mono text-xs font-semibold text-foreground">
+                {item.name}
+              </span>
+            </div>
+          ) : (
+            <div className={item.color}>
+              <Doodle name={item.doodle} fill className="size-10 md:size-12" />
+            </div>
+          )}
+        </motion.div>
+      ))}
 
+      {/* Main Center Content */}
+      <div className="relative flex flex-col items-center">
+        {/* R & G Monogram Boxes: Entry from Left (-X) & Right (+X), Exit back out to sides */}
+        <div className="flex items-end gap-2 sm:gap-4">
+          {/* 'R' Box */}
           <motion.div
-            aria-hidden
-            className="pointer-events-none absolute inset-x-0 bottom-0 h-[6px] bg-hairline"
-            initial={{ scaleX: 0, opacity: 0 }}
-            exit={{ scaleX: 1, opacity: 1 }}
-            transition={{ duration: 0.4, ease: "easeOut" }}
-          />
-
-          {/* floating stickers */}
-          {[
-            { cls: "left-[8%] top-[18%] text-yellow", d: 0.35, name: "star" as const, r: -12 },
-            { cls: "right-[10%] top-[24%] text-lavender", d: 0.5, name: "sparkle" as const, r: 10 },
-            { cls: "left-[14%] bottom-[20%] text-mint", d: 0.65, name: "smiley" as const, r: 8 },
-            { cls: "right-[14%] bottom-[16%] text-peach", d: 0.8, name: "heart" as const, r: -8 },
-          ].map((s) => (
-            <motion.span
-              key={s.cls}
-              aria-hidden
-              className={`absolute hidden sm:block ${s.cls}`}
-              initial={{ scale: 0, rotate: 0, opacity: 0 }}
-              animate={{ scale: 1, rotate: s.r, opacity: 1 }}
-              transition={{ delay: s.d, type: "spring", stiffness: 260, damping: 14 }}
-            >
-              <Doodle name={s.name} fill className="size-10 md:size-14" />
-            </motion.span>
-          ))}
-
-          <motion.div
-            className="relative flex flex-col items-center"
-            exit={{ opacity: 0, y: -28, scale: 0.94 }}
-            transition={{ duration: 0.42, ease: [0.65, 0, 0.35, 1] }}
+            initial={{ x: -280, rotate: -35, opacity: 0 }}
+            animate={
+              exiting
+                ? { x: -600, rotate: -90, opacity: 0 }
+                : { x: 0, rotate: -4, opacity: 1 }
+            }
+            transition={
+              exiting
+                ? { duration: 1.15, ease: [0.76, 0, 0.24, 1] }
+                : { type: "spring", stiffness: 180, damping: 15, delay: 0.1 }
+            }
+            className="grid size-24 place-items-center rounded-3xl border-[4px] border-hairline bg-yellow font-display text-6xl font-extrabold shadow-hard-lg sm:size-32 sm:text-8xl"
           >
-            {/* RG monogram */}
-            <div className="flex items-end gap-1 sm:gap-3">
-              {["R", "G"].map((letter, i) => (
-                <motion.span
-                  key={letter}
-                  initial={{ y: 90, opacity: 0, rotate: i === 0 ? -14 : 14 }}
-                  animate={{ y: 0, opacity: 1, rotate: i === 0 ? -4 : 4 }}
-                  transition={{ delay: 0.1 + i * 0.14, type: "spring", stiffness: 200, damping: 16 }}
-                  className={`grid size-24 place-items-center rounded-3xl border-[4px] border-hairline font-display text-6xl font-extrabold shadow-hard-lg sm:size-32 sm:text-8xl ${
-                    i === 0 ? "bg-yellow" : "bg-lavender"
-                  }`}
-                >
-                  {letter}
-                </motion.span>
-              ))}
+            R
+          </motion.div>
+
+          {/* 'G' Box */}
+          <motion.div
+            initial={{ x: 280, rotate: 35, opacity: 0 }}
+            animate={
+              exiting
+                ? { x: 600, rotate: 90, opacity: 0 }
+                : { x: 0, rotate: 4, opacity: 1 }
+            }
+            transition={
+              exiting
+                ? { duration: 1.15, ease: [0.76, 0, 0.24, 1] }
+                : { type: "spring", stiffness: 180, damping: 15, delay: 0.22 }
+            }
+            className="grid size-24 place-items-center rounded-3xl border-[4px] border-hairline bg-lavender font-display text-6xl font-extrabold shadow-hard-lg sm:size-32 sm:text-8xl"
+          >
+            G
+          </motion.div>
+        </div>
+
+        {/* Subtitle & Progress elements: translate down on exit */}
+        <motion.div
+          animate={
+            exiting
+              ? { y: 120, opacity: 0 }
+              : { y: 0, opacity: 1 }
+          }
+          transition={{ duration: 0.9, ease: [0.76, 0, 0.24, 1] }}
+          className="flex flex-col items-center"
+        >
+          <motion.p
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.45, duration: 0.5 }}
+            className="mt-8 font-mono text-[11px] uppercase tracking-[0.32em] text-muted-foreground"
+          >
+            Rohit Gautam · Full Stack Software Engineer
+          </motion.p>
+
+          {/* Ultra-smooth rotating greeting animation */}
+          <div className="relative mt-4 h-12 w-64 overflow-hidden text-center">
+            <AnimatePresence mode="wait">
+              <motion.p
+                key={word}
+                initial={{ y: 32, opacity: 0, filter: "blur(4px)" }}
+                animate={{ y: 0, opacity: 1, filter: "blur(0px)" }}
+                exit={{ y: -32, opacity: 0, filter: "blur(4px)" }}
+                transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+                className="hand text-4xl leading-none text-foreground"
+              >
+                {WORDS[word]}
+              </motion.p>
+            </AnimatePresence>
+          </div>
+
+          {/* Progress Bar */}
+          <motion.div
+            initial={{ opacity: 0, scaleX: 0.7 }}
+            animate={{ opacity: 1, scaleX: 1 }}
+            transition={{ delay: 0.4, duration: 0.5 }}
+            className="mt-6 w-56 sm:w-72"
+          >
+            <div className="h-4 w-full overflow-hidden rounded-full border-[3px] border-hairline bg-surface">
+              <div
+                className="h-full rounded-r-full bg-mint transition-all duration-150 ease-out"
+                style={{ width: `${progress}%` }}
+              />
             </div>
-
-            <motion.p
-              initial={{ opacity: 0, y: 14 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.55, duration: 0.5 }}
-              className="mt-8 font-mono text-[11px] uppercase tracking-[0.32em] text-muted-foreground"
-            >
-              Rohit Gautam · Software Engineer
-            </motion.p>
-
-            {/* rotating greeting */}
-            <div className="mt-4 h-12 overflow-hidden">
-              <AnimatePresence mode="wait">
-                <motion.p
-                  key={word}
-                  initial={{ y: 28, opacity: 0 }}
-                  animate={{ y: 0, opacity: 1 }}
-                  exit={{ y: -28, opacity: 0 }}
-                  transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-                  className="hand text-4xl leading-none text-foreground"
-                >
-                  {WORDS[word]}
-                </motion.p>
-              </AnimatePresence>
-            </div>
-
-            {/* chunky progress */}
-            <motion.div
-              initial={{ opacity: 0, scaleX: 0.7 }}
-              animate={{ opacity: 1, scaleX: 1 }}
-              transition={{ delay: 0.5, duration: 0.5 }}
-              className="mt-6 w-56 sm:w-72"
-            >
-              <div className="h-4 w-full overflow-hidden rounded-full border-[3px] border-hairline bg-surface">
-                <motion.div
-                  className="h-full rounded-r-full bg-mint"
-                  animate={{ width: `${progress}%` }}
-                  transition={{ ease: "linear", duration: 0.12 }}
-                />
-              </div>
-              <p className="mt-2 text-center font-mono text-[11px] text-muted-foreground">
-                {progress}%
-              </p>
-            </motion.div>
+            <p className="mt-2 text-center font-mono text-[11px] font-semibold text-muted-foreground">
+              {progress}%
+            </p>
           </motion.div>
         </motion.div>
-      ) : null}
-    </AnimatePresence>
+      </div>
+    </div>
   );
 }

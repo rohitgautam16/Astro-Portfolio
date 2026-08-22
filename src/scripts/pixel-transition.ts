@@ -1,38 +1,26 @@
 /**
- * pixel-transition.ts — Vanilla JS pixel dissolve page transition.
+ * pixel-transition.ts - Single-tone Lavender Pixel Dissolve Page Transition.
  *
- * Hooks into Astro's <ClientRouter /> lifecycle:
- *   astro:before-swap  → dissolve-out (cover the old page)
- *   astro:after-swap   → dissolve-in  (reveal the new page)
- *
- * This script runs ONCE and persists across soft navigations.
- * It must NOT re-initialize on each swap — Astro's <ClientRouter />
- * keeps <script> tags alive, which is the desired behaviour.
- *
- * Graceful no-op: if the browser doesn't support View Transitions
- * (and thus ClientRouter falls back to MPA navigation), the script
- * simply doesn't fire because the astro:* events never trigger.
+ * Smooth diagonal wave using signature Lavender tone oklch(0.795 0.11 300).
+ * Hooks into Astro's <ClientRouter /> with fail-safe error handling.
  */
 
 const COLS = 14;
 const ROWS = 9;
-const COVER_DURATION = 350;    // ms to cover the screen
-const HOLD_DURATION = 400;     // ms the grid stays fully covered
+const COVER_DURATION = 400;    // ms to cover the screen
 const DISSOLVE_DURATION = 400; // ms to dissolve away
 
-/** Lavender tones matching the design system. */
+/** Signature Lavender tones matching design system */
 const TONES = [
-  "oklch(0.795 0.11 300)",       // --tone-lavender
-  "oklch(0.795 0.11 300 / 85%)",
-  "oklch(0.795 0.11 300 / 70%)",
+  "oklch(0.795 0.11 300)",
+  "oklch(0.795 0.11 300 / 90%)",
+  "oklch(0.795 0.11 300 / 80%)",
 ] as const;
 
-/** Deterministic pseudo-random — matches pixel.tsx pick(). */
-function pick(i: number): string {
+function pickColor(i: number): string {
   return TONES[(i * 7 + ((i * i) % 5)) % TONES.length]!;
 }
 
-/** Easing: cubic-bezier(0.22, 1, 0.36, 1) sampled. */
 function easeOutExpo(t: number): number {
   return t === 1 ? 1 : 1 - Math.pow(2, -10 * t);
 }
@@ -49,30 +37,28 @@ let ctx: CanvasRenderingContext2D | null = null;
 let animationId: number | null = null;
 let isInitialized = false;
 
-/** Guard: only set up listeners once. */
 function init() {
   if (isInitialized) return;
   isInitialized = true;
 
-  // Check reduced motion preference
   const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
   if (prefersReducedMotion.matches) return;
 
-  // Create persistent canvas overlay
+  // Create persistent canvas overlay attached to documentElement
   canvas = document.createElement("canvas");
+  canvas.id = "pixel-transition-canvas";
   canvas.style.cssText = `
     position: fixed;
     inset: 0;
-    z-index: 90;
+    z-index: 99999;
     pointer-events: none;
     width: 100vw;
     height: 100vh;
     visibility: hidden;
   `;
-  document.body.appendChild(canvas);
+  document.documentElement.appendChild(canvas);
   ctx = canvas.getContext("2d");
 
-  // Resize canvas to match viewport
   function resize() {
     if (!canvas) return;
     canvas.width = window.innerWidth * window.devicePixelRatio;
@@ -81,7 +67,6 @@ function init() {
   resize();
   window.addEventListener("resize", resize);
 
-  // Listen for reduced motion changes
   prefersReducedMotion.addEventListener("change", (e) => {
     if (e.matches && canvas) {
       canvas.style.visibility = "hidden";
@@ -89,89 +74,110 @@ function init() {
   });
 
   // ─── Lifecycle hooks ──────────────────────────────────────────────
-  document.addEventListener("astro:before-swap", handleBeforeSwap);
-  document.addEventListener("astro:after-swap", handleAfterSwap);
-}
+  document.addEventListener("astro:before-preparation", (e: any) => {
+    if (prefersReducedMotion.matches) return;
+    if (!canvas || !ctx) return;
+    const originalLoader = e.loader;
 
-function handleBeforeSwap() {
-  if (!canvas || !ctx) return;
+    e.loader = async () => {
+      try {
+        canvas.style.visibility = "visible";
+        await Promise.race([
+          animateCoverPromise(),
+          new Promise((r) => setTimeout(r, COVER_DURATION + 100)),
+        ]);
+      } catch {
+        // Ignore animation error
+      } finally {
+        await originalLoader();
+      }
+    };
+  });
 
-  // Cancel any running animation
-  if (animationId !== null) {
-    cancelAnimationFrame(animationId);
-    animationId = null;
-  }
-
-  canvas.style.visibility = "visible";
-  animateCover();
-}
-
-function handleAfterSwap() {
-  // After hold, dissolve away
-  window.setTimeout(() => {
+  document.addEventListener("astro:after-swap", () => {
+    if (prefersReducedMotion.matches) return;
+    if (!canvas || !ctx) return;
     animateDissolve();
-  }, HOLD_DURATION);
+  });
+
+  // Safety net: always hide canvas on page load completion
+  document.addEventListener("astro:page-load", () => {
+    if (canvas && ctx) {
+      canvas.style.visibility = "hidden";
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+  });
 }
 
-/** Cover animation: blocks scale from 0 → 1 with diagonal stagger. */
-function animateCover() {
-  if (!canvas || !ctx) return;
-
-  const dpr = window.devicePixelRatio;
-  const w = canvas.width;
-  const h = canvas.height;
-  const cellW = w / COLS;
-  const cellH = h / ROWS;
-  const total = COLS * ROWS;
-  const maxDiag = COLS + ROWS - 2;
-
-  const start = performance.now();
-
-  function frame(now: number) {
-    if (!ctx || !canvas) return;
-    const elapsed = now - start;
-    ctx.clearRect(0, 0, w, h);
-
-    let allDone = true;
-
-    for (let i = 0; i < total; i++) {
-      const col = i % COLS;
-      const row = Math.floor(i / COLS);
-      const diagonal = col + row;
-      const staggerDelay = (diagonal / maxDiag) * (COVER_DURATION * 0.6);
-      const localT = Math.max(0, Math.min(1, (elapsed - staggerDelay) / (COVER_DURATION * 0.6)));
-
-      if (localT < 1) allDone = false;
-
-      const scale = easeOutExpo(localT);
-      const cx = col * cellW + cellW / 2;
-      const cy = row * cellH + cellH / 2;
-      const sw = cellW * scale;
-      const sh = cellH * scale;
-
-      ctx.fillStyle = pick(i);
-      ctx.fillRect(cx - sw / 2, cy - sh / 2, sw, sh);
+function animateCoverPromise(): Promise<void> {
+  return new Promise((resolve) => {
+    if (!canvas || !ctx) {
+      resolve();
+      return;
     }
 
-    if (!allDone) {
-      animationId = requestAnimationFrame(frame);
-    } else {
-      // Fully covered — draw final state
+    if (animationId !== null) {
+      cancelAnimationFrame(animationId);
+      animationId = null;
+    }
+
+    const w = canvas.width;
+    const h = canvas.height;
+    const cellW = w / COLS;
+    const cellH = h / ROWS;
+    const total = COLS * ROWS;
+    const maxDiag = COLS + ROWS - 2;
+
+    const start = performance.now();
+
+    function frame(now: number) {
+      if (!ctx || !canvas) {
+        resolve();
+        return;
+      }
+      const elapsed = now - start;
       ctx.clearRect(0, 0, w, h);
+
+      let allDone = true;
+
       for (let i = 0; i < total; i++) {
         const col = i % COLS;
         const row = Math.floor(i / COLS);
-        ctx.fillStyle = pick(i);
-        ctx.fillRect(col * cellW, row * cellH, cellW + 1, cellH + 1);
-      }
-      animationId = null;
-    }
-  }
+        const diagonal = col + row;
+        const staggerDelay = (diagonal / maxDiag) * (COVER_DURATION * 0.5);
+        const localT = Math.max(0, Math.min(1, (elapsed - staggerDelay) / (COVER_DURATION * 0.5)));
 
-  animationId = requestAnimationFrame(frame);
+        if (localT < 1) allDone = false;
+
+        const scale = easeOutExpo(localT);
+        const cx = col * cellW + cellW / 2;
+        const cy = row * cellH + cellH / 2;
+        const sw = cellW * scale;
+        const sh = cellH * scale;
+
+        ctx.fillStyle = pickColor(i);
+        ctx.fillRect(cx - sw / 2, cy - sh / 2, sw + 1.5, sh + 1.5);
+      }
+
+      if (!allDone) {
+        animationId = requestAnimationFrame(frame);
+      } else {
+        ctx.clearRect(0, 0, w, h);
+        for (let i = 0; i < total; i++) {
+          const col = i % COLS;
+          const row = Math.floor(i / COLS);
+          ctx.fillStyle = pickColor(i);
+          ctx.fillRect(col * cellW, row * cellH, cellW + 1.5, cellH + 1.5);
+        }
+        animationId = null;
+        resolve();
+      }
+    }
+
+    animationId = requestAnimationFrame(frame);
+  });
 }
 
-/** Dissolve animation: blocks scale from 1 → 0 with diagonal stagger. */
 function animateDissolve() {
   if (!canvas || !ctx) return;
 
@@ -195,8 +201,8 @@ function animateDissolve() {
       const col = i % COLS;
       const row = Math.floor(i / COLS);
       const diagonal = col + row;
-      const staggerDelay = (diagonal / maxDiag) * (DISSOLVE_DURATION * 0.6);
-      const localT = Math.max(0, Math.min(1, (elapsed - staggerDelay) / (DISSOLVE_DURATION * 0.6)));
+      const staggerDelay = (diagonal / maxDiag) * (DISSOLVE_DURATION * 0.5);
+      const localT = Math.max(0, Math.min(1, (elapsed - staggerDelay) / (DISSOLVE_DURATION * 0.5)));
 
       if (localT < 1) allDone = false;
 
@@ -208,14 +214,13 @@ function animateDissolve() {
       const sw = cellW * scale;
       const sh = cellH * scale;
 
-      ctx.fillStyle = pick(i);
-      ctx.fillRect(cx - sw / 2, cy - sh / 2, sw, sh);
+      ctx.fillStyle = pickColor(i);
+      ctx.fillRect(cx - sw / 2, cy - sh / 2, sw + 1.5, sh + 1.5);
     }
 
     if (!allDone) {
       animationId = requestAnimationFrame(frame);
     } else {
-      // Fully dissolved — hide canvas
       canvas!.style.visibility = "hidden";
       ctx!.clearRect(0, 0, w, h);
       animationId = null;
@@ -225,6 +230,4 @@ function animateDissolve() {
   animationId = requestAnimationFrame(frame);
 }
 
-// ─── Bootstrap ────────────────────────────────────────────────────────
-// Run init() exactly once.
 init();

@@ -13,7 +13,7 @@ Every page is rendered using `src/layouts/BaseLayout.astro`, which systematicall
   - `og:site_name`: `Rohit Gautam`
   - `og:type`: `website` (or `article` for blog posts)
   - `og:title`, `og:description`, `og:url`
-  - `og:image`: Dynamic hero image or high-res portrait card (`/images/portrait.jpg`).
+  - `og:image`: Dynamic hero image or high-res portrait card (`/images/portrait.webp`).
 - **Twitter Cards**: `twitter:card: summary_large_image`, `twitter:title`, `twitter:description`, `twitter:image`.
 - **Theme Color**: `<meta name="theme-color" content="#121212" />` preventing white flashes in mobile browser chrome.
 

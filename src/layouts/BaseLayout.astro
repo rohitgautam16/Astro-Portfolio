@@ -1,10 +1,11 @@
 ---
 /**
- * BaseLayout.astro — HTML shell for every page.
+ * BaseLayout.astro - HTML shell for every page.
  * Includes SEO metadata, OpenGraph, fonts, theme script, <ClientRouter />, and pixel transition.
  */
 import { ClientRouter } from "astro:transitions";
 import "../styles/global.css";
+import { Preloader } from "../components/react/Preloader";
 
 interface Props {
   title: string;
@@ -16,11 +17,14 @@ interface Props {
 const {
   title,
   description = "Rohit Gautam builds scalable full stack applications and AI-powered software with React.js, Node.js and Cloudflare.",
-  image = "/images/portrait.jpg",
+  image = "/images/portrait.webp",
   type = "website",
 } = Astro.props;
 
-const canonicalURL = new URL(Astro.url.pathname, Astro.site || "https://rohitgautam.site");
+const canonicalURL = new URL(
+  Astro.url.pathname,
+  Astro.site || "https://rohitgautam.site",
+);
 const ogImageURL = new URL(image, Astro.site || "https://rohitgautam.site");
 ---
 
@@ -56,7 +60,12 @@ const ogImageURL = new URL(image, Astro.site || "https://rohitgautam.site");
     <meta name="twitter:image" content={ogImageURL} />
 
     <!-- RSS Syndication -->
-    <link rel="alternate" type="application/rss+xml" title="Rohit Gautam Insights RSS Feed" href="/rss.xml" />
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title="Rohit Gautam Insights RSS Feed"
+      href="/rss.xml"
+    />
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -84,6 +93,7 @@ const ogImageURL = new URL(image, Astro.site || "https://rohitgautam.site");
     <ClientRouter />
   </head>
   <body>
+    <Preloader client:load />
     <slot />
 
     <!-- Pixel dissolve page transition (vanilla JS, persists across navigations) -->

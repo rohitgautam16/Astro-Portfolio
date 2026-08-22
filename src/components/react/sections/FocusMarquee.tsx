@@ -1,5 +1,5 @@
 /**
- * FocusMarquee — Scrolling tech ticker below the hero.
+ * FocusMarquee - Scrolling tech ticker below the hero.
  * Uses CSS animation (no Framer Motion needed), but kept as React island
  * because it imports TechGlyph and Doodle which are React components.
  */

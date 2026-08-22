@@ -1,60 +1,73 @@
 export const flags = {
   /** Set to true to display a Coming Soon pre-launch landing page for the whole website on production */
-  siteComingSoon: true,
+  siteComingSoon: false,
   /** Set to true to show Coming Soon state on /blog while setting up publishing */
   blogComingSoon: true,
 };
 
 export const profile = {
   name: "Rohit Gautam",
-  role: "Software Engineer",
-  location: "India · Remote friendly",
+  role: "Full Stack Software Engineer",
+
+  location: "India · Open to Relocation · Remote",
+
   email: "connect@rohitgautam.site",
+
   github: "https://github.com/rohitgautam16",
   linkedin: "https://www.linkedin.com/in/rohitgautam24",
   x: "https://x.com/I_amrohitgautam",
   twitter: "https://x.com/I_amrohitgautam",
+
   scheduleUrl: "https://cal.com/rohit-gautam/30min",
   resumeUrl: "/Rohit Gautam - Full Stack Software Engineer Resume.pdf",
-  /** Swap this for a real professional photograph when available. */
-  photo: "/images/portrait.jpg",
+
+  photo: "/images/portrait.webp",
+
   tagline:
-    "Building scalable Full Stack applications and AI-powered software using React.js, Node.js and modern cloud technologies.",
+    "I turn complex ideas into fast, scalable web products - from full-stack applications and commerce platforms to AI-powered workflows.",
+
   focus: [
+    "Full-Stack Products",
     "React.js",
     "Node.js",
-    "Shopify",
-    "Cloudflare",
     "AI Automation",
-    "Modern Web Engineering",
+    "Shopify",
+    "Product Engineering",
   ],
+
   summary: [
-    "I build production software end to end — the interface a customer touches, the API behind it, and the infrastructure that keeps it fast. Most of my work lives where product commerce and engineering meet: subscription platforms, Shopify apps, multi-vendor marketplaces and AI-assisted tooling.",
-    "My default is boring, typed, observable systems with a carefully crafted surface on top. I care about the first paint, the empty state, the error message and the invoice at the end of the month — because those are the parts users and founders actually feel.",
-    "Right now I'm shipping edge-first architecture and AI automation into products that need to stay cheap at scale.",
+    "From product idea to production, I build the systems behind digital businesses - intuitive interfaces, reliable APIs, authentication, data flows, payments and the infrastructure that keeps everything running smoothly.",
+
+    "My strongest work sits at the intersection of product engineering and commerce: subscription platforms, multi-vendor systems, custom Shopify experiences and AI-powered applications designed around real business workflows.",
+
+    "I bring a product-first mindset to engineering: understand the problem, choose the simplest architecture that can support it, and ship an experience that is fast, maintainable and built to grow.",
   ],
 };
 
 export const philosophy = [
   {
     no: "01",
-    title: "Ship the smallest honest version",
-    body: "Scope is a design tool. I release the version that answers the user's question, then earn every extra layer of complexity with evidence.",
+    title: "Start with the problem",
+    body:
+      "I don't start by picking a framework. I start by understanding what needs to be solved, who it's for, and what a successful outcome looks like.",
   },
   {
     no: "02",
-    title: "The edge is the new backend",
-    body: "Cloudflare Workers, caching and streaming push work closer to people. Latency is a product feature, not an infra footnote.",
+    title: "Build for the real world",
+    body:
+      "A product has to work beyond the happy path. I plan for failure, latency, and edge cases from the start-not as fixes after something breaks in production.",
   },
   {
     no: "03",
-    title: "Typed boundaries, calm systems",
-    body: "TypeScript at every seam, validation at every entry point. Most production incidents are just untyped assumptions growing up.",
+    title: "Keep complexity intentional",
+    body:
+      "I prefer simple systems that are easy to understand and evolve. Every abstraction, dependency, and architectural decision should earn its place.",
   },
   {
     no: "04",
-    title: "AI as a component, not a personality",
-    body: "Automations need fallbacks, budgets and review paths. A model is a fallible dependency I design guardrails around.",
+    title: "Tools don't get to lead",
+    body:
+      "Whether it's a full-stack application, commerce experience, or AI workflow, I choose technology to make the product better-not simply because a new tool is available.",
   },
 ];
 
@@ -79,295 +92,329 @@ export type Project = {
 
 export const projects: Project[] = [
   {
-    slug: "align-music-platform",
-    title: "Align Music Platform",
+    slug: "music-streaming-platform",
+    title: "Music Streaming Platform",
     year: "2025",
     status: "Live",
     kind: "Subscription Platform",
     role: "Full stack engineer",
     summary:
-      "A subscription music platform with streaming playback, playlist curation, plan management and a creator-facing catalog dashboard.",
+      "A production-grade subscription music platform built end-to-end - persistent audio playback, plan-aware access control, Stripe billing and an internal dashboard for catalog and artist management.",
     image: "/images/project-align.jpg",
     overview:
-      "Align is a subscription-based music platform: listeners browse a curated catalog, build playlists and stream continuously, while the team manages releases, artists and plans from an internal dashboard.",
+      "A subscription music platform serving listeners, artists and an admin team from a single MERN stack. Listeners stream a curated catalog and build playlists; the team manages releases, artist profiles and plan entitlements from a purpose-built internal dashboard - all without touching the codebase.",
     problem:
-      "Streaming products fail on two boring things — playback that stutters when the tab changes, and a billing state that disagrees with what the user can actually access.",
+      "Streaming products fail on two predictable things: audio that resets when the user navigates, and a subscription state that quietly drifts out of sync with what the user can actually access.",
     solution:
-      "A single source of truth for entitlement, a persistent player that survives navigation, and a MongoDB catalog model designed around playlists rather than files.",
+      "Audio player state lifted above the router so navigation never interrupts playback. A single entitlement record computed from every Stripe billing event - upgrades, renewals, failures and cancellations all resolve into one authoritative source.",
     architecture: [
-      "React SPA with a persistent audio player kept outside the route tree",
-      "Node.js and Express API with role-based access for listeners, artists and admins",
-      "MongoDB schemas modelled around playlists, releases and subscription entitlements",
-      "Signed, expiring media URLs so streams cannot be hot-linked",
-      "Subscription lifecycle webhooks reconciled into a single entitlement record",
+      "React SPA with persistent audio player mounted outside the route tree - queue and state survive navigation",
+      "Node.js / Express REST API with JWT auth and RBAC across listener, artist and admin roles",
+      "MongoDB schemas modelled around playlists, releases and computed subscription entitlements",
+      "Stripe subscription webhooks processed into one authoritative entitlement record per user",
+      "Signed, short-lived media URLs preventing hotlinking and unauthorized stream access",
+      "Admin dashboard: artist CRUD, release scheduling, media uploads, plan management, user controls",
+      "DigitalOcean deployment with Nginx reverse proxy, PM2, SSL and Cloudflare caching layer",
     ],
-    stack: ["React", "Node.js", "Express", "MongoDB", "JWT Auth", "Subscriptions"],
+    stack: ["React", "Node.js", "Express", "MongoDB", "Stripe", "JWT", "DigitalOcean", "Redux"],
     highlights: [
       {
-        title: "Player that never resets",
-        body: "Playback state lives above the router, so navigating the catalog never interrupts a track or re-buffers a stream.",
+        title: "Playback that never resets",
+        body: "The audio player mounts once, above the router. Navigating the catalog, switching playlists or opening account settings never re-buffers a track or loses queue state.",
       },
       {
-        title: "Entitlement as one record",
-        body: "Plan changes, renewals and failures all resolve into a single computed access record — no scattered boolean flags.",
+        title: "One entitlement record, always correct",
+        body: "Every Stripe event - upgrade, renewal, failure, cancellation - resolves into a single computed access record. No scattered boolean flags, no billing-state drift.",
       },
       {
-        title: "Catalog tooling",
-        body: "Internal dashboard for uploads, artwork and release scheduling, so the team ships music without a developer in the loop.",
+        title: "Team-owned catalog tooling",
+        body: "The internal dashboard covers artist uploads, artwork, release scheduling and RBAC-gated admin controls. The team ships music without a developer in the loop.",
       },
     ],
-    github: "https://github.com/rohitgautam",
+    github: "",
     demo: "",
   },
   {
-    slug: "multi-vendor-ecommerce-platform",
-    title: "Multi Vendor Ecommerce Platform",
+    slug: "multi-vendor-marketplace",
+    title: "Multi-Vendor Marketplace",
     year: "2024",
     status: "Shipped",
     kind: "Marketplace",
     role: "Full stack engineer",
     summary:
-      "A marketplace where independent vendors run their own storefront, inventory and payouts inside one shared commerce system.",
+      "A three-surface marketplace platform - buyer storefront, vendor dashboard and platform admin - with split-order fulfilment, per-vendor payout ledger and faceted catalog search, all on one MERN API.",
     image: "/images/project-marketplace.jpg",
     overview:
-      "A marketplace platform with three distinct surfaces — buyer storefront, vendor dashboard and platform admin — sharing one catalog, cart and order pipeline.",
+      "An end-to-end marketplace platform with three distinct portals sharing one API and one MongoDB cluster. Buyers browse, filter and checkout across multiple vendors in a single cart. Vendors manage their own products, orders and payouts. Platform admins control commission rules, disputes and cross-vendor analytics.",
     problem:
-      "Multi-vendor commerce breaks on split orders: one cart, several sellers, separate fulfilment, separate money. Most single-tenant shop code cannot express that.",
+      "Multi-vendor commerce breaks predictably on split orders: one cart, multiple sellers, separate fulfilment timelines, separate money flows. Single-tenant e-commerce code has no model for any of that.",
     solution:
-      "Orders modelled as a parent record with per-vendor sub-orders, each with its own state machine, fulfilment timeline and payout calculation.",
+      "Orders designed as a parent record with per-vendor sub-orders, each running its own state machine. Authorization scoped to vendor identity at the middleware layer so no route can accidentally cross vendor boundaries.",
     architecture: [
-      "React storefront with faceted search, cart persistence and guest checkout",
-      "Node.js and Express API with vendor-scoped authorization on every route",
-      "MongoDB aggregation pipelines for catalog facets and vendor analytics",
-      "Parent order with per-vendor sub-orders, each running its own state machine",
-      "Commission and payout ledger computed from settled sub-orders",
+      "React storefront with faceted search, persistent cart across sessions and guest checkout",
+      "Node.js / Express API with vendor-scoped authorization enforced once in shared middleware",
+      "Parent order record with per-vendor sub-orders, each with independent state machine and fulfilment flow",
+      "Commission and payout ledger computed automatically from settled sub-orders",
+      "MongoDB aggregation pipelines for catalog facets, search ranking and vendor analytics",
+      "Vendor dashboard: product CRUD, inventory, order management, payout history and metrics",
+      "Platform admin: commission configuration, dispute resolution, cross-vendor reporting",
     ],
-    stack: ["React", "Node.js", "Express", "MongoDB", "REST API", "Payments"],
+    stack: ["React", "Node.js", "Express", "MongoDB", "REST API", "Stripe", "RBAC"],
     highlights: [
       {
-        title: "Split orders done properly",
-        body: "One checkout fans out into vendor sub-orders so fulfilment, refunds and payouts stay independent and auditable.",
+        title: "Split orders that stay coherent",
+        body: "One checkout fans out into per-vendor sub-orders. Fulfilment, refunds and payouts are completely independent per seller - no shared state, no cross-vendor bleed.",
       },
       {
-        title: "Authorization by default",
-        body: "Vendor scope is enforced in a shared middleware layer instead of being re-checked, and eventually forgotten, per route.",
+        title: "Authorization that can't be forgotten",
+        body: "Vendor identity scoping lives in shared middleware, applied once before any route handler runs. Every endpoint is vendor-safe by architecture, not by convention.",
       },
       {
-        title: "Search that stays fast",
-        body: "Facets and listings are served from tuned aggregation pipelines with indexed filters instead of ad-hoc queries.",
+        title: "Catalog at query speed",
+        body: "Facets and listings run on tuned MongoDB aggregation pipelines with compound indexes. No in-memory filtering, no N+1 catalog reads at browse time.",
       },
     ],
-    github: "https://github.com/rohitgautam",
+    github: "",
     demo: "",
   },
   {
-    slug: "by-the-degree",
-    title: "By The Degree",
+    slug: "ai-consultation-platform",
+    title: "AI Consultation Platform",
     year: "2025",
     status: "Live",
-    kind: "Astrology Platform",
+    kind: "AI-Powered SaaS",
     role: "Full stack engineer",
     summary:
-      "An astrology consultation platform with chart generation, bookings and an AI assistant that answers questions grounded in the user's own chart.",
+      "A full-stack consultation platform combining deterministic domain computation, practitioner bookings and a context-constrained AI assistant - built so the model can only answer from verified, computed data.",
     image: "/images/project-bythedegree.jpg",
     overview:
-      "By The Degree pairs a traditional consultation business with software: users generate a chart, book a practitioner and get an AI assistant that can explain their reading in plain language.",
+      "A niche consultation platform that pairs a booking business with product software. Users generate a personalised data report from a deterministic computation engine, book a practitioner, and interact with an AI assistant that explains the report in plain language - strictly within the bounds of the computed context, never improvising.",
     problem:
-      "Consultation businesses lose people between curiosity and booking. Generic chatbots make that worse by inventing details that contradict the actual chart.",
+      "Consultation businesses lose users between initial curiosity and a booked session. Generic AI chatbots make it worse - they confidently hallucinate details that contradict the user's actual data, destroying trust before the first appointment.",
     solution:
-      "Deterministic chart computation first, then an AI assistant constrained to that computed context, with booking as a first-class next step in every conversation.",
+      "Deterministic computation runs first and produces a structured context object. The AI assistant is then constrained entirely to that object - it cannot invent or extrapolate. Booking is surfaced as a first-class action inside every conversation thread.",
     architecture: [
-      "React interface with an interactive chart wheel and a streaming assistant panel",
-      "Node.js API computing chart data deterministically before any model call",
-      "AI assistant prompted strictly from the computed chart context",
-      "Booking and availability flow with reminders and rescheduling",
-      "Response caching for repeated interpretation prompts to control cost",
+      "React interface with an interactive data visualization panel and a streaming AI assistant",
+      "Node.js API running all domain computation deterministically before any model call is made",
+      "OpenAI assistant prompted strictly from the computed context object - freeform invention is blocked by design",
+      "Booking and availability system with confirmation emails, reminders and rescheduling flows",
+      "Response caching for repeated queries against the same computed context to control per-user cost",
+      "MongoDB storing computed reports, booking records and assistant conversation threads",
     ],
-    stack: ["React", "Node.js", "MongoDB", "AI Assistant", "Bookings"],
+    stack: ["React", "Node.js", "Express", "MongoDB", "OpenAI", "Stripe", "Booking System"],
     highlights: [
       {
         title: "Grounded, not improvised",
-        body: "The assistant only reasons over the deterministically computed chart, so answers stay consistent with what the user is looking at.",
+        body: "The assistant only reasons over the deterministically computed context object. Answers are always consistent with what the user sees - the model cannot invent data.",
       },
       {
-        title: "Conversation to booking",
-        body: "Every assistant thread can convert into a real appointment without the user re-entering anything.",
+        title: "Curiosity converts to bookings",
+        body: "Every assistant conversation surfaces a booking action inline. The user moves from first question to confirmed appointment without re-entering a single detail.",
       },
       {
-        title: "Cost-aware AI",
-        body: "Cached interpretations and tight context windows keep per-conversation spend predictable.",
+        title: "Predictable AI cost at scale",
+        body: "Cached responses for repeated queries and tight, purpose-built context windows keep per-session model spend flat as the user base grows.",
       },
     ],
-    github: "https://github.com/rohitgautam",
+    github: "",
+    demo: "",
+  },
+  {
+    slug: "shopify-storefront-engineering",
+    title: "Shopify Storefront Engineering",
+    year: "2024–25",
+    status: "Ongoing",
+    kind: "Commerce Engineering",
+    role: "Shopify engineer",
+    summary:
+      "End-to-end Shopify engineering across multiple live stores - custom Liquid themes, performance-tuned storefronts, metafield-driven sections, third-party integrations and multi-store architecture.",
+    image: "/images/project-shopify.jpg",
+    overview:
+      "Worked across a portfolio of Shopify stores handling everything from ground-up theme builds and redesigns to integrating complex third-party apps, optimising Core Web Vitals and shipping custom storefront behaviour that the platform doesn't offer out of the box.",
+    problem:
+      "Shopify's default tooling stops where merchant requirements start. Custom UX patterns, performance at scale, conditional logic across metafields, and app integrations that play nicely with each other all need an engineer who understands both the platform and the product.",
+    solution:
+      "Built directly in the Shopify stack - Liquid, JS, CSS - with a clear separation between theme logic, section schema and client-side behaviour. Integrations are treated as dependencies, not afterthoughts, and every performance change is measured against real CWV data.",
+    architecture: [
+      "Custom Liquid theme development with schema-driven section architecture",
+      "Metafield-powered dynamic content - product specs, variant logic, conditional display",
+      "Storefront JS for custom cart drawer, live filters, sticky behaviour and animations",
+      "Third-party app integrations: reviews, subscriptions, loyalty, upsell and bundles",
+      "Multi-store setup with shared component patterns across international storefronts",
+      "Core Web Vitals auditing and asset pipeline tuning - LCP, CLS and INP targets met",
+    ],
+    stack: ["Shopify", "Liquid", "JavaScript", "CSS", "Theme Architecture", "App Integrations"],
+    highlights: [
+      {
+        title: "Performance as a requirement",
+        body: "Every storefront shipped with a CWV audit. LCP under 2.5 s and zero layout shift from dynamic content - achieved through asset deferral, image sizing and render order discipline.",
+      },
+      {
+        title: "Sections that configure, not hard-code",
+        body: "Built section schemas so merchants control layout, content and logic from the Shopify editor without touching code - reducing developer dependency on routine changes.",
+      },
+      {
+        title: "Integrations that don't fight each other",
+        body: "Stacked review apps, subscription tools, upsell widgets and loyalty programs on the same storefront without event collision or layout breakage.",
+      },
+    ],
+    github: "",
     demo: "",
   },
   {
     slug: "portfolio-website",
-    title: "Portfolio Website",
+    title: "This Portfolio",
     year: "2026",
     status: "You're on it",
-    kind: "Craft",
+    kind: "Design & Engineering",
     role: "Design and build",
     summary:
-      "This site: a hand-built neo-brutalist portfolio with a terminal preloader, scroll-driven motion and a server-rendered, accessible foundation.",
+      "A hand-built neo-brutalist portfolio with a terminal preloader, GSAP scroll-driven motion, OKLCH theming and a server-rendered Astro foundation - designed to demonstrate craft as much as content.",
     image: "/images/project-portfolio.jpg",
     overview:
-      "A deliberately handcrafted site — no template, no page builder. Built to demonstrate the same things I care about in product work: typography, motion discipline, accessibility and performance.",
+      "No template. No page builder. Built from a blank file - OKLCH design tokens, a soft neo-brutalist system, GSAP scroll animations and an Astro-rendered core. The same standards I apply to client products: first paint speed, zero layout shift, keyboard accessibility and motion that respects the user's system preference.",
     problem:
-      "Most engineering portfolios read like a generated template. The work is real; the presentation says otherwise.",
+      "Most engineering portfolios are a list of GitHub repos dressed up with a CSS framework. The work is real; the surface signals otherwise.",
     solution:
-      "A custom neo-brutalist design system, a motion layer that respects reduced-motion, and route-level code splitting on a server-rendered React stack.",
+      "A custom design system that applies to every element, a motion layer built on GSAP and scroll-driven APIs, and an Astro foundation that ships zero unnecessary JavaScript by default.",
     architecture: [
-      "React 19 and TanStack Start with server rendering and file-based routing",
-      "Custom OKLCH token system with a light and cozy dark theme",
-      "Framer Motion layer for reveals, magnetic buttons and page transitions",
-      "Terminal-style preloader with typed boot messages",
-      "Route-level code splitting, lazy imagery and reserved media dimensions",
+      "Astro with React islands - only interactive components ship JS to the browser",
+      "Custom OKLCH token system with paper-light and cozy-dark themes",
+      "GSAP ScrollTrigger for pinned sections, clip-path reveals and diagonal marquees",
+      "Terminal-style preloader sequence before first paint",
+      "Image dimensions reserved at build time - zero cumulative layout shift",
     ],
-    stack: ["React 19", "TypeScript", "TanStack Start", "Tailwind CSS", "Framer Motion"],
+    stack: ["Astro", "React", "TypeScript", "GSAP", "Tailwind CSS", "OKLCH Tokens"],
     highlights: [
       {
+        title: "Zero-JS by default",
+        body: "Astro ships static HTML for every non-interactive section. React only hydrates where interaction is genuinely needed - the page loads fast by architecture, not optimization.",
+      },
+      {
         title: "Motion with a brake pedal",
-        body: "Every animation degrades to a static state under prefers-reduced-motion — the whole system is opt-out in one place.",
+        body: "Every GSAP animation degrades gracefully under prefers-reduced-motion. One global flag, not per-component conditionals scattered across the codebase.",
       },
       {
-        title: "No layout shift",
-        body: "Media carries intrinsic dimensions and decorative layers are absolutely positioned, so nothing jumps after load.",
-      },
-      {
-        title: "Keyboard complete",
-        body: "Command palette, skip link, visible focus rings and semantic landmarks across every route.",
+        title: "Design token discipline",
+        body: "OKLCH-based color tokens, consistent spacing scale and a shared shadow system mean the neo-brutalist aesthetic holds at every breakpoint and in both themes.",
       },
     ],
-    github: "https://github.com/rohitgautam",
-    demo: "",
+    github: "https://github.com/rohitgautam16/Astro-Portfolio",
+    demo: "https://rohitgautam.site",
   },
+
 ];
 
 export const experience = [
   {
     company: "Red Honey Group",
     role: "Software Engineer",
-    period: "Present",
+    period: "Nov 2024 – Present",
     location: "India",
+
     summary:
-      "Client-facing product engineering across React applications, Shopify storefronts, WordPress builds and AI integrations.",
+      "Product-focused software engineering across full-stack applications, commerce platforms, Shopify storefronts, and AI-powered digital experiences.",
+
     achievements: [
-      "Built React applications for client products and internal tooling",
-      "Developed and customised Shopify stores, themes and app integrations",
-      "Created WordPress websites with custom templates and content models",
-      "Worked with AI integrations to automate content and support workflows",
-      "Optimized website performance across Core Web Vitals and asset delivery",
+      "Built and shipped full-stack products with React.js, Node.js and Express, working across frontend architecture, APIs, authentication, data flows and production deployment.",
+
+      "Developed a subscription-based music platform with authentication, playlists, user personalization, media protection, plan-based access control, Stripe billing and an internal administration system.",
+
+      "Designed backend services with secure authentication, refresh-token workflows, RBAC, content visibility controls, recommendation flows and modular CRUD systems.",
+
+      "Built and customized multiple Shopify storefronts, working with Liquid, custom storefront behaviour, third-party integrations and performance optimization.",
+
+      "Developed and maintained internal admin tooling for content, users, playlists, media and operational workflows, with reusable controls, pagination and secure administrative routes.",
+
+      "Handled production deployment and infrastructure workflows using DigitalOcean, Nginx, PM2, SSL and Cloudflare for caching, DNS and delivery.",
+
+      "Contributed to AI-powered product experiences by integrating generative AI into application workflows and exploring practical automation use cases.",
     ],
-    stack: ["React", "Node.js", "Shopify", "WordPress", "AI Integrations"],
+
+    stack: [
+      "React.js",
+      "Node.js",
+      "Express",
+      "MongoDB",
+      "Redux",
+      "RTK Query",
+      "Shopify",
+      "Stripe",
+      "Cloudflare",
+      "DigitalOcean",
+    ],
   },
 ];
 
-export const timeline = [
-  /*
+export const timeline: {
+  period: string;
+  title: string;
+  detail: string;
+  projects?: { title: string; detail: string }[];
+}[] = [
     {
-      period: "Now",
-      title: "Building a Shopify SaaS on the edge",
+      period: "Present",
+      title: "Software Engineer · Red Honey Group",
       detail:
-        "Running an image optimization product on Cloudflare Workers — architecture, billing, merchant onboarding and support.",
+        "Building and shipping full-stack digital products across commerce, subscriptions, AI, Shopify, WordPress and modern web applications.",
+      projects: [
+        {
+          title: "Multi-Vendor Marketplace",
+          detail:
+            "Designed and built complex commerce workflows for independent vendors, including split orders, vendor management and payout modelling.",
+        },
+        {
+          title: "Subscription Platform",
+          detail:
+            "Took a subscription-based digital platform from product architecture through development and launch, covering core user flows and recurring access.",
+        },
+        {
+          title: "AI-Powered Experience",
+          detail:
+            "Built an AI-assisted personalised platform, combining modern application development with generative AI capabilities and user-specific experiences.",
+        },
+      ],
     },
-  */
-  {
-    period: "Present",
-    title: "Software Engineer · Red Honey Group",
-    detail:
-      "Shipping React applications, Shopify storefronts, WordPress builds, AI integrations and performance work for clients.",
-  },
-  {
-    period: "2025",
-    title: "Align and By The Degree",
-    detail:
-      "Two full products taken from schema to launch: a subscription music platform and an AI-assisted astrology platform.",
-  },
-  {
-    period: "2024",
-    title: "Multi vendor commerce",
-    detail:
-      "Designed split-order and payout modelling for a marketplace serving independent vendors.",
-  },
-  {
-    period: "Foundations",
-    title: "Full stack in JavaScript",
-    detail:
-      "Went deep on React and Node.js, then on the cloud layer underneath — certifying in Oracle Cloud Infrastructure and OCI Generative AI.",
-  },
-];
+    {
+      period: "Foundations",
+      title: "Full-Stack JavaScript & Cloud",
+      detail:
+        "Built a strong foundation in React and Node.js, then expanded into cloud architecture and generative AI with Oracle Cloud Infrastructure and OCI Generative AI certifications.",
+    },
+  ];
 
 export const currentlyBuilding = [
-  /* { title: "Shopify SaaS", note: "Image optimization at the edge" }, */
-  { title: "AI Automation", note: "Workflows that survive production" },
-  { title: "Full Stack Applications", note: "React and Node.js end to end" },
-  { title: "Cloudflare Edge Apps", note: "Workers, R2, caching, queues" },
-  { title: "Enterprise Products", note: "Systems built to be handed over" },
+  {
+    title: "AI Automation",
+    note: "Turning repetitive business workflows into reliable software.",
+  },
+  {
+    title: "Full-Stack Products",
+    note: "Building end-to-end applications with React.js and Node.js.",
+  },
+  {
+    title: "Shopify Products",
+    note: "Exploring SaaS and tooling that solve real commerce problems.",
+  },
+  {
+    title: "Cloud & Edge Engineering",
+    note: "Learning and building with Cloudflare, caching, and modern deployment patterns.",
+  },
 ];
 
 export const certifications = [
   {
     title: "Oracle Cloud Infrastructure Foundations",
     org: "Oracle",
-    detail: "Core cloud architecture, identity, networking and managed services on OCI.",
+    detail:
+      "Foundation in cloud infrastructure, core OCI services, networking, security, and cloud architecture fundamentals.",
   },
   {
     title: "Oracle OCI Generative AI Professional",
     org: "Oracle",
-    detail: "Applied generative AI: retrieval, embeddings, prompt design and deployment patterns.",
+    detail:
+      "Focused on generative AI architecture, foundation models, RAG, embeddings, semantic search, fine-tuning, inference, and AI security.",
   },
-];
-
-export const stack = [
-  {
-    category: "Frontend",
-    items: ["React.js", "TypeScript", "TanStack Router", "Tailwind CSS", "Framer Motion", "Vite"],
-  },
-  {
-    category: "Backend",
-    items: ["Node.js", "Express", "REST APIs", "Auth & RBAC", "Webhooks", "Zod"],
-  },
-  {
-    category: "Commerce",
-    items: ["Shopify Apps", "Shopify Themes", "Liquid", "Subscriptions", "Payments", "WordPress"],
-  },
-  {
-    category: "Cloud",
-    items: ["Cloudflare Workers", "R2", "Queues", "Oracle Cloud", "Edge caching", "CI/CD"],
-  },
-  {
-    category: "Data",
-    items: ["MongoDB", "Aggregation pipelines", "Postgres", "Redis", "Indexing", "Schema design"],
-  },
-  {
-    category: "AI",
-    items: ["AI automation", "Assistants", "Embeddings", "Prompt design", "Streaming UX", "Guardrails"],
-  },
-];
-
-/** Flat tool list rendered as logo cards. Names must match keys in tech-icons. */
-export const tools: { name: string; category: string }[] = [
-  { name: "React", category: "Frontend" },
-  { name: "TypeScript", category: "Language" },
-  { name: "JavaScript", category: "Language" },
-  { name: "Node.js", category: "Backend" },
-  { name: "Express", category: "Backend" },
-  { name: "REST API", category: "Backend" },
-  { name: "MongoDB", category: "Database" },
-  { name: "MySQL", category: "Database" },
-  { name: "Cloudflare", category: "Edge" },
-  { name: "Docker", category: "DevOps" },
-  { name: "Git", category: "DevOps" },
-  { name: "GitHub", category: "DevOps" },
-  { name: "Vercel", category: "Hosting" },
-  { name: "Tailwind CSS", category: "Styling" },
-  { name: "GSAP", category: "Motion" },
-  { name: "Framer Motion", category: "Motion" },
-  { name: "Shopify", category: "Commerce" },
-  { name: "WordPress", category: "Commerce" },
-  { name: "Figma", category: "Design" },
-  { name: "Adobe XD", category: "Design" },
 ];
 
 export type SkillGroup = {
@@ -382,7 +429,7 @@ export const skillGroups: SkillGroup[] = [
   {
     category: "Frontend",
     tone: "sky",
-    note: "Interfaces people actually use",
+    note: "Interfaces built to feel fast, clear, and intentional",
     items: [
       { name: "React", level: "Daily" },
       { name: "TypeScript", level: "Daily" },
@@ -397,7 +444,7 @@ export const skillGroups: SkillGroup[] = [
   {
     category: "Backend",
     tone: "yellow",
-    note: "APIs that stay boring",
+    note: "APIs, authentication, and business logic behind the interface",
     items: [
       { name: "Node.js", level: "Daily" },
       { name: "Express", level: "Daily" },
@@ -405,25 +452,26 @@ export const skillGroups: SkillGroup[] = [
       { name: "Authentication", level: "Often" },
       { name: "Webhooks", level: "Often" },
       { name: "JWT", level: "Often" },
+      { name: "RBAC", level: "Working" },
     ],
   },
   {
     category: "Commerce",
     tone: "peach",
-    note: "Stores and storefront apps",
+    note: "Digital commerce experiences and custom storefronts",
     items: [
       { name: "Shopify", level: "Daily" },
       { name: "Shopify Apps", level: "Daily" },
       { name: "Shopify Themes", level: "Often" },
       { name: "Liquid", level: "Often" },
-      { name: "WordPress", level: "Often" },
-      { name: "WooCommerce", level: "Sometimes" },
+      { name: "Subscriptions", level: "Working" },
+      { name: "Payments", level: "Working" },
     ],
   },
   {
     category: "Cloud & DevOps",
     tone: "lavender",
-    note: "Edge-first delivery",
+    note: "Getting products from code to a reliable production environment",
     items: [
       { name: "Cloudflare", level: "Daily" },
       { name: "Cloudflare R2", level: "Often" },
@@ -431,30 +479,31 @@ export const skillGroups: SkillGroup[] = [
       { name: "Git", level: "Daily" },
       { name: "GitHub", level: "Daily" },
       { name: "Vercel", level: "Often" },
+      { name: "DigitalOcean", level: "Working" },
       { name: "Oracle Cloud", level: "Certified" },
     ],
   },
   {
     category: "Databases",
     tone: "mint",
-    note: "Schemas before code",
+    note: "Practical data modelling for real product workflows",
     items: [
       { name: "MongoDB", level: "Daily" },
       { name: "MySQL", level: "Often" },
       { name: "Redis", level: "Sometimes" },
       { name: "PostgreSQL", level: "Sometimes" },
-      { name: "Prisma", level: "Sometimes" },
+      { name: "Schema Design", level: "Working" },
     ],
   },
   {
     category: "AI & Automation",
     tone: "yellow",
-    note: "Assistants that do real work",
+    note: "Using AI where it creates a meaningful product advantage",
     items: [
       { name: "OpenAI", level: "Often" },
-      { name: "LangChain", level: "Sometimes" },
-      { name: "Vector Search", level: "Often" },
-      { name: "RAG", level: "Often" },
+      // { name: "LangChain", level: "Sometimes" },
+      // { name: "Vector Search", level: "Often" },
+      // { name: "RAG", level: "Often" },
       { name: "Prompt Engineering", level: "Daily" },
       { name: "AI Automation", level: "Daily" },
       { name: "Assistants", level: "Often" },
@@ -465,13 +514,13 @@ export const skillGroups: SkillGroup[] = [
 /** Categorised technology matrix rendered as logo cards on the home page. */
 export const techMatrix: { category: string; items: string[] }[] = [
   { category: "Frontend", items: ["React", "TypeScript", "JavaScript", "Tailwind CSS", "Vite"] },
-  { category: "Backend", items: ["Node.js", "Express", "REST API"] },
+  { category: "Backend", items: ["Node.js", "Express", "REST API", "PostgreSQL"] },
   { category: "Database", items: ["MongoDB", "MySQL", "Redis"] },
-  { category: "Cloud", items: ["Cloudflare", "Vercel", "Oracle Cloud", "DigitalOcean"] },
-  { category: "Commerce", items: ["Shopify", "WordPress", "Liquid"] },
-  { category: "DevOps", items: ["Docker", "Git", "GitHub"] },
-  { category: "Design", items: ["Figma", "Canva"] },
-  { category: "Animation", items: ["GSAP", "Framer Motion"] },
+  { category: "Cloud", items: ["Cloudflare", "Vercel", "Docker", "DigitalOcean"] },
+  { category: "Commerce", items: ["Shopify", "Shopify Apps", "Liquid"] },
+  { category: "AI & Automation", items: ["OpenAI", "Prompt Engineering", "Assistants", "AI Automation"] },
+  { category: "DevOps", items: ["Docker", "Git", "GitHub", "Nginx", "CI/CD"] },
+  { category: "Design & Animation", items: ["Figma", "Canva", "GSAP", "Framer Motion"] },
 ];
 
 /** Availability shown in the footer. */
@@ -483,61 +532,138 @@ export const availability = [
 
 /* --------------------------------------------------------------- resume --- */
 
-/** Source of truth for the resume page — mirrors the latest CV exactly. */
+/** Source of truth for the resume page - mirrors the latest CV exactly. */
 export const resume = {
   name: "Rohit Gautam",
-  headline: "Full Stack Software Engineer",
+  headline: "Full Stack Developer",
   location: "Noida, Uttar Pradesh, India",
   phone: "+91 79056 97407",
+  email: "rohit.gautam2403@gmail.com",
+
   summary:
-    "Full-stack software engineer experienced in building production-grade applications using React.js, Node.js, Express, and cloud deployment workflows. Strong focus on scalable architecture, authentication systems, API performance, payment integrations, admin dashboards, and DevOps automation. Passionate about shipping clean, modular, maintainable code with a product-first mindset.",
+    "Full-stack developer experienced in building production-grade applications using React.js, Node.js, Express, and cloud deployment workflows. Strong focus on scalable architecture, authentication systems, API performance, payment integrations, admin dashboards, and DevOps automation. Passionate about shipping clean, modular, maintainable code with a product-first mindset.",
+
   skills: [
-    { category: "Frontend", items: ["React.js", "Redux", "RTK Query", "Tailwind CSS", "JavaScript (ES6+)"] },
-    { category: "Backend", items: ["Node.js", "Express.js", "REST APIs"] },
-    { category: "Authentication", items: ["JWT", "Refresh Tokens", "RBAC"] },
-    { category: "Payments", items: ["Stripe Integration", "Webhooks"] },
-    { category: "DevOps", items: ["DigitalOcean", "Nginx", "PM2", "Cloudflare"] },
-    { category: "Databases", items: ["MySQL"] },
-    { category: "Tools", items: ["Git", "GitHub", "Postman", "Vite", "Webpack"] },
-    { category: "Platforms", items: ["Shopify (Liquid templates, storefronts)"] },
+    {
+      category: "Frontend",
+      items: [
+        "React.js",
+        "Redux",
+        "RTK Query",
+        "Tailwind CSS",
+        "JavaScript (ES6+)",
+      ],
+    },
+    {
+      category: "Backend",
+      items: [
+        "Node.js",
+        "Express.js",
+        "REST APIs",
+      ],
+    },
+    {
+      category: "Authentication",
+      items: [
+        "JWT",
+        "Refresh Tokens",
+        "RBAC",
+      ],
+    },
+    {
+      category: "Payments",
+      items: [
+        "Stripe Integration",
+        "Webhooks",
+      ],
+    },
+    {
+      category: "DevOps",
+      items: [
+        "DigitalOcean",
+        "Nginx",
+        "PM2",
+        "Cloudflare",
+      ],
+    },
+    {
+      category: "Databases",
+      items: [
+        "MySQL",
+      ],
+    },
+    {
+      category: "Tools",
+      items: [
+        "Git",
+        "GitHub",
+        "Postman",
+        "Vite",
+        "Webpack",
+      ],
+    },
+    {
+      category: "Platforms",
+      items: [
+        "Shopify",
+        "Liquid Templates",
+        "Shopify Storefronts",
+      ],
+    },
   ],
+
   experience: [
     {
-      role: "Software Engineer",
+      role: "Full Stack Developer",
       company: "Redhoney Consulting",
       period: "Nov 2024 – Present",
       achievements: [
         "Developed a large-scale Music Platform with modular architecture covering authentication, playlist management, admin dashboards, user personalization, media protection, and device-limit access rules.",
+
         "Built frontend interfaces using React.js, Redux, RTK Query, component-driven patterns, optimized API caching, and reusable admin controls.",
+
         "Designed backend services in Node.js + Express for secure login, refresh token workflows, RBAC, content visibility toggles, recommendations, and CRUD modules.",
-        "Integrated Stripe for subscription plans, webhooks and billing automation.",
+
+        "Integrated Stripe for subscription plans, webhooks, and billing automation.",
+
         "Deployed production backend on DigitalOcean (Ubuntu) with Nginx reverse proxy, PM2, SSL, Cloudflare caching, DNS, and server hardening.",
+
         "Built and maintained multiple Shopify storefronts, customizing Liquid templates, optimizing speed, and integrating third-party apps.",
+
         "Developed an internal Admin Panel with advanced CRUD, pagination, media controls, user/playlist management, and secure admin routes.",
       ],
     },
   ],
+
   projects: [
     {
-      title: "Expressions – Full Stack Blog Platform",
+      title: "Expressions – Sentiment-Based Confession Platform",
+
       stack: [
         "React.js",
         "Redux",
+        "Node.js",
+        "Express.js",
+        "MySQL",
         "Tailwind CSS",
-        "React Hook Form",
-        "React Router",
-        "Appwrite",
-        "TinyMCE",
+        "Framer Motion",
+        "GSAP",
       ],
+
       points: [
-        "Engineered a full-stack blog platform using React.js + Appwrite, enabling secure authentication, content storage, and real-time data management.",
-        "Integrated Appwrite Authentication with protected routes, improving login reliability and security.",
-        "Designed clean post creation and editing workflows using the TinyMCE editor and React Hook Form for validated forms.",
-        "Implemented Redux to manage global authentication state, user sessions, and CRUD operations efficiently.",
-        "Built a responsive, mobile-first UI with Tailwind CSS, improving usability and readability across devices.",
+        "Re-engineered the backend from Appwrite to Node.js + Express.js, designing a modular REST API architecture for authentication, confessions, moods, user profiles, reactions, and content management.",
+
+        "Implemented JWT-based authentication, protected routes, request validation, centralized error handling, and role-based access controls, improving API security and maintainability.",
+
+        "Designed relational MySQL schemas and CRUD services for users, confessions, moods, interactions, and subscriptions, with indexed queries and reusable service/controller layers.",
+
+        "Optimized frontend state management using Redux, separating authentication, user, confession, and application state while integrating API-driven data flows with reusable React components.",
+
+        "Engineered an interactive frontend using Framer Motion and GSAP, implementing reusable animations, page transitions, micro-interactions, and responsive layouts with Tailwind CSS.",
       ],
     },
   ],
+
   certifications: [
     {
       title: "Oracle Cloud Infrastructure 2023 Certified Foundations Associate",

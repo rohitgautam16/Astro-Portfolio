@@ -1,23 +1,35 @@
 ---
 /**
- * Experience Page — Roles, career timeline, in-progress builds, and certifications.
+ * Experience Page - Roles, career timeline, in-progress builds, and certifications.
  */
 import PageLayout from "../layouts/PageLayout.astro";
 import { ArrowRight } from "lucide-react";
-import { certifications, currentlyBuilding, experience, timeline } from "../data/site";
+import {
+  certifications,
+  currentlyBuilding,
+  experience,
+  timeline,
+} from "../data/site";
 import { Doodle, FloatingShape } from "../components/react/decor";
 import { Reveal, StaggerText } from "../components/react/motion";
 ---
 
 <PageLayout
-  title="Experience — Rohit Gautam, Software Engineer"
-  description="Software Engineer at Red Honey Group: React applications, WordPress builds, AI integrations and performance optimization, plus a career timeline and certifications."
+  title="Experience - Rohit Gautam, Full Stack Software Engineer"
+  description="Full Stack Software Engineer at Red Honey Group: React applications, WordPress builds, AI integrations and performance optimization."
 >
-  <section class="relative overflow-hidden pt-14 pb-12 md:pt-20">
-    <FloatingShape name="squiggle" tone="mint" className="right-[12%] top-24 size-14" client:load />
+  <section class="relative overflow-hidden -mt-20 pt-28 pb-12 md:-mt-24 md:pt-36">
+    <FloatingShape
+      name="squiggle"
+      tone="mint"
+      className="right-[12%] top-24 size-14"
+      client:load
+    />
     <div class="container-page">
       <p class="hand text-2xl">experience</p>
-      <h1 class="mt-3 font-display text-[2.7rem] leading-[0.92] font-extrabold md:text-7xl">
+      <h1
+        class="mt-3 font-display text-[2.7rem] leading-[0.92] font-extrabold md:text-7xl"
+      >
         <StaggerText text="Work, shipped" client:load />
       </h1>
     </div>
@@ -25,65 +37,103 @@ import { Reveal, StaggerText } from "../components/react/motion";
 
   <section class="container-page pb-20">
     <div class="flex flex-col gap-8">
-      {experience.map((role) => (
-        <Reveal client:visible>
-          <div class="grid gap-8 rounded-[28px] border-[3px] border-hairline bg-card p-8 shadow-hard md:grid-cols-[0.8fr_1.2fr] md:p-12">
-            <div>
-              <p class="font-mono text-[11px] uppercase tracking-[0.24em] text-muted-foreground">
-                {role.period} · {role.location}
-              </p>
-              <h2 class="mt-4 font-display text-3xl leading-tight font-extrabold md:text-4xl">
-                {role.role}
-              </h2>
-              <p class="mt-2 hand text-2xl">{role.company}</p>
-              <div class="mt-6 flex flex-wrap gap-2">
-                {role.stack.map((tech: string) => (
-                  <span class="rounded-full border-2 border-hairline bg-surface px-3 py-1 font-mono text-[11px]">
-                    {tech}
-                  </span>
-                ))}
+      {
+        experience.map((role) => (
+          <Reveal client:visible>
+            <div class="rounded-[28px] border-[3px] border-hairline bg-card p-8 shadow-hard md:p-12">
+              <div>
+                <p class="font-mono text-[11px] uppercase tracking-[0.24em] text-muted-foreground">
+                  {role.period} · {role.location}
+                </p>
+                <h2 class="mt-4 font-display text-3xl leading-tight font-extrabold md:text-4xl">
+                  {role.role}
+                </h2>
+                <p class="mt-2 hand text-2xl">{role.company}</p>
+                <div class="mt-6 flex flex-wrap gap-2 max-w-2xl">
+                  {role.stack.map((tech: string) => (
+                    <span class="rounded-full border-2 border-hairline bg-surface px-3.5 py-1 font-mono text-[11px] font-semibold">
+                      {tech}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              <div class="mt-8 border-t-2 border-hairline/15 pt-8">
+                <p class="text-lg leading-relaxed font-medium text-foreground">
+                  {role.summary}
+                </p>
+                <ul class="mt-6 grid gap-x-8 gap-y-4 md:grid-cols-2">
+                  {role.achievements.map((item: string) => (
+                    <li class="flex gap-3 text-sm leading-relaxed text-foreground/80 md:text-base">
+                      <Doodle
+                        name="star"
+                        fill
+                        className="mt-1 size-3.5 shrink-0 text-foreground"
+                        client:load
+                      />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
               </div>
             </div>
-            <div>
-              <p class="text-lg leading-relaxed font-medium">{role.summary}</p>
-              <ul class="mt-7 space-y-4">
-                {role.achievements.map((item: string) => (
-                  <li class="flex gap-3 text-sm leading-relaxed text-foreground/80 md:text-base">
-                    <Doodle name="star" fill className="mt-1 size-3.5 shrink-0 text-foreground" client:load />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        </Reveal>
-      ))}
+          </Reveal>
+        ))
+      }
     </div>
   </section>
 
   <section class="border-y-[3px] border-hairline bg-surface py-20 md:py-28">
     <div class="container-page grid gap-14 lg:grid-cols-[0.7fr_1.3fr]">
       <Reveal className="lg:sticky lg:top-28 lg:h-fit" client:visible>
-        <h2 class="font-display text-3xl leading-[0.95] font-extrabold md:text-5xl">
+        <h2
+          class="font-display text-3xl leading-[0.95] font-extrabold md:text-5xl"
+        >
           Career timeline
         </h2>
         <p class="mt-4 max-w-xs text-sm text-foreground/70">
-          Scroll it like a changelog — most recent commit first.
+          Scroll it like a changelog - most recent commit first.
         </p>
       </Reveal>
-      <ol class="relative border-l-[3px] border-dashed border-hairline pl-8 md:pl-12">
-        {timeline.map((item, i: number) => (
-          <Reveal delay={i * 0.05} className="relative pb-12 last:pb-0" client:visible>
-            <span class="absolute -left-[2.6rem] top-1 grid size-6 place-items-center rounded-full border-[3px] border-hairline bg-yellow md:-left-[3.85rem]"></span>
-            <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-muted-foreground">
-              {item.period}
-            </p>
-            <h3 class="mt-2 font-display text-xl font-extrabold md:text-2xl">{item.title}</h3>
-            <p class="mt-2 max-w-lg text-sm leading-relaxed text-foreground/75 md:text-base">
-              {item.detail}
-            </p>
-          </Reveal>
-        ))}
+      <ol
+        class="relative border-l-[3px] border-dashed border-hairline pl-8 md:pl-12"
+      >
+        {
+          timeline.map((item, i: number) => (
+            <Reveal
+              delay={i * 0.05}
+              className="relative p-12 last:pb-0"
+              client:visible
+            >
+              <span class="absolute -left-[2.6rem] top-1 grid size-6 place-items-center rounded-full border-[3px] border-hairline bg-yellow md:-left-[3.85rem]" />
+              <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-muted-foreground">
+                {item.period}
+              </p>
+              <h3 class="mt-2 font-display text-xl font-extrabold md:text-2xl">
+                {item.title}
+              </h3>
+              <p class="mt-2 max-w-lg text-sm leading-relaxed text-foreground/75 md:text-base">
+                {item.detail}
+              </p>
+              {item.projects && item.projects.length > 0 && (
+                <div class="mt-6 space-y-4">
+                  {item.projects.map(
+                    (proj: { title: string; detail: string }) => (
+                      <div class="relative pl-4 border-l-2 border-primary/40">
+                        <h4 class="font-display text-base font-bold text-foreground">
+                          {proj.title}
+                        </h4>
+                        <p class="mt-1 text-sm leading-relaxed text-foreground/75">
+                          {proj.detail}
+                        </p>
+                      </div>
+                    ),
+                  )}
+                </div>
+              )}
+            </Reveal>
+          ))
+        }
       </ol>
     </div>
   </section>
@@ -92,33 +142,49 @@ import { Reveal, StaggerText } from "../components/react/motion";
     <div class="grid gap-12 md:grid-cols-2">
       <div>
         <Reveal client:visible>
-          <h2 class="font-display text-2xl font-extrabold md:text-3xl">Currently building</h2>
+          <h2 class="font-display text-2xl font-extrabold md:text-3xl">
+            Currently building
+          </h2>
         </Reveal>
         <div class="mt-6 flex flex-col gap-4">
-          {currentlyBuilding.map((item, i: number) => (
-            <Reveal delay={i * 0.04} client:visible>
-              <div class="flex items-baseline justify-between gap-4 border-b-[3px] border-hairline pb-3">
-                <p class="font-display text-lg font-extrabold">{item.title}</p>
-                <p class="text-right text-xs text-muted-foreground">{item.note}</p>
-              </div>
-            </Reveal>
-          ))}
+          {
+            currentlyBuilding.map((item, i: number) => (
+              <Reveal delay={i * 0.04} client:visible>
+                <div class="flex items-baseline justify-between gap-4 border-b-[3px] border-hairline pb-3">
+                  <p class="font-display text-lg font-extrabold">
+                    {item.title}
+                  </p>
+                  <p class="text-right text-xs text-muted-foreground">
+                    {item.note}
+                  </p>
+                </div>
+              </Reveal>
+            ))
+          }
         </div>
       </div>
       <div>
         <Reveal client:visible>
-          <h2 class="font-display text-2xl font-extrabold md:text-3xl">Certifications</h2>
+          <h2 class="font-display text-2xl font-extrabold md:text-3xl">
+            Certifications
+          </h2>
         </Reveal>
         <div class="mt-6 flex flex-col gap-5">
-          {certifications.map((cert, i: number) => (
-            <Reveal delay={i * 0.06} client:visible>
-              <div class="rounded-2xl border-[3px] border-hairline bg-sky p-6 shadow-hard-sm">
-                <p class="font-mono text-[11px] uppercase tracking-widest">{cert.org}</p>
-                <h3 class="mt-2 font-display text-lg font-extrabold">{cert.title}</h3>
-                <p class="mt-2 text-sm text-foreground/75">{cert.detail}</p>
-              </div>
-            </Reveal>
-          ))}
+          {
+            certifications.map((cert, i: number) => (
+              <Reveal delay={i * 0.06} client:visible>
+                <div class="rounded-2xl border-[3px] border-hairline bg-sky p-6 shadow-hard-sm">
+                  <p class="font-mono text-[11px] uppercase tracking-widest">
+                    {cert.org}
+                  </p>
+                  <h3 class="mt-2 font-display text-lg font-extrabold">
+                    {cert.title}
+                  </h3>
+                  <p class="mt-2 text-sm text-foreground/75">{cert.detail}</p>
+                </div>
+              </Reveal>
+            ))
+          }
         </div>
       </div>
     </div>

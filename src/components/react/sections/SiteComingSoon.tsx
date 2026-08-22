@@ -172,7 +172,7 @@ export function SiteComingSoon() {
             </h1>
 
             <p className="mt-3 sm:mt-4 text-xs sm:text-sm leading-relaxed text-foreground/80">
-              Hey, I'm <span className="font-bold text-foreground">{profile.name}</span> — software engineer building scalable full-stack web applications, high-throughput APIs, and production AI tools.
+              Hey, I'm <span className="font-bold text-foreground">{profile.name}</span> - software engineer building scalable full-stack web applications, high-throughput APIs, and production AI tools.
             </p>
 
             {/* Email Early Access Box */}

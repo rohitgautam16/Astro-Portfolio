@@ -1,9 +1,25 @@
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
-import { useState, useEffect, type FormEvent } from "react";
+import { useState, useEffect, useRef, type FormEvent } from "react";
 import { ArrowRight, Check, Loader2, RotateCcw } from "lucide-react";
 import { z } from "zod";
 import { profile } from "@/data/site";
 import { cn } from "@/lib/utils";
+
+declare global {
+  interface Window {
+    turnstile?: {
+      render: (
+        container: HTMLElement | string,
+        options: {
+          sitekey: string;
+          theme?: "auto" | "light" | "dark";
+          callback: (token: string) => void;
+        },
+      ) => string;
+      reset: (widgetId?: string) => void;
+    };
+  }
+}
 
 const schema = z.object({
   name: z.string().trim().min(2, "Tell me your name").max(100, "That name is too long"),
@@ -95,12 +111,61 @@ function Field({
 const control =
   "w-full rounded-xl border-[3px] border-hairline bg-card px-3.5 py-3 text-sm font-medium shadow-hard-sm outline-none transition-all duration-200 placeholder:text-muted-foreground focus:-translate-y-0.5 focus:shadow-hard";
 
+/** Cloudflare Turnstile Bot Verification Component */
+function TurnstileWidget({ onVerify }: { onVerify: (token: string) => void }) {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const siteKey =
+      import.meta.env.PUBLIC_TURNSTILE_SITE_KEY ||
+      "1x00000000000000000000AA"; // Cloudflare official test sitekey
+
+    const renderWidget = () => {
+      if (window.turnstile && containerRef.current) {
+        containerRef.current.innerHTML = "";
+        try {
+          window.turnstile.render(containerRef.current, {
+            sitekey: siteKey,
+            theme: "auto",
+            callback: (token: string) => onVerify(token),
+          });
+        } catch {
+          // Ignore render errors
+        }
+      }
+    };
+
+    if (window.turnstile) {
+      renderWidget();
+    } else {
+      const existingScript = document.getElementById("turnstile-script");
+      if (!existingScript) {
+        const script = document.createElement("script");
+        script.id = "turnstile-script";
+        script.src = "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit";
+        script.async = true;
+        script.defer = true;
+        script.onload = renderWidget;
+        document.head.appendChild(script);
+      } else {
+        existingScript.addEventListener("load", renderWidget);
+      }
+    }
+  }, [onVerify]);
+
+  return <div ref={containerRef} className="mt-4 flex justify-start min-h-[65px]" />;
+}
+
 export function ContactForm() {
   const reduced = useReducedMotion();
   const [currency, setCurrency] = useState<"INR" | "USD">("INR");
   const [values, setValues] = useState<Values>(empty);
   const [errors, setErrors] = useState<Errors>({});
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
+  const [serverError, setServerError] = useState<string | null>(null);
+  const [turnstileToken, setTurnstileToken] = useState<string>("");
 
   // Auto-detect whether visitor is in India (INR) or International (USD)
   useEffect(() => {
@@ -127,12 +192,14 @@ export function ContactForm() {
   const set = (key: keyof Values) => (event: { target: { value: string } }) => {
     setValues((prev) => ({ ...prev, [key]: event.target.value }));
     setErrors((prev) => ({ ...prev, [key]: undefined }));
+    setServerError(null);
   };
 
   const currentBudgets = currency === "INR" ? inrBudgets : usdBudgets;
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    setServerError(null);
     const parsed = schema.safeParse(values);
     if (!parsed.success) {
       const next: Errors = {};
@@ -150,7 +217,7 @@ export function ContactForm() {
       const response = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(parsed.data),
+        body: JSON.stringify({ ...parsed.data, turnstileToken }),
       });
 
       const result = await response.json();
@@ -159,8 +226,9 @@ export function ContactForm() {
       }
 
       setStatus("sent");
-    } catch (err) {
+    } catch (err: any) {
       console.error("Contact form submission failed:", err);
+      setServerError(err?.message || "Something went wrong. Please try again.");
       setStatus("error");
     }
   }
@@ -189,6 +257,7 @@ export function ContactForm() {
           onClick={() => {
             setValues(empty);
             setStatus("idle");
+            setTurnstileToken("");
           }}
           className="mt-8 inline-flex items-center gap-2 rounded-full border-[3px] border-hairline bg-card px-5 py-2.5 font-display text-sm font-extrabold shadow-hard-sm transition-transform hover:-translate-y-0.5"
         >
@@ -268,7 +337,10 @@ export function ContactForm() {
         </div>
       </div>
 
-      <div className="mt-7 flex flex-wrap items-center gap-3">
+      {/* Cloudflare Turnstile Bot Protection Widget */}
+      <TurnstileWidget onVerify={(token) => setTurnstileToken(token)} />
+
+      <div className="mt-4 flex flex-wrap items-center gap-3">
         <motion.button
           type="submit"
           disabled={status === "sending"}
@@ -304,7 +376,7 @@ export function ContactForm() {
             role="alert"
             className="mt-4 rounded-xl border-2 border-destructive bg-destructive/10 px-3.5 py-2.5 font-mono text-[11px] text-destructive"
           >
-            A few fields need attention before this can go out.
+            {serverError || "A few fields need attention before this can go out."}
           </motion.p>
         ) : null}
       </AnimatePresence>

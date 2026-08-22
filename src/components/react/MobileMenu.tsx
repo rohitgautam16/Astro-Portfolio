@@ -1,5 +1,5 @@
 /**
- * MobileMenu — React island.
+ * MobileMenu - React island.
  * Full-screen mobile navigation with layered panels, staggered links,
  * scroll lock, focus trap, and escape-to-close.
  */

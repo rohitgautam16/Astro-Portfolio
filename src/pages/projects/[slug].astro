@@ -1,6 +1,6 @@
 ---
 /**
- * Project Detail Page — Dynamic case study route.
+ * Project Detail Page - Dynamic case study route.
  */
 import PageLayout from "../../layouts/PageLayout.astro";
 import { ArrowLeft, ArrowRight } from "lucide-react";
@@ -29,7 +29,7 @@ const next = projects[(index + 1) % projects.length]!;
 ---
 
 <PageLayout
-  title={`${project.title} — case study by Rohit Gautam`}
+  title={`${project.title} - case study by Rohit Gautam`}
   description={project.summary}
 >
   <article>
@@ -83,7 +83,7 @@ const next = projects[(index + 1) % projects.length]!;
 
     <section class="container-page py-20 md:py-28">
       <div class="grid gap-12 lg:grid-cols-[1.2fr_0.8fr]">
-        <div class="space-y-12">
+        <div class="flex flex-col gap-12">
           <Reveal client:visible>
             <p class="text-xl leading-relaxed font-medium md:text-2xl">{project.overview}</p>
           </Reveal>

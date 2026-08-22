@@ -400,7 +400,7 @@
 }
 
 .marquee-track {
-  animation: marquee 28s linear infinite;
+  animation: marquee 18s linear infinite;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -473,7 +473,7 @@ body {
 }
 
 .marquee-track-reverse {
-  animation: marquee 34s linear infinite reverse;
+  animation: marquee 22s linear infinite reverse;
 }
 
 @media (prefers-reduced-motion: reduce) {

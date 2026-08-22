@@ -4,7 +4,7 @@ import { insights } from "@/data/insights";
 
 export async function GET(context: APIContext) {
   return rss({
-    title: "Rohit Gautam — Engineering Notes & Insights",
+    title: "Rohit Gautam - Engineering Notes & Insights",
     description:
       "Evergreen technical articles, engineering case studies and notes on React, Node.js, Shopify, Cloudflare, AI and performance.",
     site: context.site ?? "https://rohitgautam.site",

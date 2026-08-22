@@ -130,7 +130,7 @@ export function BlockView({ block }: { block: Block }) {
           <p className="hand text-2xl leading-snug">{block.text}</p>
           {block.cite ? (
             <cite className="mt-1 block font-mono text-[11px] text-muted-foreground not-italic">
-              — {block.cite}
+              - {block.cite}
             </cite>
           ) : null}
         </blockquote>

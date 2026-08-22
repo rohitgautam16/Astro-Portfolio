@@ -1,5 +1,5 @@
 /**
- * Hero section — React island for the homepage.
+ * Hero section - React island for the homepage.
  * Preserves all Framer Motion animations unchanged from the TanStack Start version.
  */
 import { ArrowRight, Download, Mail } from "lucide-react";
@@ -19,7 +19,7 @@ import { Mascot } from "@/components/react/Mascot";
 
 export function HeroSection() {
   return (
-    <section className="relative overflow-hidden pt-8 pb-16 md:pt-14 md:pb-28">
+    <section className="relative overflow-hidden -mt-20 pt-28 pb-16 md:-mt-24 md:pt-36 md:pb-28">
       <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
         <div className="halo absolute inset-0 opacity-60" />
         <div className="grid-lines absolute inset-0 opacity-30" />
@@ -92,7 +92,7 @@ export function HeroSection() {
   );
 }
 
-/** Layered, tilting portrait composition — the visual anchor of the hero. */
+/** Layered, tilting portrait composition - the visual anchor of the hero. */
 function HeroPortrait() {
   const [flipped, setFlipped] = useState(false);
   return (
@@ -180,7 +180,7 @@ function HeroPortrait() {
   );
 }
 
-/** Back face of the hero card — a chunky "Developer ID" badge. */
+/** Back face of the hero card - a chunky "Developer ID" badge. */
 function DeveloperId({ onFlipBack }: { onFlipBack: () => void }) {
   const current = experience[0];
   return (
@@ -253,8 +253,8 @@ function DeveloperId({ onFlipBack }: { onFlipBack: () => void }) {
 }
 
 const HERO_MODES = [
-  { id: "illustration", src: "/images/illustration.jpg", label: "Illustration" },
-  { id: "photo", src: "/images/portrait.jpg", label: "Portrait" },
+  { id: "illustration", src: "/images/illustration.webp", label: "Illustration" },
+  { id: "photo", src: "/images/portrait.webp", label: "Portrait" },
 ] as const;
 
 /** Pixel-dissolve swap between the illustrated avatar and the portrait. */
