@@ -116,20 +116,14 @@ const control =
 /** Cloudflare Turnstile Bot Verification Component */
 function TurnstileWidget({ onVerify }: { onVerify: (token: string) => void }) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [keyMissing, setKeyMissing] = useState(false);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
 
+    // Real production Site Key for rohitgautam.site
     const siteKey =
       import.meta.env.PUBLIC_TURNSTILE_SITE_KEY ||
-      "1x00000000000000000000AA"; // Fallback to Cloudflare official test sitekey
-
-    if (!import.meta.env.PUBLIC_TURNSTILE_SITE_KEY) {
-      setKeyMissing(true);
-      // Auto-pass verification when siteKey is unconfigured in production build
-      onVerify("dev-bypass-token");
-    }
+      "0x4AAAAAAEYbQYh9CA1FaRz-";
 
     const renderWidget = () => {
       if (window.turnstile && containerRef.current) {
@@ -168,11 +162,6 @@ function TurnstileWidget({ onVerify }: { onVerify: (token: string) => void }) {
   return (
     <div className="mt-4 flex flex-col justify-start min-h-[65px]">
       <div ref={containerRef} />
-      {keyMissing && (
-        <p className="mt-1 font-mono text-[10px] text-muted-foreground">
-          (Security Key pending setup in Cloudflare environment settings)
-        </p>
-      )}
     </div>
   );
 }

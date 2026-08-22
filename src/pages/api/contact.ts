@@ -72,9 +72,10 @@ export const POST: APIRoute = async ({ request }) => {
     // 2. Cloudflare Turnstile Bot Verification Check
     const turnstileSecret =
       import.meta.env.TURNSTILE_SECRET_KEY ||
-      process.env.TURNSTILE_SECRET_KEY;
+      process.env.TURNSTILE_SECRET_KEY ||
+      "0x4AAAAAAEYbQUdiA1zfJamCDO_ebtaMqlE"; // Production Secret Key fallback
 
-    if (turnstileSecret && turnstileToken && !turnstileToken.includes("bypass")) {
+    if (turnstileToken && !turnstileToken.includes("bypass")) {
       try {
         const verifyRes = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
           method: "POST",
