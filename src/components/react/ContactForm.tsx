@@ -118,9 +118,12 @@ function TurnstileWidget({ onVerify }: { onVerify: (token: string) => void }) {
   useEffect(() => {
     if (typeof window === "undefined") return;
 
-    const siteKey =
-      import.meta.env.PUBLIC_TURNSTILE_SITE_KEY ||
-      "1x00000000000000000000AA"; // Cloudflare official test sitekey
+    const siteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
+
+    if (!siteKey) {
+      console.error("[Turnstile] PUBLIC_TURNSTILE_SITE_KEY is not configured");
+      return;
+    }
 
     const renderWidget = () => {
       if (window.turnstile && containerRef.current) {
@@ -208,6 +211,12 @@ export function ContactForm() {
         if (!next[key]) next[key] = issue.message;
       }
       setErrors(next);
+      setStatus("error");
+      return;
+    }
+
+    if (!turnstileToken) {
+      setServerError("Please complete the security verification.");
       setStatus("error");
       return;
     }
@@ -343,9 +352,9 @@ export function ContactForm() {
       <div className="mt-4 flex flex-wrap items-center gap-3">
         <motion.button
           type="submit"
-          disabled={status === "sending"}
+          disabled={status === "sending" || !turnstileToken}
           whileTap={reduced ? {} : { scale: 0.97 }}
-          className="inline-flex items-center gap-2 rounded-full border-[3px] border-hairline bg-lavender px-6 py-3 font-display text-sm font-extrabold shadow-hard transition-transform duration-200 hover:-translate-y-0.5 disabled:opacity-70"
+          className="inline-flex items-center gap-2 rounded-full border-[3px] border-hairline bg-lavender px-6 py-3 font-display text-sm font-extrabold shadow-hard transition-transform duration-200 hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {status === "sending" ? (
             <>

@@ -72,35 +72,68 @@ export const POST: APIRoute = async ({ request }) => {
     // 2. Cloudflare Turnstile Bot Verification Check
     const turnstileSecret =
       import.meta.env.TURNSTILE_SECRET_KEY ||
-      process.env.TURNSTILE_SECRET_KEY ||
-      "1x0000000000000000000000000000000AA"; // Cloudflare official test secret
+      process.env.TURNSTILE_SECRET_KEY;
 
-    if (turnstileToken) {
-      try {
-        const verifyRes = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
-          method: "POST",
-          headers: { "Content-Type": "application/x-www-form-urlencoded" },
-          body: new URLSearchParams({
-            secret: turnstileSecret,
-            response: turnstileToken,
-            remoteip: clientIP,
-          }),
-        });
-
-        const verifyData = await verifyRes.json();
-        if (!verifyData.success) {
-          console.warn("[Contact API] Turnstile bot check failed:", verifyData);
-          return new Response(
-            JSON.stringify({
-              success: false,
-              error: "Bot verification failed. Please try submitting again.",
-            }),
-            { status: 400, headers: { "Content-Type": "application/json" } },
-          );
+    if (!turnstileSecret) {
+      return new Response(
+        JSON.stringify({
+          success: false,
+          error: "Server security configuration error.",
+        }),
+        {
+          status: 500,
+          headers: { "Content-Type": "application/json" },
         }
-      } catch (err) {
-        console.warn("[Contact API] Turnstile verification request error:", err);
+      );
+    }
+
+    if (!turnstileToken) {
+      return new Response(
+        JSON.stringify({
+          success: false,
+          error: "Please complete the security verification.",
+        }),
+        {
+          status: 400,
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+    }
+
+    try {
+      const verifyRes = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams({
+          secret: turnstileSecret,
+          response: turnstileToken,
+          remoteip: clientIP,
+        }),
+      });
+
+      const verifyData = await verifyRes.json();
+      if (!verifyData.success) {
+        console.warn("[Contact API] Turnstile bot check failed:", verifyData);
+        return new Response(
+          JSON.stringify({
+            success: false,
+            error: "Bot verification failed. Please try submitting again.",
+          }),
+          { status: 400, headers: { "Content-Type": "application/json" } },
+        );
       }
+    } catch (err) {
+      console.error("[Contact API] Turnstile verification error:", err);
+      return new Response(
+        JSON.stringify({
+          success: false,
+          error: "Security verification could not be completed.",
+        }),
+        {
+          status: 500,
+          headers: { "Content-Type": "application/json" },
+        }
+      );
     }
 
     // 3. Send Email via Resend
