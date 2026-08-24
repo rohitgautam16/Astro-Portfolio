@@ -59,7 +59,7 @@ export function Header({ pathname }: { pathname: string }) {
             <a
               href="/"
               className="group flex min-w-0 items-center gap-2 pl-1.5"
-              aria-label="Home"
+              aria-label="Rohit Gautam - Home"
             >
               <span
                 aria-hidden

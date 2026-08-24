@@ -123,7 +123,6 @@ function HeroPortrait() {
               <div
                 role="button"
                 tabIndex={0}
-                aria-label="Flip card to see developer ID"
                 onClick={() => setFlipped(true)}
                 onKeyDown={(e) => {
                   if (e.key === "Enter" || e.key === " ") {

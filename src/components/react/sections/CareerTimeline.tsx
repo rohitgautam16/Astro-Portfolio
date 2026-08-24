@@ -30,7 +30,7 @@ export function CareerTimeline() {
 
         <ol className="relative border-l-[3px] border-dashed border-hairline pl-8 md:pl-12">
           {timeline.map((item, i) => (
-            <Reveal key={item.title} delay={i * 0.05} className="relative pb-12 last:pb-0">
+            <Reveal key={item.title} as="li" delay={i * 0.05} className="relative pb-12 last:pb-0">
               <span className="absolute -left-[2.6rem] top-1 grid size-6 place-items-center rounded-full border-[3px] border-hairline bg-yellow md:-left-[3.85rem]" />
               <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-muted-foreground">
                 {item.period}

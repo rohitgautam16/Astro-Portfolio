@@ -1,0 +1,31 @@
+# Rohit Gautam - Full Stack Software Engineer
+
+> Personal portfolio and engineering blog of Rohit Gautam, a full-stack software engineer specializing in React, Node.js, Shopify, and AI-powered applications.
+
+## About
+
+- [Homepage](https://rohitgautam.site/): Overview of skills, featured projects, tech stack, career timeline, and contact information.
+- [About](https://rohitgautam.site/about): Detailed background, engineering philosophy, and professional summary.
+- [Experience](https://rohitgautam.site/experience): Full career history, roles, and responsibilities.
+- [Resume](https://rohitgautam.site/resume): Downloadable résumé and professional credentials.
+
+## Projects
+
+- [All Projects](https://rohitgautam.site/projects): Showcase of full-stack products, commerce platforms, and AI-powered workflows.
+- [Music Streaming Platform](https://rohitgautam.site/projects/music-streaming-platform): Subscription-based music streaming application with real-time features.
+- [Multi-Vendor Marketplace](https://rohitgautam.site/projects/multi-vendor-marketplace): Scalable e-commerce marketplace with vendor management.
+- [AI Consultation Platform](https://rohitgautam.site/projects/ai-consultation-platform): AI-powered consultation and workflow automation platform.
+- [Shopify Storefront Engineering](https://rohitgautam.site/projects/shopify-storefront-engineering): Custom Shopify theme development and performance optimization.
+- [Portfolio Website](https://rohitgautam.site/projects/portfolio-website): This portfolio site built with Astro, React, and Cloudflare.
+
+## Blog
+
+- [Engineering Blog](https://rohitgautam.site/blog): Technical articles on web performance, React patterns, Node.js architecture, and Shopify development.
+
+## Contact
+
+- [Contact](https://rohitgautam.site/contact): Get in touch for collaboration or opportunities.
+- Email: connect@rohitgautam.site
+- [GitHub](https://github.com/rohitgautam16)
+- [LinkedIn](https://www.linkedin.com/in/rohitgautam24)
+- [Schedule a Call](https://cal.com/rohit-gautam/30min)

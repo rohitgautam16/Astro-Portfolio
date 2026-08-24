@@ -279,6 +279,9 @@ export function ContactForm() {
     <form
       onSubmit={onSubmit}
       noValidate
+      // @ts-expect-error WebMCP attributes for agentic browsing
+      toolname="send_project_inquiry"
+      tooldescription="Send a project inquiry or collaboration message to Rohit Gautam, a full-stack software engineer. Collects name, email, optional company, subject, project type, optional budget range, and a detailed message."
       className="relative rounded-[26px] border-[3px] border-hairline bg-surface p-6 shadow-hard-lg sm:p-8"
     >
       <span aria-hidden className="tape-strip absolute -top-3 left-10 h-5 w-24 -rotate-6 rounded-[2px]" />
@@ -293,19 +296,19 @@ export function ContactForm() {
 
       <div className="mt-6 grid gap-5 sm:grid-cols-2">
         <Field label="Name" htmlFor="name" error={errors.name}>
-          <input id="name" name="name" className={control} value={values.name} onChange={set("name")} placeholder="Your Name" maxLength={100} />
+          <input id="name" name="name" className={control} value={values.name} onChange={set("name")} placeholder="Your Name" maxLength={100} toolparamdescription="Full name of the person sending the inquiry" />
         </Field>
         <Field label="Email" htmlFor="email" error={errors.email}>
-          <input id="email" name="email" type="email" className={control} value={values.email} onChange={set("email")} placeholder="your.email@domain.com" maxLength={255} />
+          <input id="email" name="email" type="email" className={control} value={values.email} onChange={set("email")} placeholder="your.email@domain.com" maxLength={255} toolparamdescription="Email address for reply correspondence" />
         </Field>
         <Field label="Company" htmlFor="company" optional error={errors.company}>
-          <input id="company" name="company" className={control} value={values.company} onChange={set("company")} placeholder="Where you work" maxLength={120} />
+          <input id="company" name="company" className={control} value={values.company} onChange={set("company")} placeholder="Where you work" maxLength={120} toolparamdescription="Optional company or organization name" />
         </Field>
         <Field label="Subject" htmlFor="subject" error={errors.subject}>
-          <input id="subject" name="subject" className={control} value={values.subject} onChange={set("subject")} placeholder="I need a website" maxLength={140} />
+          <input id="subject" name="subject" className={control} value={values.subject} onChange={set("subject")} placeholder="I need a website" maxLength={140} toolparamdescription="Brief subject line describing the inquiry" />
         </Field>
         <Field label="Project type" htmlFor="projectType" error={errors.projectType}>
-          <select id="projectType" name="projectType" className={cn(control, "appearance-none")} value={values.projectType} onChange={set("projectType")}>
+          <select id="projectType" name="projectType" className={cn(control, "appearance-none")} value={values.projectType} onChange={set("projectType")} toolparamdescription="Type of project: Full stack application, E-commerce, Business website, AI automation, Performance Optimization, or Something else">
             <option value="">Choose one…</option>
             {projectTypes.map((type) => (
               <option key={type} value={type}>
@@ -320,7 +323,7 @@ export function ContactForm() {
           optional
           error={errors.budget}
         >
-          <select id="budget" name="budget" className={cn(control, "appearance-none")} value={values.budget} onChange={set("budget")}>
+          <select id="budget" name="budget" className={cn(control, "appearance-none")} value={values.budget} onChange={set("budget")} toolparamdescription="Optional estimated budget range for the project">
             <option value="">Prefer not to say</option>
             {currentBudgets.slice(1).map((band) => (
               <option key={band} value={band}>
@@ -340,6 +343,7 @@ export function ContactForm() {
               value={values.message}
               onChange={set("message")}
               placeholder="What are you building, what's stuck, and when does it need to be live?"
+              toolparamdescription="Detailed message describing the project requirements, timeline, and any specific needs"
             />
           </Field>
         </div>

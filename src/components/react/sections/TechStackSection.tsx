@@ -29,13 +29,13 @@ export function TechStackSection() {
           <div className="grid gap-8 sm:grid-cols-2">
             {techMatrix.map((group, gi) => (
               <section key={group.category} aria-labelledby={`matrix-${group.category}`}>
-                <h4
+                <h3
                   id={`matrix-${group.category}`}
                   className="flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.24em] text-muted-foreground"
                 >
                   {group.category}
                   <span aria-hidden className="h-[3px] flex-1 rounded-full bg-hairline/25" />
-                </h4>
+                </h3>
                 <div className="mt-4 grid grid-cols-2 gap-3">
                   {group.items.map((item, i) => (
                     <ToolCard

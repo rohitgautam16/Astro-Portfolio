@@ -89,7 +89,7 @@ function HorizontalCatalogCard({
           />
           <span
             className={cn(
-              "absolute left-4 top-4 rounded-full border-[3px] border-hairline px-3 py-1 font-display text-[11px] font-extrabold uppercase tracking-widest shadow-hard-sm",
+              "absolute left-4 top-4 rounded-full border-[3px] border-hairline px-3 py-1 font-display text-[11px] font-extrabold uppercase tracking-widest text-black shadow-hard-sm",
               toneBg[tone],
             )}
           >
@@ -108,7 +108,7 @@ function HorizontalCatalogCard({
               {project.title}
             </h3>
 
-            <p className="mt-3 line-clamp-3 text-xs xl:text-sm leading-relaxed text-foreground/80">
+            <p className="mt-3 text-xs xl:text-sm leading-relaxed text-foreground/80">
               {project.summary}
             </p>
           </div>

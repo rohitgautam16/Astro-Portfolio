@@ -42,14 +42,14 @@ export function ProjectCard({
               alt={`${project.title} product interface`}
               width={1600}
               height={1000}
-              loading={priority ? "eager" : "lazy"}
+              loading="lazy"
               decoding="async"
               className="size-full scale-[1.06] object-cover transition-transform duration-700 ease-out group-hover:scale-[1.14]"
             />
           </Parallax>
           <span
             className={cn(
-              "absolute left-5 top-5 rounded-full border-[3px] border-hairline px-3 py-1 font-display text-[11px] font-extrabold uppercase tracking-widest shadow-hard-sm",
+              "absolute left-5 top-5 rounded-full border-[3px] border-hairline px-3 py-1 font-display text-[11px] font-extrabold uppercase tracking-widest text-black shadow-hard-sm",
               toneBg[tone],
             )}
           >

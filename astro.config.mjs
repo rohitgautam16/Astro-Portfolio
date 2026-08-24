@@ -13,6 +13,8 @@ export default defineConfig({
   site: 'https://rohitgautam.site',
   output: 'static',
 
+  devToolbar: { enabled: false },
+
   integrations: [
     react(),
     sitemap(),

@@ -142,7 +142,7 @@ export function ZoomMarqueeSection() {
             {marquee2Items.map((item, i) => (
               <span
                 key={`m2-${i}`}
-                className="flex items-center gap-8 font-hand text-3xl sm:text-4xl md:text-5xl font-extrabold uppercase tracking-wide text-foreground"
+                className="flex items-center gap-8 font-hand text-xl sm:text-4xl md:text-5xl font-extrabold uppercase tracking-wide text-foreground"
               >
                 <span>{item}</span>
                 <span className="text-xl sm:text-2xl font-sans font-extrabold text-foreground/70">✦</span>

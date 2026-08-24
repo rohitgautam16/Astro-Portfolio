@@ -79,7 +79,7 @@ export function Preloader() {
     };
     frame = requestAnimationFrame(tick);
 
-    const wordsInterval = window.setInterval(() => setWord((w) => (w + 1) % WORDS.length), 300);
+    const wordsInterval = window.setInterval(() => setWord((w) => (w + 1) % WORDS.length), 900);
 
     return () => {
       cancelAnimationFrame(frame);
