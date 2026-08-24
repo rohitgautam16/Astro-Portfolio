@@ -69,14 +69,25 @@ const next = projects[(index + 1) % projects.length]!;
     <Reveal className="container-page" client:load>
       <div class="overflow-hidden rounded-[28px] border-[3px] border-hairline shadow-hard-lg">
         <Parallax distance={26} className="aspect-16/9 w-full bg-surface" client:load>
-          <img
-            src={project.image}
-            alt={`${project.title} interface`}
-            width={1600}
-            height={900}
-            decoding="async"
-            class="size-full scale-110 object-cover"
-          />
+          {project.image.endsWith(".mp4") || project.image.endsWith(".webm") ? (
+            <video
+              src={project.image}
+              autoplay
+              loop
+              muted
+              playsinline
+              class="size-full scale-110 object-cover"
+            />
+          ) : (
+            <img
+              src={project.image}
+              alt={`${project.title} interface`}
+              width={1600}
+              height={900}
+              decoding="async"
+              class="size-full scale-110 object-cover"
+            />
+          )}
         </Parallax>
       </div>
     </Reveal>

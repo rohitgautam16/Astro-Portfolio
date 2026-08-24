@@ -37,15 +37,26 @@ export function ProjectCard({
           )}
         >
           <Parallax distance={18} className="aspect-16/10 w-full">
-            <img
-              src={project.image}
-              alt={`${project.title} product interface`}
-              width={1600}
-              height={1000}
-              loading="lazy"
-              decoding="async"
-              className="size-full scale-[1.06] object-cover transition-transform duration-700 ease-out group-hover:scale-[1.14]"
-            />
+            {project.image.endsWith(".mp4") || project.image.endsWith(".webm") ? (
+              <video
+                src={project.image}
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="size-full scale-[1.06] object-cover transition-transform duration-700 ease-out group-hover:scale-[1.14]"
+              />
+            ) : (
+              <img
+                src={project.image}
+                alt={`${project.title} product interface`}
+                width={1600}
+                height={1000}
+                loading="lazy"
+                decoding="async"
+                className="size-full scale-[1.06] object-cover transition-transform duration-700 ease-out group-hover:scale-[1.14]"
+              />
+            )}
           </Parallax>
           <span
             className={cn(

@@ -167,14 +167,14 @@ export function ZoomMarqueeSection() {
           <div className="relative w-full h-full overflow-hidden rounded-[20px]">
             {/* Desktop 16:9 Landscape Image */}
             <img
-              src="./images/featured-img-landscape.webp"
+              src="/media/images/featured-img-landscape.webp"
               alt="Desktop preview"
               className="reveal-img hidden md:block rounded-[20px] border-[3.5px] border-hairline object-contain aspect-auto w-full"
             />
 
             {/* Mobile Portrait Image */}
             <img
-              src="./images/featured-img-portrait.webp"
+              src="/media/images/featured-img-portrait.webp"
               alt={profile.name}
               className="reveal-img block md:hidden rounded-[20px] border-[3.5px] border-hairline object-cover aspect-[3/4] w-full"
             />

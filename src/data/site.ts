@@ -21,7 +21,7 @@ export const profile = {
   scheduleUrl: "https://cal.com/rohit-gautam/30min",
   resumeUrl: "/Rohit Gautam - Full Stack Software Engineer Resume.pdf",
 
-  photo: "/images/portrait.webp",
+  photo: "/media/images/portrait.webp",
 
   tagline:
     "I turn complex ideas into fast, scalable web products - from full-stack applications and commerce platforms to AI-powered workflows.",
@@ -100,7 +100,7 @@ export const projects: Project[] = [
     role: "Full stack engineer",
     summary:
       "A production-grade subscription music platform built end-to-end - persistent audio playback, plan-aware access control, Stripe billing and an internal dashboard for catalog and artist management.",
-    image: "/images/project-align.gif",
+    image: "/media/videos/project-align.mp4",
     overview:
       "A subscription music platform serving listeners, artists and an admin team from a single MERN stack. Listeners stream a curated catalog and build playlists; the team manages releases, artist profiles and plan entitlements from a purpose-built internal dashboard - all without touching the codebase.",
     problem:
@@ -143,7 +143,7 @@ export const projects: Project[] = [
     role: "Full stack engineer",
     summary:
       "A three-surface marketplace platform - buyer storefront, vendor dashboard and platform admin - with split-order fulfilment, per-vendor payout ledger and faceted catalog search, all on one MERN API.",
-    image: "/images/project-marketplace.gif",
+    image: "/media/videos/project-marketplace.mp4",
     overview:
       "An end-to-end marketplace platform with three distinct portals sharing one API and one MongoDB cluster. Buyers browse, filter and checkout across multiple vendors in a single cart. Vendors manage their own products, orders and payouts. Platform admins control commission rules, disputes and cross-vendor analytics.",
     problem:
@@ -186,7 +186,7 @@ export const projects: Project[] = [
     role: "Full stack engineer",
     summary:
       "A full-stack consultation platform combining deterministic domain computation, practitioner bookings and a context-constrained AI assistant - built so the model can only answer from verified, computed data.",
-    image: "/images/project-bythedegree.gif",
+    image: "/media/videos/project-bythedegree.mp4",
     overview:
       "A niche consultation platform that pairs a booking business with product software. Users generate a personalised data report from a deterministic computation engine, book a practitioner, and interact with an AI assistant that explains the report in plain language - strictly within the bounds of the computed context, never improvising.",
     problem:
@@ -228,7 +228,7 @@ export const projects: Project[] = [
     role: "Shopify engineer",
     summary:
       "End-to-end Shopify engineering across multiple live stores - custom Liquid themes, performance-tuned storefronts, metafield-driven sections, third-party integrations and multi-store architecture.",
-    image: "/images/project-shopify.gif",
+    image: "/media/videos/project-shopify.mp4",
     overview:
       "Worked across a portfolio of Shopify stores handling everything from ground-up theme builds and redesigns to integrating complex third-party apps, optimising Core Web Vitals and shipping custom storefront behaviour that the platform doesn't offer out of the box.",
     problem:
@@ -270,7 +270,7 @@ export const projects: Project[] = [
     role: "Design and build",
     summary:
       "A hand-built neo-brutalist portfolio with a terminal preloader, GSAP scroll-driven motion, OKLCH theming and a server-rendered Astro foundation - designed to demonstrate craft as much as content.",
-    image: "/images/project-portfolio.gif",
+    image: "/media/videos/project-portfolio.mp4",
     overview:
       "No template. No page builder. Built from a blank file - OKLCH design tokens, a soft neo-brutalist system, GSAP scroll animations and an Astro-rendered core. The same standards I apply to client products: first paint speed, zero layout shift, keyboard accessibility and motion that respects the user's system preference.",
     problem:

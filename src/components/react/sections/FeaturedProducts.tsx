@@ -79,14 +79,25 @@ function HorizontalCard({
       >
         {/* Visual Showcase */}
         <div className="relative h-full overflow-hidden border-r-[3px] border-hairline bg-surface">
-          <img
-            src={project.image}
-            alt={`${project.title} product interface`}
-            width={1600}
-            height={1000}
-            className="size-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-            loading={index === 0 ? "eager" : "lazy"}
-          />
+          {project.image.endsWith(".mp4") || project.image.endsWith(".webm") ? (
+            <video
+              src={project.image}
+              autoPlay
+              loop
+              muted
+              playsInline
+              className="size-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+            />
+          ) : (
+            <img
+              src={project.image}
+              alt={`${project.title} product interface`}
+              width={1600}
+              height={1000}
+              className="size-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+              loading={index === 0 ? "eager" : "lazy"}
+            />
+          )}
           <span
             className={cn(
               "absolute left-4 top-4 rounded-full border-[3px] border-hairline px-3 py-1 font-display text-[11px] font-extrabold uppercase tracking-widest text-black shadow-hard-sm",

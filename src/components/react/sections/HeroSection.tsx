@@ -242,8 +242,8 @@ function DeveloperId({ onFlipBack }: { onFlipBack: () => void }) {
 }
 
 const HERO_MODES = [
-  { id: "illustration", src: "/images/illustration-opt.webp", label: "Illustration" },
-  { id: "photo", src: "/images/portrait-opt.webp", label: "Portrait" },
+  { id: "illustration", src: "/media/images/illustration.webp", label: "Illustration" },
+  { id: "photo", src: "/media/images/portrait.webp", label: "Portrait" },
 ] as const;
 
 /** Pixel-dissolve swap between the illustrated avatar and the portrait. */

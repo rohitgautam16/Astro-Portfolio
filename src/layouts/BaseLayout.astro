@@ -16,7 +16,7 @@ interface Props {
 
 const {
   title,
-  image = "/images/portrait.webp",
+  image = "/media/images/portrait.webp",
   type = "website",
 } = Astro.props;
 
@@ -40,6 +40,7 @@ const ogImageURL = new URL(image, Astro.site || "https://rohitgautam.site");
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="icon" href="/favicon.ico" sizes="32x32" />
     <link rel="canonical" href={canonicalURL} />
+    <link rel="preload" as="image" href="/media/images/illustration.webp" type="image/webp" fetchpriority="high" />
 
     <!-- Primary Meta Tags -->
     <title>{title}</title>
