@@ -16,10 +16,13 @@ interface Props {
 
 const {
   title,
-  description = "Rohit Gautam builds scalable full stack applications and AI-powered software with React.js, Node.js and Cloudflare.",
   image = "/images/portrait.webp",
   type = "website",
 } = Astro.props;
+
+const description =
+  Astro.props.description ||
+  "Rohit Gautam is a full stack software engineer building scalable web applications and AI-powered products with React.js, Node.js and Cloudflare.";
 
 const canonicalURL = new URL(
   Astro.url.pathname,

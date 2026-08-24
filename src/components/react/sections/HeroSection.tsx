@@ -30,34 +30,24 @@ export function HeroSection() {
       <div className="container-page grid gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:gap-8">
         <div className="relative z-10 lg:pr-6">
           <h1 className="font-display text-[2.4rem] leading-[0.94] font-extrabold tracking-tight sm:text-6xl lg:text-[5rem]">
-            <StaggerText text="Rohit" perChar className="block" />
+            <span className="block">Rohit</span>
             <span className="relative block">
-              <StaggerText text="Gautam" perChar delay={0.18} />
+              Gautam
               <motion.span
                 aria-hidden
                 initial={{ scaleX: 0 }}
                 animate={{ scaleX: 1 }}
-                transition={{ delay: 0.9, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+                transition={{ delay: 0.3, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
                 className="absolute -bottom-1 left-0 h-3 w-[7.5ch] origin-left rounded-full bg-yellow -z-10"
               />
             </span>
           </h1>
 
-          <motion.p
-            initial={{ opacity: 0, filter: "blur(8px)", y: 14 }}
-            animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
-            transition={{ delay: 0.7, duration: 0.7 }}
-            className="mt-7 max-w-xl text-base leading-relaxed text-balance text-foreground/80 md:text-lg"
-          >
+          <p className="mt-7 max-w-xl text-base leading-relaxed text-balance text-foreground/80 md:text-lg">
             {profile.tagline}
-          </motion.p>
+          </p>
 
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.9, duration: 0.6 }}
-            className="mt-9 flex flex-wrap items-center gap-3"
-          >
+          <div className="mt-9 flex flex-wrap items-center gap-3">
             <Magnetic>
               <a
                 href="/projects"
@@ -83,7 +73,7 @@ export function HeroSection() {
               <Download className="size-4" aria-hidden />
               Resume
             </a>
-          </motion.div>
+          </div>
         </div>
 
         <HeroPortrait />
@@ -252,8 +242,8 @@ function DeveloperId({ onFlipBack }: { onFlipBack: () => void }) {
 }
 
 const HERO_MODES = [
-  { id: "illustration", src: "/images/illustration.webp", label: "Illustration" },
-  { id: "photo", src: "/images/portrait.webp", label: "Portrait" },
+  { id: "illustration", src: "/images/illustration-opt.webp", label: "Illustration" },
+  { id: "photo", src: "/images/portrait-opt.webp", label: "Portrait" },
 ] as const;
 
 /** Pixel-dissolve swap between the illustrated avatar and the portrait. */
