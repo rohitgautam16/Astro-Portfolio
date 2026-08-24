@@ -268,8 +268,8 @@ function HeroImageSwap() {
       <img
         src={mode.src}
         alt={`${profile.name}, software engineer`}
-        width={1024}
-        height={1280}
+        width={1122}
+        height={1402}
         fetchPriority="high"
         decoding="async"
         className="size-full object-cover"

@@ -2,6 +2,7 @@ import { ArrowUpRight } from "lucide-react";
 import type { Project } from "@/data/site";
 import { Badge, type Tone, toneBg } from "@/components/react/decor";
 import { Parallax, Tilt } from "@/components/react/motion";
+import { LazyVideo } from "@/components/react/LazyVideo";
 import { cn } from "@/lib/utils";
 
 const tones: Tone[] = ["mint", "lavender", "peach", "sky", "yellow"];
@@ -13,60 +14,57 @@ const tones: Tone[] = ["mint", "lavender", "peach", "sky", "yellow"];
 export function ProjectCard({
   project,
   index = 0,
-  priority = false,
+  flip = false,
 }: {
   project: Project;
   index?: number;
-  priority?: boolean;
+  flip?: boolean;
 }) {
   const tone = tones[index % tones.length]!;
-  const flip = index % 2 === 1;
+  const poster = project.image.replace("/media/videos/", "/media/images/").replace(".mp4", ".webp");
 
   return (
-    <Tilt max={3} className="group relative">
+    <Tilt max={6} scale={1.01} className="w-full">
       <a
         href={`/projects/${project.slug}`}
-        className={cn(
-          "relative grid items-stretch gap-0 overflow-hidden rounded-[28px] border-[3px] border-hairline bg-card shadow-hard transition-shadow duration-300 hover:shadow-hard-lg md:grid-cols-[1.15fr_1fr]",
-        )}
+        className="group relative block overflow-hidden rounded-[28px] border-[3px] border-hairline bg-card shadow-hard-lg"
       >
-        <div
-          className={cn(
-            "relative overflow-hidden border-b-[3px] border-hairline bg-surface md:border-b-0",
-            flip ? "md:order-2 md:border-l-[3px]" : "md:border-r-[3px]",
-          )}
-        >
-          <Parallax distance={18} className="aspect-16/10 w-full">
-            {project.image.endsWith(".mp4") || project.image.endsWith(".webm") ? (
-              <video
-                src={project.image}
-                autoPlay
-                loop
-                muted
-                playsInline
-                className="size-full scale-[1.06] object-cover transition-transform duration-700 ease-out group-hover:scale-[1.14]"
-              />
-            ) : (
-              <img
-                src={project.image}
-                alt={`${project.title} product interface`}
-                width={1600}
-                height={1000}
-                loading="lazy"
-                decoding="async"
-                className="size-full scale-[1.06] object-cover transition-transform duration-700 ease-out group-hover:scale-[1.14]"
-              />
-            )}
-          </Parallax>
-          <span
+        <div className="grid grid-cols-1 md:grid-cols-[1.1fr_0.9fr]">
+          <div
             className={cn(
-              "absolute left-5 top-5 rounded-full border-[3px] border-hairline px-3 py-1 font-display text-[11px] font-extrabold uppercase tracking-widest text-black shadow-hard-sm",
-              toneBg[tone],
+              "relative overflow-hidden border-b-[3px] border-hairline bg-surface md:border-b-0",
+              flip ? "md:order-2 md:border-l-[3px]" : "md:border-r-[3px]",
             )}
           >
-            {project.status}
-          </span>
-        </div>
+            <Parallax distance={18} className="aspect-16/10 w-full">
+              {project.image.endsWith(".mp4") || project.image.endsWith(".webm") ? (
+                <LazyVideo
+                  src={project.image}
+                  poster={poster}
+                  eager={index === 0}
+                  className="size-full scale-[1.06] object-cover transition-transform duration-700 ease-out group-hover:scale-[1.14]"
+                />
+              ) : (
+                <img
+                  src={project.image}
+                  alt={`${project.title} product interface`}
+                  width={1600}
+                  height={1000}
+                  loading="lazy"
+                  decoding="async"
+                  className="size-full scale-[1.06] object-cover transition-transform duration-700 ease-out group-hover:scale-[1.14]"
+                />
+              )}
+            </Parallax>
+            <span
+              className={cn(
+                "absolute left-5 top-5 rounded-full border-[3px] border-hairline px-3 py-1 font-display text-[11px] font-extrabold uppercase tracking-widest text-black shadow-hard-sm",
+                toneBg[tone],
+              )}
+            >
+              {project.status}
+            </span>
+          </div>
 
         <div className={cn("flex flex-col justify-between p-7 md:p-10", flip && "md:order-1")}>
           <div>
@@ -94,7 +92,8 @@ export function ProjectCard({
             </span>
           </div>
         </div>
-      </a>
-    </Tilt>
+      </div>
+    </a>
+  </Tilt>
   );
 }

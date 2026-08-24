@@ -12,6 +12,7 @@ import { projects, type Project } from "@/data/site";
 import { ProjectCard } from "@/components/react/ProjectCard";
 import { Badge, type Tone, toneBg } from "@/components/react/decor";
 import { Reveal } from "@/components/react/motion";
+import { LazyVideo } from "@/components/react/LazyVideo";
 import { cn } from "@/lib/utils";
 
 const tones: Tone[] = ["mint", "lavender", "peach", "sky", "yellow"];
@@ -63,6 +64,8 @@ function HorizontalCard({
   const opacity = useTransform(progress, inputRanges, reduced ? [1, 1, 1] : opacityValues);
   const rotate = useTransform(progress, inputRanges, reduced ? [0, 0, 0] : rotateValues);
 
+  const poster = project.image.replace("/media/videos/", "/media/images/").replace(".mp4", ".webp");
+
   return (
     <motion.div
       style={{
@@ -80,12 +83,10 @@ function HorizontalCard({
         {/* Visual Showcase */}
         <div className="relative h-full overflow-hidden border-r-[3px] border-hairline bg-surface">
           {project.image.endsWith(".mp4") || project.image.endsWith(".webm") ? (
-            <video
+            <LazyVideo
               src={project.image}
-              autoPlay
-              loop
-              muted
-              playsInline
+              poster={poster}
+              eager={index === 0}
               className="size-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
             />
           ) : (
