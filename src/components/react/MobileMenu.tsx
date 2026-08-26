@@ -8,6 +8,7 @@ import { ArrowUpRight, Download, Mail, Moon, Sun } from "lucide-react";
 import { useEffect, useRef, type ReactNode } from "react";
 import { navLinks } from "@/components/nav-links";
 import { profile } from "@/data/site";
+import { getMediaUrl } from "@/lib/media";
 import { useTheme } from "@/components/react/ThemeToggle";
 import { Mascot } from "@/components/react/Mascot";
 import { Doodle } from "@/components/react/decor";
@@ -215,7 +216,7 @@ export function MobileMenu({
                 <Mail className="size-4" aria-hidden /> Start a project
               </a>
               <a
-                href={profile.resumeUrl}
+                href={getMediaUrl(profile.resumeUrl)}
                 className="inline-flex items-center justify-center gap-2 rounded-2xl border-[3px] border-hairline bg-card px-5 py-3.5 font-display text-sm font-extrabold shadow-hard-sm active:translate-y-0.5"
               >
                 <Download className="size-4" aria-hidden /> Download resume

@@ -12,7 +12,7 @@ import { projects, type Project } from "@/data/site";
 import { ProjectCard } from "@/components/react/ProjectCard";
 import { Badge, type Tone, toneBg } from "@/components/react/decor";
 import { Reveal } from "@/components/react/motion";
-import { LazyVideo } from "@/components/react/LazyVideo";
+import { ProjectMediaShowcase } from "@/components/react/LazyVideo";
 import { cn } from "@/lib/utils";
 
 const tones: Tone[] = ["mint", "lavender", "peach", "sky", "yellow"];
@@ -82,23 +82,15 @@ function HorizontalCard({
       >
         {/* Visual Showcase */}
         <div className="relative h-full overflow-hidden border-r-[3px] border-hairline bg-surface">
-          {project.image.endsWith(".mp4") || project.image.endsWith(".webm") ? (
-            <LazyVideo
-              src={project.image}
-              poster={poster}
-              eager={index === 0}
-              className="size-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-            />
-          ) : (
-            <img
-              src={project.image}
-              alt={`${project.title} product interface`}
-              width={1600}
-              height={1000}
-              className="size-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-              loading={index === 0 ? "eager" : "lazy"}
-            />
-          )}
+          <ProjectMediaShowcase
+            imageSrc={project.image}
+            videoSrc={project.video}
+            alt={`${project.title} product interface`}
+            widths={[480, 720, 960]}
+            sizes="(min-width: 1024px) 45vw, calc(100vw - 32px)"
+            eager={index === 0}
+            className="size-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+          />
           <span
             className={cn(
               "absolute left-4 top-4 rounded-full border-[3px] border-hairline px-3 py-1 font-display text-[11px] font-extrabold uppercase tracking-widest text-black shadow-hard-sm",

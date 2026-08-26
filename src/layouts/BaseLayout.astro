@@ -6,6 +6,7 @@
 import { ClientRouter } from "astro:transitions";
 import "../styles/global.css";
 import { Preloader } from "../components/react/Preloader";
+import { getCloudflareImageUrl, getCloudflareSrcSet } from "../lib/media";
 
 interface Props {
   title: string;
@@ -16,7 +17,7 @@ interface Props {
 
 const {
   title,
-  image = "/media/images/portrait.webp",
+  image = "/hero/portrait.webp",
   type = "website",
 } = Astro.props;
 
@@ -29,6 +30,9 @@ const canonicalURL = new URL(
   Astro.site || "https://rohitgautam.site",
 );
 const ogImageURL = new URL(image, Astro.site || "https://rohitgautam.site");
+
+const heroPreloadSrc = getCloudflareImageUrl("/hero/illustration.webp", { width: 784, quality: 85 });
+const heroPreloadSrcSet = getCloudflareSrcSet("/hero/illustration.webp", [522, 784, 1122], { quality: 85 });
 ---
 
 <!doctype html>
@@ -40,7 +44,15 @@ const ogImageURL = new URL(image, Astro.site || "https://rohitgautam.site");
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="icon" href="/favicon.ico" sizes="32x32" />
     <link rel="canonical" href={canonicalURL} />
-    <link rel="preload" as="image" href="/media/images/illustration.webp" type="image/webp" fetchpriority="high" />
+    <link
+      rel="preload"
+      as="image"
+      href={heroPreloadSrc}
+      imagesrcset={heroPreloadSrcSet}
+      imagesizes="(max-width: 768px) calc(100vw - 32px), 522px"
+      type="image/webp"
+      fetchpriority="high"
+    />
 
     <!-- Primary Meta Tags -->
     <title>{title}</title>

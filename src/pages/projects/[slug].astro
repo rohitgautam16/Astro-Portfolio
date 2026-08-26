@@ -8,6 +8,7 @@ import { projects } from "../../data/site";
 import { Badge, Doodle, ScribbleDivider } from "../../components/react/decor";
 import { Magnetic, Parallax, Reveal, StaggerText } from "../../components/react/motion";
 import { TechGlyph } from "../../components/react/tech-icons";
+import { ProjectMediaShowcase } from "../../components/react/LazyVideo";
 
 export const prerender = true;
 
@@ -69,25 +70,16 @@ const next = projects[(index + 1) % projects.length]!;
     <Reveal className="container-page" client:load>
       <div class="overflow-hidden rounded-[28px] border-[3px] border-hairline shadow-hard-lg">
         <Parallax distance={26} className="aspect-16/9 w-full bg-surface" client:load>
-          {project.image.endsWith(".mp4") || project.image.endsWith(".webm") ? (
-            <video
-              src={project.image}
-              autoplay
-              loop
-              muted
-              playsinline
-              class="size-full scale-110 object-cover"
-            />
-          ) : (
-            <img
-              src={project.image}
-              alt={`${project.title} interface`}
-              width={1600}
-              height={900}
-              decoding="async"
-              class="size-full scale-110 object-cover"
-            />
-          )}
+          <ProjectMediaShowcase
+            client:load
+            imageSrc={project.image}
+            videoSrc={project.video}
+            alt={`${project.title} interface`}
+            widths={[480, 720, 1200]}
+            sizes="(max-width: 1024px) calc(100vw - 32px), 1200px"
+            eager={true}
+            className="size-full scale-110 object-cover"
+          />
         </Parallax>
       </div>
     </Reveal>

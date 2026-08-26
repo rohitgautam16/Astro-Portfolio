@@ -5,6 +5,7 @@
 import PageLayout from "../layouts/PageLayout.astro";
 import { Download, Mail, MapPin } from "lucide-react";
 import { profile } from "../data/site";
+import { getMediaUrl } from "../lib/media";
 import { Doodle, FloatingShape } from "../components/react/decor";
 import { Magnetic, Reveal, StaggerText } from "../components/react/motion";
 import { ContactForm } from "../components/react/ContactForm";
@@ -95,7 +96,7 @@ const links = [
         ))}
         <Reveal delay={0.18} client:visible>
           <a
-            href={profile.resumeUrl}
+            href={getMediaUrl(profile.resumeUrl)}
             download
             class="poke flex h-full items-center gap-4 rounded-2xl border-[3px] border-hairline bg-card p-5 shadow-hard-sm transition-transform hover:-translate-y-0.5"
           >

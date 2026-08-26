@@ -5,6 +5,7 @@
 import PageLayout from "../layouts/PageLayout.astro";
 import { Download, Mail, MapPin, Phone } from "lucide-react";
 import { profile, resume } from "../data/site";
+import { getMediaUrl } from "../lib/media";
 import { Doodle, Sticker } from "../components/react/decor";
 import { Reveal, StaggerText } from "../components/react/motion";
 import { TechGlyph } from "../components/react/tech-icons";
@@ -26,7 +27,7 @@ import { TechGlyph } from "../components/react/tech-icons";
         </p>
       </div>
       <a
-        href={profile.resumeUrl}
+        href={getMediaUrl(profile.resumeUrl)}
         download
         class="inline-flex shrink-0 items-center gap-2 rounded-full border-[3px] border-hairline bg-yellow px-5 py-3 font-display text-sm font-extrabold shadow-hard transition-transform hover:-translate-y-0.5 print:hidden"
       >

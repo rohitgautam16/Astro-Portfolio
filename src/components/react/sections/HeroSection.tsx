@@ -6,6 +6,7 @@ import { ArrowRight, Download, Mail } from "lucide-react";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { profile, experience } from "@/data/site";
+import { getMediaUrl } from "@/lib/media";
 import { Doodle, FloatingShape, Sticker } from "@/components/react/decor";
 import {
   Magnetic,
@@ -16,6 +17,7 @@ import {
 import { PixelGrid, PixelReveal } from "@/components/react/pixel";
 import { TechGlyph } from "@/components/react/tech-icons";
 import { Mascot } from "@/components/react/Mascot";
+import { ResponsiveImage } from "@/components/react/ResponsiveImage";
 
 export function HeroSection() {
   return (
@@ -67,7 +69,7 @@ export function HeroSection() {
               </a>
             </Magnetic>
             <a
-              href={profile.resumeUrl}
+              href={getMediaUrl(profile.resumeUrl)}
               className="inline-flex items-center gap-2 px-2 py-3 text-sm font-semibold underline decoration-[3px] underline-offset-4 hover:decoration-wavy"
             >
               <Download className="size-4" aria-hidden />
@@ -228,7 +230,7 @@ function DeveloperId({ onFlipBack }: { onFlipBack: () => void }) {
         </dl>
 
         <a
-          href={profile.resumeUrl}
+          href={getMediaUrl(profile.resumeUrl)}
           download
           onClick={(e) => e.stopPropagation()}
           className="mt-auto inline-flex items-center justify-center gap-2 rounded-full border-[3px] border-hairline bg-yellow px-4 py-2.5 font-display text-sm font-extrabold shadow-hard-sm transition-transform duration-200 hover:-translate-y-0.5 active:translate-y-0.5"
@@ -242,8 +244,8 @@ function DeveloperId({ onFlipBack }: { onFlipBack: () => void }) {
 }
 
 const HERO_MODES = [
-  { id: "illustration", src: "/media/images/illustration.webp", label: "Illustration" },
-  { id: "photo", src: "/media/images/portrait.webp", label: "Portrait" },
+  { id: "illustration", src: "/hero/illustration.webp", label: "Illustration" },
+  { id: "photo", src: "/hero/portrait.webp", label: "Portrait" },
 ] as const;
 
 /** Pixel-dissolve swap between the illustrated avatar and the portrait. */
@@ -265,13 +267,18 @@ function HeroImageSwap() {
 
   return (
     <div className="relative size-full">
-      <img
+      <ResponsiveImage
         src={mode.src}
-        alt={`${profile.name}, software engineer`}
+        widths={[522, 784, 1122]}
+        sizes="(max-width: 768px) calc(100vw - 32px), 522px"
         width={1122}
         height={1402}
+        quality={85}
+        fit="cover"
+        loading="eager"
         fetchPriority="high"
         decoding="async"
+        alt={`${profile.name}, software engineer`}
         className="size-full object-cover"
       />
       <div className="pointer-events-none absolute inset-0">

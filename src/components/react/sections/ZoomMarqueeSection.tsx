@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { profile } from "@/data/site";
+import { ResponsiveImage } from "@/components/react/ResponsiveImage";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -166,15 +167,31 @@ export function ZoomMarqueeSection() {
 
           <div className="relative w-full h-full overflow-hidden rounded-[20px]">
             {/* Desktop 16:9 Landscape Image */}
-            <img
-              src="/media/images/featured-img-landscape.webp"
+            <ResponsiveImage
+              src="/showcase/featured-img-landscape.webp"
+              widths={[600, 1200, 2000]}
+              sizes="(min-width: 1024px) 1000px, 90vw"
+              width={2730}
+              height={1437}
+              quality={85}
+              fit="cover"
+              loading="lazy"
+              decoding="async"
               alt="Desktop preview"
               className="reveal-img hidden md:block rounded-[20px] border-[3.5px] border-hairline object-contain aspect-auto w-full"
             />
 
             {/* Mobile Portrait Image */}
-            <img
-              src="/media/images/featured-img-portrait.webp"
+            <ResponsiveImage
+              src="/showcase/featured-img-portrait.webp"
+              widths={[480, 800, 1200]}
+              sizes="(max-width: 768px) 90vw, 500px"
+              width={1023}
+              height={1537}
+              quality={85}
+              fit="cover"
+              loading="lazy"
+              decoding="async"
               alt={profile.name}
               className="reveal-img block md:hidden rounded-[20px] border-[3.5px] border-hairline object-cover aspect-[3/4] w-full"
             />

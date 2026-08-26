@@ -2,7 +2,7 @@ import { ArrowUpRight } from "lucide-react";
 import type { Project } from "@/data/site";
 import { Badge, type Tone, toneBg } from "@/components/react/decor";
 import { Parallax, Tilt } from "@/components/react/motion";
-import { LazyVideo } from "@/components/react/LazyVideo";
+import { ProjectMediaShowcase } from "@/components/react/LazyVideo";
 import { cn } from "@/lib/utils";
 
 const tones: Tone[] = ["mint", "lavender", "peach", "sky", "yellow"];
@@ -37,24 +37,15 @@ export function ProjectCard({
             )}
           >
             <Parallax distance={18} className="aspect-16/10 w-full">
-              {project.image.endsWith(".mp4") || project.image.endsWith(".webm") ? (
-                <LazyVideo
-                  src={project.image}
-                  poster={poster}
-                  eager={index === 0}
-                  className="size-full scale-[1.06] object-cover transition-transform duration-700 ease-out group-hover:scale-[1.14]"
-                />
-              ) : (
-                <img
-                  src={project.image}
-                  alt={`${project.title} product interface`}
-                  width={1600}
-                  height={1000}
-                  loading="lazy"
-                  decoding="async"
-                  className="size-full scale-[1.06] object-cover transition-transform duration-700 ease-out group-hover:scale-[1.14]"
-                />
-              )}
+              <ProjectMediaShowcase
+                imageSrc={project.image}
+                videoSrc={project.video}
+                alt={`${project.title} product interface`}
+                widths={[480, 720, 960]}
+                sizes="(min-width: 1024px) 45vw, calc(100vw - 32px)"
+                eager={index === 0}
+                className="size-full scale-[1.06] object-cover transition-transform duration-700 ease-out group-hover:scale-[1.14]"
+              />
             </Parallax>
             <span
               className={cn(
