@@ -2,15 +2,19 @@
  * Centralized Cloudflare Media CDN & Image Resizing Helper Utilities.
  */
 
+const isDev = typeof process !== "undefined" && process.env.NODE_ENV === "development";
+
 const MEDIA_BASE_URL =
   (typeof process !== "undefined" && process.env.PUBLIC_MEDIA_BASE_URL) ||
   (typeof import.meta !== "undefined" && import.meta.env && import.meta.env.PUBLIC_MEDIA_BASE_URL) ||
-  "";
+  (isDev ? "" : "https://media.rohitgautam.site");
 
 const ENABLE_CF_IMAGE_RESIZING =
-  (typeof process !== "undefined" && process.env.PUBLIC_ENABLE_CF_IMAGE_RESIZING === "true") ||
-  (typeof import.meta !== "undefined" && import.meta.env && import.meta.env.PUBLIC_ENABLE_CF_IMAGE_RESIZING === "true") ||
-  false;
+  (typeof process !== "undefined" && process.env.PUBLIC_ENABLE_CF_IMAGE_RESIZING !== undefined
+    ? process.env.PUBLIC_ENABLE_CF_IMAGE_RESIZING === "true"
+    : (typeof import.meta !== "undefined" && import.meta.env && import.meta.env.PUBLIC_ENABLE_CF_IMAGE_RESIZING !== undefined
+        ? import.meta.env.PUBLIC_ENABLE_CF_IMAGE_RESIZING === "true"
+        : true));
 
 interface CloudflareImageOptions {
   width?: number;
@@ -21,7 +25,7 @@ interface CloudflareImageOptions {
 }
 
 /**
- * Resolves absolute media URL from R2 bucket CDN or local static server.
+ * Resolves absolute R2 media URL or clean local media path.
  * E.g. /hero/illustration.webp -> https://media.rohitgautam.site/hero/illustration.webp
  */
 export function getMediaUrl(path: string): string {
@@ -29,7 +33,10 @@ export function getMediaUrl(path: string): string {
   if (path.startsWith("http://") || path.startsWith("https://")) {
     return path;
   }
-  const cleanPath = path.startsWith("/") ? path : `/${path}`;
+  let cleanPath = path.startsWith("/") ? path : `/${path}`;
+  if (cleanPath.startsWith("/media/")) {
+    cleanPath = cleanPath.replace(/^\/media/, "");
+  }
   return MEDIA_BASE_URL ? `${MEDIA_BASE_URL}${cleanPath}` : cleanPath;
 }
 
@@ -52,7 +59,11 @@ export function getCloudflareImageUrl(path: string, options: CloudflareImageOpti
     return getMediaUrl(path);
   }
 
-  const cleanPath = path.startsWith("/") ? path : `/${path}`;
+  let cleanPath = path.startsWith("/") ? path : `/${path}`;
+  if (cleanPath.startsWith("/media/")) {
+    cleanPath = cleanPath.replace(/^\/media/, "");
+  }
+
   const quality = options.quality ?? 85;
   const format = options.format ?? "auto";
   const fit = options.fit ?? "cover";
@@ -72,8 +83,7 @@ export function getCloudflareImageUrl(path: string, options: CloudflareImageOpti
 }
 
 /**
- * Generates multi-candidate srcset string using Cloudflare Image Resizing,
- * or falls back cleanly to the primary R2 URL when transformations are disabled.
+ * Generates multi-candidate srcset string using Cloudflare Image Resizing.
  */
 export function getCloudflareSrcSet(
   path: string,
@@ -81,9 +91,6 @@ export function getCloudflareSrcSet(
   options: Omit<CloudflareImageOptions, "width"> = {}
 ): string {
   if (!path || !widths || widths.length === 0) return "";
-  if (!ENABLE_CF_IMAGE_RESIZING) {
-    return `${getMediaUrl(path)}`;
-  }
   return widths
     .map((w) => `${getCloudflareImageUrl(path, { ...options, width: w })} ${w}w`)
     .join(", ");
