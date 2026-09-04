@@ -38,6 +38,9 @@ export function Preloader() {
       document.documentElement.classList.remove("rg-preloading");
       document.documentElement.classList.add("rg-booted");
       setDone(true);
+      if (typeof window !== "undefined") {
+        setTimeout(() => window.dispatchEvent(new Event("resize")), 50);
+      }
       return;
     }
 
@@ -61,12 +64,15 @@ export function Preloader() {
       setExiting(true);
       document.body.style.overflow = "";
       document.documentElement.classList.remove("rg-preloading");
-      document.documentElement.classList.add("rg-booted");
 
-      // Allow 650ms for snappy exit reveal sequence
+      // Allow 850ms for smooth R & G exit animation to play before hiding wrapper
       destroyTimeout = window.setTimeout(() => {
+        document.documentElement.classList.add("rg-booted");
         setDone(true);
-      }, 650);
+        if (typeof window !== "undefined") {
+          window.dispatchEvent(new Event("resize"));
+        }
+      }, 850);
     };
 
     const tick = () => {

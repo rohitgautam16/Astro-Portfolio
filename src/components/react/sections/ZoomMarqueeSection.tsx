@@ -156,7 +156,7 @@ export function ZoomMarqueeSection() {
       {/* Center Image Container */}
       <div
         ref={imageRef}
-        className="relative z-10 flex flex-col items-center justify-center p-4"
+        className="relative z-10 h-[90vh] flex flex-col items-center justify-center p-4 mt-10"
         style={{ clipPath: "inset(50% 50% 50% 50%)" }}
       >
         <div className="relative overflow-hidden rounded-[32px] border-[3px] border-hairline bg-card p-4 shadow-hard-lg w-[90vw] sm:w-[80vw] md:w-[75vw] max-w-[850px] md:aspect-auto transition-all duration-300 flex flex-col justify-center">

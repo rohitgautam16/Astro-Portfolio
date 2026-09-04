@@ -491,7 +491,6 @@ body {
 /* Preloader anti-flash rules: hide main page content on frame 0 before preloader completes */
 html.rg-preloading body > *:not(#preloader-wrapper) {
   opacity: 0 !important;
-  visibility: hidden !important;
   pointer-events: none !important;
 }
 
