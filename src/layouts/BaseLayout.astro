@@ -139,7 +139,9 @@ const heroPreloadSrcSet = getCloudflareSrcSet("/hero/illustration.webp", [522, 7
     <ClientRouter />
   </head>
   <body>
-    <Preloader client:load />
+    <div id="preloader-wrapper">
+      <Preloader client:load />
+    </div>
     <slot />
 
     <!-- Pixel dissolve page transition (vanilla JS, persists across navigations) -->
