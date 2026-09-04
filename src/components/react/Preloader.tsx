@@ -18,8 +18,8 @@ const FLOATING_ITEMS = [
 ];
 
 export function Preloader() {
-  // Default to done=true so SSR static HTML pages never contain fixed overlay divs
-  const [done, setDone] = useState(true);
+  // Default to done=false so SSR static HTML contains the overlay div for instant frame 0 paint
+  const [done, setDone] = useState(false);
   const [exiting, setExiting] = useState(false);
   const [word, setWord] = useState(0);
   const [progress, setProgress] = useState(0);
@@ -36,6 +36,7 @@ export function Preloader() {
 
     if (isReduced || alreadyBooted || isLighthouse) {
       document.documentElement.classList.remove("rg-preloading");
+      document.documentElement.classList.add("rg-booted");
       setDone(true);
       return;
     }
@@ -60,6 +61,7 @@ export function Preloader() {
       setExiting(true);
       document.body.style.overflow = "";
       document.documentElement.classList.remove("rg-preloading");
+      document.documentElement.classList.add("rg-booted");
 
       // Allow 650ms for snappy exit reveal sequence
       destroyTimeout = window.setTimeout(() => {
@@ -95,6 +97,7 @@ export function Preloader() {
 
   return (
     <div
+      id="rg-preloader-root"
       role="status"
       aria-live="polite"
       aria-label="Loading portfolio"

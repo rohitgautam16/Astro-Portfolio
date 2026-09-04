@@ -488,11 +488,14 @@ body {
   animation-play-state: paused;
 }
 
-/* Preloader anti-flash rule: hide headers/nav on initial frame 0 before preloader exits */
-html.rg-preloading header,
-html.rg-preloading nav,
-html.rg-preloading [data-site-header] {
+/* Preloader anti-flash rules: hide main page content on frame 0 before preloader completes */
+html.rg-preloading body > *:not(#rg-preloader-root) {
   opacity: 0 !important;
   visibility: hidden !important;
   pointer-events: none !important;
+}
+
+/* Hide preloader overlay immediately on return visits / booted state */
+html.rg-booted #rg-preloader-root {
+  display: none !important;
 }

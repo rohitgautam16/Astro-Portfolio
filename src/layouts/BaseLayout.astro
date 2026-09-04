@@ -118,6 +118,8 @@ const heroPreloadSrcSet = getCloudflareSrcSet("/hero/illustration.webp", [522, 7
       (function() {
         if (!sessionStorage.getItem("rg-booted")) {
           document.documentElement.classList.add("rg-preloading");
+        } else {
+          document.documentElement.classList.add("rg-booted");
         }
       })();
 
