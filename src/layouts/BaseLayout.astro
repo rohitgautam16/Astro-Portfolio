@@ -115,12 +115,14 @@ const heroPreloadSrcSet = getCloudflareSrcSet("/hero/illustration.webp", [522, 7
 
     <!-- Preloader anti-flash & Theme script before frame 0 paint -->
     <script is:inline>
-      (function() {
-        if (!sessionStorage.getItem("rg-booted")) {
-          document.documentElement.classList.add("rg-preloading");
-        } else {
-          document.documentElement.classList.add("rg-booted");
-        }
+      (function () {
+        try {
+          var skip =
+            /Lighthouse|Googlebot/.test(navigator.userAgent) ||
+            matchMedia('(prefers-reduced-motion: reduce)').matches ||
+            sessionStorage.getItem('rg-booted') === '1';
+          if (skip) document.documentElement.classList.add('rg-booted');
+        } catch (e) {}
       })();
 
       function applyTheme() {

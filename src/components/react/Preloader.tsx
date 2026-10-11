@@ -4,7 +4,7 @@ import { Doodle } from "./decor";
 import { TechGlyph } from "./tech-icons";
 
 const WORDS = ["Hello", "नमस्ते", "Bonjour", "Hola", "Welcome"];
-const MIN_MS = 4000; // 4.0 seconds intro greeting sequence
+const MIN_MS = 1800; // 1.8 seconds intro greeting sequence
 
 /** Tech & doodle items floating around the preloader */
 const FLOATING_ITEMS = [
@@ -35,7 +35,6 @@ export function Preloader() {
         navigator.userAgent.includes("Googlebot"));
 
     if (isReduced || alreadyBooted || isLighthouse) {
-      document.documentElement.classList.remove("rg-preloading");
       document.documentElement.classList.add("rg-booted");
       setDone(true);
       if (typeof window !== "undefined") {
@@ -63,16 +62,15 @@ export function Preloader() {
       sessionStorage.setItem("rg-booted", "1");
       setExiting(true);
       document.body.style.overflow = "";
-      document.documentElement.classList.remove("rg-preloading");
 
-      // Allow 850ms for smooth R & G exit animation to play before hiding wrapper
+      // Allow 500ms for smooth R & G exit animation to play before hiding wrapper
       destroyTimeout = window.setTimeout(() => {
         document.documentElement.classList.add("rg-booted");
         setDone(true);
         if (typeof window !== "undefined") {
           window.dispatchEvent(new Event("resize"));
         }
-      }, 850);
+      }, 500);
     };
 
     const tick = () => {
@@ -87,7 +85,7 @@ export function Preloader() {
     };
     frame = requestAnimationFrame(tick);
 
-    const wordsInterval = window.setInterval(() => setWord((w) => (w + 1) % WORDS.length), 900);
+    const wordsInterval = window.setInterval(() => setWord((w) => (w + 1) % WORDS.length), 450);
 
     return () => {
       cancelAnimationFrame(frame);
@@ -107,21 +105,24 @@ export function Preloader() {
       role="status"
       aria-live="polite"
       aria-label="Loading portfolio"
-      className={`fixed inset-0 z-[99990] grid w-screen place-items-center overflow-hidden px-6 transition-all duration-1000 ease-[cubic-bezier(0.76,0,0.24,1)] ${exiting ? "pointer-events-none opacity-0 scale-[1.04]" : "opacity-100 scale-100"
-        }`}
+      className={`fixed inset-0 z-[99990] grid w-screen place-items-center overflow-hidden px-6 transition-all duration-500 ease-[cubic-bezier(0.76,0,0.24,1)] ${
+        exiting ? "pointer-events-none opacity-0 scale-[1.04]" : "opacity-100 scale-100"
+      }`}
       style={{ backgroundColor: "var(--color-background)" }}
     >
       {/* Background grain texture & grid lines */}
       <div
         aria-hidden
-        className={`pointer-events-none absolute inset-0 bg-background transition-opacity duration-1000 ${exiting ? "opacity-0" : "opacity-100"
-          }`}
+        className={`pointer-events-none absolute inset-0 bg-background transition-opacity duration-500 ${
+          exiting ? "opacity-0" : "opacity-100"
+        }`}
         style={{ backgroundColor: "var(--color-background)" }}
       />
       <div
         aria-hidden
-        className={`grid-lines pointer-events-none absolute inset-0 transition-opacity duration-800 ${exiting ? "opacity-0" : "opacity-30"
-          }`}
+        className={`grid-lines pointer-events-none absolute inset-0 transition-opacity duration-500 ${
+          exiting ? "opacity-0" : "opacity-30"
+        }`}
       />
 
       {/* Floating tech badges & doodles around the screen */}
@@ -138,7 +139,7 @@ export function Preloader() {
           }
           transition={{
             delay: item.delay,
-            duration: exiting ? 0.9 : 0.6,
+            duration: exiting ? 0.5 : 0.6,
             type: exiting ? "tween" : "spring",
             stiffness: 220,
             damping: 15,
@@ -173,7 +174,7 @@ export function Preloader() {
             }
             transition={
               exiting
-                ? { duration: 1.15, ease: [0.76, 0, 0.24, 1] }
+                ? { duration: 0.6, ease: [0.76, 0, 0.24, 1] }
                 : { type: "spring", stiffness: 180, damping: 15, delay: 0.1 }
             }
             className="grid size-24 place-items-center rounded-3xl border-[4px] border-hairline bg-yellow font-display text-6xl font-extrabold shadow-hard-lg sm:size-32 sm:text-8xl"
@@ -191,7 +192,7 @@ export function Preloader() {
             }
             transition={
               exiting
-                ? { duration: 1.15, ease: [0.76, 0, 0.24, 1] }
+                ? { duration: 0.6, ease: [0.76, 0, 0.24, 1] }
                 : { type: "spring", stiffness: 180, damping: 15, delay: 0.22 }
             }
             className="grid size-24 place-items-center rounded-3xl border-[4px] border-hairline bg-lavender font-display text-6xl font-extrabold shadow-hard-lg sm:size-32 sm:text-8xl"
@@ -207,7 +208,7 @@ export function Preloader() {
               ? { y: 120, opacity: 0 }
               : { y: 0, opacity: 1 }
           }
-          transition={{ duration: 0.9, ease: [0.76, 0, 0.24, 1] }}
+          transition={{ duration: 0.5, ease: [0.76, 0, 0.24, 1] }}
           className="flex flex-col items-center"
         >
           <motion.p
