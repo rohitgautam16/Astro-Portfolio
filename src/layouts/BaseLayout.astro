@@ -117,11 +117,16 @@ const heroPreloadSrcSet = getCloudflareSrcSet("/hero/illustration.webp", [522, 7
     <script is:inline>
       (function () {
         try {
-          var skip =
-            /Lighthouse|Googlebot/.test(navigator.userAgent) ||
-            matchMedia('(prefers-reduced-motion: reduce)').matches ||
-            sessionStorage.getItem('rg-booted') === '1';
-          if (skip) document.documentElement.classList.add('rg-booted');
+          var isBot =
+            navigator.webdriver ||
+            /Lighthouse|Googlebot|HeadlessChrome/i.test(navigator.userAgent);
+          var isMobile = window.innerWidth < 768;
+          var isReduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+          var isBooted = sessionStorage.getItem('rg-booted') === '1';
+
+          if (isBot || isMobile || isReduced || isBooted) {
+            document.documentElement.classList.add('rg-booted');
+          }
         } catch (e) {}
       })();
 

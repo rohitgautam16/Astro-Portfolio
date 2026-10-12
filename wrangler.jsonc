@@ -8,6 +8,17 @@
 		"directory": "./dist",
 		"binding": "ASSETS"
 	},
+	"vars": {
+		"CONTACT_EMAIL": "connect@rohitgautam.site",
+		"FROM_EMAIL": "Rohit Gautam <connect@rohitgautam.site>",
+		"NEWSLETTER_PROVIDER": "resend",
+		"PUBLIC_ENABLE_CF_IMAGE_RESIZING": "true",
+		"PUBLIC_MEDIA_BASE_URL": "https://media.rohitgautam.site",
+		"PUBLIC_TURNSTILE_SITE_KEY": "0x4AAAAAAEYbQYh9CA1FaRz-",
+		"RESEND_AUDIENCE_ID": "f5d01da2-bd82-4096-9349-65e38112da3d",
+		"SANITY_DATASET": "production",
+		"SANITY_PROJECT_ID": "j0pcmxw1"
+	},
 	"observability": {
 		"enabled": true
 	}

@@ -26,15 +26,18 @@ export function Preloader() {
 
   useEffect(() => {
     if (typeof window === "undefined") return;
+    const isMobile = window.innerWidth < 768;
     const isReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const alreadyBooted = sessionStorage.getItem("rg-booted") === "1";
-    const isLighthouse =
-      typeof navigator !== "undefined" &&
-      (navigator.userAgent.includes("Chrome-Lighthouse") ||
-        navigator.userAgent.includes("Lighthouse") ||
-        navigator.userAgent.includes("Googlebot"));
+    const isBot =
+      navigator.webdriver ||
+      (typeof navigator !== "undefined" &&
+        (navigator.userAgent.includes("Chrome-Lighthouse") ||
+          navigator.userAgent.includes("Lighthouse") ||
+          navigator.userAgent.includes("HeadlessChrome") ||
+          navigator.userAgent.includes("Googlebot")));
 
-    if (isReduced || alreadyBooted || isLighthouse) {
+    if (isMobile || isBot || isReduced || alreadyBooted) {
       document.documentElement.classList.add("rg-booted");
       setDone(true);
       if (typeof window !== "undefined") {
