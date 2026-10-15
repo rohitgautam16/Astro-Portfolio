@@ -111,7 +111,7 @@ export function PixelReveal({
   return (
     <div ref={ref} className={cn("relative isolate overflow-hidden", className)}>
       {children}
-      <div className="pointer-events-none absolute inset-0 z-10">
+      <div className="pointer-events-none absolute inset-0 z-10 hidden md:block">
         <PixelGrid
           cols={cols}
           rows={rows}

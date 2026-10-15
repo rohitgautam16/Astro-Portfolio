@@ -34,7 +34,7 @@ const pathname = Astro.url.pathname;
   </a>
   {!flags.siteComingSoon && <ScrollProgress client:idle />}
   {!flags.siteComingSoon && <SmoothScroll client:idle />}
-  {!flags.siteComingSoon && <Header client:load pathname={pathname} />}
+  {!flags.siteComingSoon && <Header client:idle pathname={pathname} />}
   <main id="main" class={flags.siteComingSoon ? "h-[100dvh] w-full overflow-hidden" : ""}>
     <slot />
   </main>

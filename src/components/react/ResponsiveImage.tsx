@@ -38,8 +38,8 @@ export function ResponsiveImage({
 }: ResponsiveImageProps) {
   // Use candidate width matching sizes or middle width as fallback src
   const fallbackWidth = widths.length > 1 ? widths[1]! : widths[0] ?? width;
-  const defaultSrc = getCloudflareImageUrl(src, { width: fallbackWidth, height, quality, fit });
-  const srcSet = getCloudflareSrcSet(src, widths, { height, quality, fit });
+  const defaultSrc = getCloudflareImageUrl(src, { width: fallbackWidth, quality, fit });
+  const srcSet = getCloudflareSrcSet(src, widths, { quality, fit });
 
   return (
     <img
